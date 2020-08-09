@@ -1,16 +1,36 @@
 .App {
   text-align: left;
-  color: #BDBDBD;
+  color: #EEEEEE;
   height:100%;
   width:100%;
+  font-size: 14;
 }
 
+.UserName{
+  color: #F5F5F5;
+  display: flex;
+  align-items: center;
+}
 
-.LeftScreen {
+.SelectedItem{
+  color: #F5F5F5;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /*background-color: #9E9E9E;*/
+}
+
+.ItemText{
+  margin-left: 0.2em;
+}
+
+.RightScreen {
   height:100%;
   margin-left: 200px;
   display: flex;
   flex-direction: column;
+  background-color: #212121;
 }
 
 .Sidebar{
@@ -30,21 +50,40 @@
 }
 
 .Header {
-  background-color:#424242;
+  /*bad */
+  font-weight: 500;
+  color: #F5F5F5;
+  /*font-weight: bold;*/
+  /*background-color:#424242;*/
   padding: 1em;
+  padding-top: 0.3em;
   padding-left: 2em;
   height: 25px;
 }
 .Content {
-  background-color: #212121;
   padding: 1em;
   flex: 1;
   justify-content: center;
   align-items: center;
   display: flex;
+  flex-direction: column;
+}
+
+.CodeBoxParent {
+
+ flex-grow: 1;
+ width: 100%;
+ display: flex;
+  flex-direction: column;
+
 }
 
 .CodeBox{
+
   margin: 1em;
-  background-color: #616161;
+ background-color: #616161;
+ flex-grow: 1;
+ width: auto;
+  border-radius: 5px;
+  padding: 1em;
 }

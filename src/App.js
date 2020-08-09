@@ -9,25 +9,25 @@ function App() {
     <div className="App">
       <div className="Sidebar">
       <div className="SidebarContent">
-        <h3 >Menu</h3>
-        <div href="#">Link 1</div>
-        <div href="#">Link 2</div>
-        <div href="#">Link 3</div>
+        <h5 className="UserName"><span class="material-icons">person</span><span className="ItemText">Julien</span></h5>
+        <div href="#" className="SelectedItem"><span class="material-icons">text_snippet</span><span className="ItemText">amount_for</span></div>
       </div>
       </div>
 
-      <div className="LeftScreen">
+      <div className="RightScreen">
 
-          <div class="Header">
-           <div> amount_for </div>
+          <div className="Header">
+           <div >amount_for </div>
           </div>
 
 
-          <div class="Content">
-          <div class="CodeBox">
+          <div className="Content">
+          <div className="CodeBoxParent">
+          <div className="CodeBox">
           <h2>Sidebar Navigation Example</h2>
           <p>The sidebar with is set with "style="width:25%".</p>
           <p>The left margin of the page content is set to the same value.</p>
+          </div>
           </div>
           </div>
 
