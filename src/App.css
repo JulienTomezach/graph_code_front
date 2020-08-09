@@ -27,7 +27,7 @@
 
 .RightScreen {
   height:100%;
-  margin-left: 200px;
+  margin-left: 175px;
   display: flex;
   flex-direction: column;
   background-color: #212121;
@@ -35,7 +35,7 @@
 
 .Sidebar{
   height:100%;
-  width:200px;
+  width:175px;
   background-color:#424242;
   position:fixed!important;
   z-index:1;
@@ -45,7 +45,7 @@
 .SidebarContent{
   height:100%;
   width:100px;
-  padding-left: 2em;
+  padding-left: 1em;
 
 }
 
