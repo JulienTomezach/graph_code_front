@@ -1,13 +1,50 @@
 .App {
-  text-align: center;
+  text-align: left;
+  color: #BDBDBD;
+  height:100%;
+  width:100%;
 }
 
+
+.LeftScreen {
+  height:100%;
+  margin-left: 200px;
+  display: flex;
+  flex-direction: column;
+}
 
 .Sidebar{
   height:100%;
   width:200px;
-  background-color:#fff;
+  background-color:#424242;
   position:fixed!important;
   z-index:1;
-  overflow:auto
+  overflow:auto;
+}
+
+.SidebarContent{
+  height:100%;
+  width:100px;
+  padding-left: 2em;
+
+}
+
+.Header {
+  background-color:#424242;
+  padding: 1em;
+  padding-left: 2em;
+  height: 25px;
+}
+.Content {
+  background-color: #212121;
+  padding: 1em;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.CodeBox{
+  margin: 1em;
+  background-color: #616161;
 }
