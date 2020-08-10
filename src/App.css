@@ -1,9 +1,10 @@
 .App {
   text-align: left;
-  color: #EEEEEE;
+  color: white;
   height:100%;
   width:100%;
   font-size: 14;
+  font-weight: 400;
 }
 
 .UserName{
@@ -36,7 +37,7 @@
 .Sidebar{
   height:100%;
   width:175px;
-  background-color:#424242;
+  background-color:#313131;
   position:fixed!important;
   z-index:1;
   overflow:auto;
@@ -54,7 +55,7 @@
   font-weight: 500;
   color: #F5F5F5;
   /*font-weight: bold;*/
-  /*background-color:#424242;*/
+  /*background-color:#313131;*/
   padding: 1em;
   padding-top: 0.3em;
   padding-left: 2em;
@@ -83,7 +84,7 @@
 .CodeBox{
   flex-grow: 1;
   margin: 1em;
-  background-color: #515151;
+  /*background-color: #313131;*/
   border-radius: 5px;
   padding: 1em;
   padding-left: 2em;
@@ -109,7 +110,9 @@
   background: rgba(77,208,225);
 }
 
-
+[contenteditable] {
+  outline: 0px solid transparent;
+}
 
 
 
