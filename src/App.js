@@ -53,6 +53,9 @@ function App() {
           <div id="code_box" contentEditable  className="CodeBox">
           </div>
           </div>
+          <div className="SaveButton">
+          Save
+          </div>
           </div>
 
       </div>

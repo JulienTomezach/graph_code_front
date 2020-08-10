@@ -83,7 +83,7 @@
 .CodeBox{
   flex-grow: 1;
   margin: 1em;
-  background-color: #616161;
+  background-color: #515151;
   border-radius: 5px;
   padding: 1em;
   padding-left: 2em;
@@ -92,6 +92,22 @@
 
 }
 
+.SaveButton{
+  font-weight: bold;
+  background: rgba(77,208,225, 0.8);
+  width: 40px;
+  height: 20px;
+  z-index: 1;
+  padding: 1em;
+  bottom: 30px;
+  right: 50px;
+  position:fixed!important;
+  border-radius: 10px;
+}
+
+.SaveButton:hover {
+  background: rgba(77,208,225);
+}
 
 
 
