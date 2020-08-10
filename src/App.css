@@ -37,10 +37,11 @@
 .Sidebar{
   height:100%;
   width:175px;
-  background-color:#313131;
+  background-color:#222323;
   position:fixed!important;
   z-index:1;
   overflow:auto;
+  /*box-shadow: 1px 0px 10px #112121;*/
 }
 
 .SidebarContent{
