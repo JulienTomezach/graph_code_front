@@ -4,14 +4,17 @@ import './App.css';
 const axios_base = require('axios').default;
 
 function App() {
-
-   const [textCode, setTextCode] = useState("The code is \nloading...");
+    const initialText = "The code is \nloading...";
    const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
 
-   useEffect(() => {
-    let fetch = async () => {
+  let setTextCode = (text) =>{
+    const el = document.getElementById("code_box");
+    el.innerHTML = text
+  }
+
+   const fetcData = async () => {
     try {
       const response = await axios.get('/code');
       setTextCode(response.data)
@@ -19,13 +22,18 @@ function App() {
       console.error(error);
     }
   }
-      fetch();
+
+
+   useEffect(() => {
+    setTextCode(initialText)
+    fetcData();
   });
+
 
   return (
 
-
     <div className="App">
+    {console.log('rendu')}
       <div className="Sidebar">
       <div className="SidebarContent">
         <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
@@ -42,8 +50,7 @@ function App() {
 
           <div className="Content">
           <div className="CodeBoxParent">
-          <div className="CodeBox">
-          {textCode}
+          <div id="code_box" contentEditable  className="CodeBox">
           </div>
           </div>
           </div>
