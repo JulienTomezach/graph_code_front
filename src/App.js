@@ -14,6 +14,11 @@ function App() {
     el.innerHTML = text
   }
 
+  let getTextCode = () =>{
+    const el = document.getElementById("code_box");
+    return el.innerHTML
+  }
+
    const fetcData = async () => {
     try {
       const response = await axios.get('/code');
@@ -21,6 +26,10 @@ function App() {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  const saveCode = async () => {
+    await axios.post('/code', {code: getTextCode()});
   }
 
 
@@ -53,7 +62,7 @@ function App() {
           <div id="code_box" contentEditable  className="CodeBox">
           </div>
           </div>
-          <div className="SaveButton">
+          <div onClick={saveCode} className="SaveButton">
           Save
           </div>
           </div>
