@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {graph_to_text} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
    const fetcData = async () => {
     try {
       const response = await axios.get('/code');
-      setTextCode(response.data)
+      setTextCode(graph_to_text(response.data))
     } catch (error) {
       console.error(error);
     }
