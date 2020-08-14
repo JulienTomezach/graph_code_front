@@ -118,10 +118,10 @@
 
 
 .Function{
-  color: green;
+  color: #55ff00;
 }
 .Parameter{
-color: orange;
+color: #ffaa00;
 }
 .Bracket{
   color: red;

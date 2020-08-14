@@ -10,14 +10,15 @@
 // = <span className="Function">sum_on</span>(owner.lots)<span className="Bracket">[</span>
 // </div>
 
-const PARAMS = 'Parameter'
+const PARAM = 'Parameter'
+const FUNCTION = 'Function'
 // special case of the root elements
 let graph_to_text = (graph_input) => {
 
   let textCode=""
   graph_input.forEach(element => {
     if('comment' in element){
-        textCode += "# "+ element.comment + '\n'
+        textCode += "# "+ element.comment + '<br/>'
     }else{
       let keys = Object.keys(element)
       if(keys.length >1) throw Error('graph_to_text: several keys for an element of the graph')
@@ -26,9 +27,9 @@ let graph_to_text = (graph_input) => {
       if(!('formulas' in value)) throw Error('graph_to_text: formulas not in element')
       let formula = value.formulas
     // do something with the name of formula, the parameters
-    let parameters = value.parameters.map(param =>  graph_to_text_aux(param, PARAMS)).join(", ")
+    let parameters = value.parameters.map(param =>  graph_to_text_aux(param, PARAM)).join(", ")
     let line_break = formula.definitions ? "\n" : ""
-    textCode += key + "("+ parameters+ ")"+ " = " + line_break + graph_to_text_aux(formula) + '\n' + "\n"
+    textCode += SPAN(key, FUNCTION) + "("+ parameters+ ")"+ " = " + line_break + graph_to_text_aux(formula) + '<br/>' + '<br/>'
     }
   })
   return textCode
@@ -37,10 +38,11 @@ let graph_to_text = (graph_input) => {
 
 // {"sum_on":[{".":[{"name":"owner"},{"name":"lots"}]},{"sum_on":[{".":[{"name":"budget_version"},{"name":"subbudgets"}]},{"name":"line_for","parameters":[{"name":"lot_i"},{"name":"fund_call"},{"name":"subbudget_i"}]}]}
 
-const SPAN = (className) => {
- return className ? `<span class="${className}">` : "<span>"
+const SPAN = (content, className) => {
+ let first = className ? `<span class="${className}">` : "<span>"
+ let last = "</span>"
+ return first + content + last
 }
-const SPAN_E = '</span>'
 
 let graph_to_text_aux = (graph_input, type=null) => {
   console.log(graph_input)
@@ -76,7 +78,7 @@ let graph_to_text_aux = (graph_input, type=null) => {
         return graph_to_text_aux(element[0])+" where "+ graph_to_text_aux(element[1])
     }else if('name' in graph_input && !('parameters' in graph_input)) {
 
-      return SPAN(type) + graph_input.name + SPAN_E
+      return SPAN(graph_input.name, type)
     }else if('name' in graph_input && 'parameters' in graph_input) {
       let parameters = graph_input.parameters.map(param =>  graph_to_text_aux(param)).join(", ")
       return graph_input.name+"("+parameters+")"
