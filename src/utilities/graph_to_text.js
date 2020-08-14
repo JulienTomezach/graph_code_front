@@ -14,6 +14,8 @@ const PARAM = 'Parameter'
 const FUNCTION = 'Function'
 const FUNCTION_CALL = 'FunctionCall'
 const COMMENT = 'Comment'
+const OPERATION = 'Operation'
+const INDEX = 'Index'
 // special case of the root elements
 let graph_to_text = (graph_input) => {
 
@@ -57,30 +59,32 @@ let graph_to_text_aux = (graph_input, type=null) => {
       // sum_on(owner.lots) {
       return SPAN("sum_on",FUNCTION_CALL)+"("+ graph_to_text_aux(iteree)+")"+" { "+ graph_to_text_aux(formula) + " }"
     }else if('.' in graph_input){
-        return graph_input['.'].map(sub_element => graph_to_text_aux(sub_element)).join('.')
+        return graph_input['.'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN('.', OPERATION))
     }else if('*' in graph_input){
-        return graph_input['*'].map(sub_element => graph_to_text_aux(sub_element)).join(' * ')
+        return graph_input['*'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' * ', OPERATION))
     }else if('/' in graph_input){
-        return graph_input['/'].map(sub_element => graph_to_text_aux(sub_element)).join(' / ')
+        return graph_input['/'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' / ', OPERATION))
     }else if('-' in graph_input){
-        return graph_input['-'].map(sub_element => graph_to_text_aux(sub_element)).join(' - ')
+        return graph_input['-'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' - ', OPERATION))
     }else if('+' in graph_input){
-        return graph_input['+'].map(sub_element => graph_to_text_aux(sub_element)).join(' + ')
+        return graph_input['+'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' + ', OPERATION))
     }else if('??' in graph_input){
-        return graph_input['??'].map(sub_element => graph_to_text_aux(sub_element)).join(' ?? ')
+        return graph_input['??'].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' ?? ', OPERATION))
     }else if('[]' in graph_input){
-        return graph_to_text_aux(graph_input['[]'][0])+"["+graph_input['[]'][1]+"]"
+        return graph_to_text_aux(graph_input['[]'][0])+"["+SPAN(graph_input['[]'][1], INDEX)+"]"
     }else if('==' in graph_input){
-        return graph_input['=='].map(sub_element => graph_to_text_aux(sub_element)).join(' == ')
+        return graph_input['=='].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' == ', OPERATION))
     }else if('!=' in graph_input){
-        return graph_input['!='].map(sub_element => graph_to_text_aux(sub_element)).join(' != ')
+        return graph_input['!='].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' != ', OPERATION))
     }else if('where' in graph_input){
       // it is binary operator too like +, - ...
         let element = graph_input['where']
         return graph_to_text_aux(element[0])+" where "+ graph_to_text_aux(element[1])
     }else if('name' in graph_input && !('parameters' in graph_input)) {
 
-      return SPAN(graph_input.name, type)
+      let is_number = !isNaN(graph_input.name)
+      let new_type = is_number ? INDEX: type
+      return SPAN(graph_input.name, new_type)
     }else if('name' in graph_input && 'parameters' in graph_input) {
       let parameters = graph_input.parameters.map(param =>  graph_to_text_aux(param)).join(", ")
       return SPAN(graph_input.name, FUNCTION_CALL)+"("+parameters+")"
