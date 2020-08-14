@@ -90,7 +90,8 @@
   padding: 1em;
   padding-left: 2em;
   padding-right: 2em;
-  white-space: pre-wrap;
+  /*for text*/
+  /*white-space: pre-wrap;*/
 
 }
 
@@ -115,6 +116,16 @@
   outline: 0px solid transparent;
 }
 
+
+.Function{
+  color: green;
+}
+.Parameter{
+color: orange;
+}
+.Bracket{
+  color: red;
+}
 
 
 

@@ -5,7 +5,7 @@ import {graph_to_text} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
 function App() {
-    const initialText = "The code is \nloading...";
+    const initialText = "The code is <br/> <span class='Function'>loading</span>...";
    const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
@@ -61,6 +61,7 @@ function App() {
           <div className="Content">
           <div className="CodeBoxParent">
           <div id="code_box" contentEditable  className="CodeBox">
+
           </div>
           </div>
           <div onClick={saveCode} className="SaveButton">
