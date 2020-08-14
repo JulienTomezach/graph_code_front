@@ -12,13 +12,15 @@
 
 const PARAM = 'Parameter'
 const FUNCTION = 'Function'
+const FUNCTION_CALL = 'FunctionCall'
+const COMMENT = 'Comment'
 // special case of the root elements
 let graph_to_text = (graph_input) => {
 
   let textCode=""
   graph_input.forEach(element => {
     if('comment' in element){
-        textCode += "# "+ element.comment + '<br/>'
+        textCode +=  SPAN("# "+element.comment, COMMENT) + '<br/>'
     }else{
       let keys = Object.keys(element)
       if(keys.length >1) throw Error('graph_to_text: several keys for an element of the graph')
@@ -53,7 +55,7 @@ let graph_to_text_aux = (graph_input, type=null) => {
     if('sum_on' in graph_input){
       let [iteree, formula] = graph_input.sum_on
       // sum_on(owner.lots) {
-      return "sum_on("+ graph_to_text_aux(iteree)+")"+" { "+ graph_to_text_aux(formula) + " }"
+      return SPAN("sum_on",FUNCTION_CALL)+"("+ graph_to_text_aux(iteree)+")"+" { "+ graph_to_text_aux(formula) + " }"
     }else if('.' in graph_input){
         return graph_input['.'].map(sub_element => graph_to_text_aux(sub_element)).join('.')
     }else if('*' in graph_input){
@@ -81,7 +83,7 @@ let graph_to_text_aux = (graph_input, type=null) => {
       return SPAN(graph_input.name, type)
     }else if('name' in graph_input && 'parameters' in graph_input) {
       let parameters = graph_input.parameters.map(param =>  graph_to_text_aux(param)).join(", ")
-      return graph_input.name+"("+parameters+")"
+      return SPAN(graph_input.name, FUNCTION_CALL)+"("+parameters+")"
     }
     throw Error(`graph_to_text: we dont knwo that key word in formula: ${Object.keys(graph_input)}`)
   }

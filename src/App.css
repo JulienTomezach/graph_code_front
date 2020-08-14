@@ -126,6 +126,10 @@ color: #ffaa00;
 .Bracket{
   color: red;
 }
+.FunctionCall{
+  color: #00ffdd;
+}
 
-
-
+.Comment{
+  color: #878e8d;
+}
