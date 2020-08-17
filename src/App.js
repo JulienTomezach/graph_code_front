@@ -10,7 +10,7 @@ function App() {
                           baseURL: 'http://localhost:3000/',
                         });
 
-  let setTextCode = (text) =>{
+  let setCode = (text) =>{
     const el = document.getElementById("code_box");
     el.innerHTML = text
   }
@@ -26,7 +26,7 @@ function App() {
    const fetcData = async () => {
     try {
       const response = await axios.get('/code');
-      setTextCode(graph_to_text(response.data))
+      setCode(graph_to_text(response.data))
     } catch (error) {
       console.error(error);
     }
@@ -36,9 +36,19 @@ function App() {
     await axios.post('/code', {code: getTextCode()});
   }
 
+  let setFocusEventsHandler= () =>{
+    const codeBox = document.getElementById("code_box");
+    codeBox.addEventListener('focus', (event) => {
+      // replace html by text in the element
+    });
 
+    codeBox.addEventListener('blur', (event) => {
+      // send save request and so
+    });
+}
    useEffect(() => {
-    setTextCode(initialText)
+    setFocusEventsHandler()
+    setCode(initialText)
     fetcData();
   });
 
