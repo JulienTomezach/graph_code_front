@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {graph_to_text, htmlToTextCode} from './utilities/graph_to_text'
+import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
 // .selectionStart
@@ -20,9 +20,8 @@ function App() {
 
   let getTextCode = () =>{
     const codeBox = document.getElementById("code_box");
-    // return htmlToTextCode(codeBox.innerHTML)
     let span = document.createElement('span');
-    span.innerHTML = htmlToTextCode(codeBox.innerHTML);
+    htmlToTextFor(span, htmlToTextNodes(codeBox));
     return span.textContent || span.innerText;
   }
 
@@ -49,23 +48,34 @@ function App() {
     const codeBox = document.getElementById("code_box");
     codeBox.addEventListener('input', (event) => {
       if(!editing){
-        console.log('set editing at true')
+            editing = true
+            console.log('set editing at true')
             let cursor = document.createElement("span");
             cursor.id = "cursor"
+            // cursor.setAttribute("tabindex", 0);
+            // cursor.setAttribute("contentEditable", true);
+
+            // set cursor at position
             let sel = window.getSelection();
             let range = sel.getRangeAt(0);
             range.insertNode(cursor);
+
             const codeBox = document.getElementById("code_box");
-            codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true, keepCursor: true});
+            htmlToTextFor(codeBox, htmlToTextNodes(codeBox, {keepBRTag: true}));
+
             cursor = document.getElementById("cursor");
-            cursor.focus()
-            editing = true
+            range = document.createRange()
+            sel = window.getSelection()
+
+            range.setStart(cursor, 0)
+            range.collapse(true)
+
+            sel.removeAllRanges()
+            sel.addRange(range)
+            // cursor.focus()
         }
     });
 
-    // codeBox.addEventListener('blur', (event) => {
-    //   saveCode()
-    // });
 }
 
 let setKeyEventsHandler = () => {

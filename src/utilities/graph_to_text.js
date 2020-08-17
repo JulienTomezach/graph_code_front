@@ -92,35 +92,32 @@ let graph_to_text_aux = (graph_input, type=null) => {
   }
 }
 
-// alternative: as span are not hierarchic (it is just for coloring)
-// it could be easy to go through the content of the root node and replace span
-// by their text content, execpt when the id is cursor
-let replaceMostHTMLTag = (content) =>{
-  let regex = /<span class="\w*">/g
-  let text = content.replace(regex, '')
-
-  regex = /<span>/g
-  text = text.replace(regex, '')
-
-  regex = /<\/span>/g
-  text = text.replace(regex, '')
-  return text
-}
 
 // options: keepBRTag with br->\n;
-let htmlToTextCode = (htmlRoot, opts={}) => {
-  htmlRoot.childNodes.map( node => {
+let htmlToTextNodes = (htmlRoot, opts={}) => {
+  let newChildNodes = Array.from(htmlRoot.childNodes).map( node => {
       if(node.tagName === "SPAN"){
-
+        return node.id === "cursor" ? node : document.createTextNode(node.innerHTML)
+      }else if(node.tagName === "BR"){
+        return opts.keepBRTag ? node :  document.createTextNode('\n')
       }else if(!node.tagName){
-
+        return node
       }else{
         console.log("what is this node ?", node)
       }
 
   })
+  return newChildNodes
+}
+
+let htmlToTextFor = (htmlRoot, newNodes) => {
+    htmlRoot.innerHTML = ""
+    newNodes.forEach(node => {
+      htmlRoot.appendChild(node)
+    })
 }
 
 
 
-module.exports = {graph_to_text, htmlToTextCode};
+
+module.exports = {graph_to_text, htmlToTextNodes, htmlToTextFor};
