@@ -5,6 +5,7 @@ import {graph_to_text, htmlToTextCode} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
 function App() {
+    let editing = false
     const initialText = "The code is <br/> <span class='Function'>loading</span>...";
    const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
@@ -16,10 +17,10 @@ function App() {
   }
 
   let getTextCode = () =>{
-    const el = document.getElementById("code_box");
-    // return htmlToTextCode(el.innerHTML)
+    const codeBox = document.getElementById("code_box");
+    // return htmlToTextCode(codeBox.innerHTML)
     let span = document.createElement('span');
-    span.innerHTML = htmlToTextCode(el.innerHTML);
+    span.innerHTML = htmlToTextCode(codeBox.innerHTML);
     return span.textContent || span.innerText;
   }
 
@@ -33,20 +34,44 @@ function App() {
   }
 
   const saveCode = async () => {
-    await axios.post('/code', {code: getTextCode()});
+    let response = await axios.post('/code', {code: getTextCode()});
+    // thats inneficient, better to get graph from post response
+    if(response.status === 200){
+      await fetcData()
+      editing = false
+      console.log('set editing at false')
+    }
   }
 
   let setFocusEventsHandler= () =>{
     const codeBox = document.getElementById("code_box");
-    codeBox.addEventListener('focus', (event) => {
-      // replace html by text in the element
+    codeBox.addEventListener('input', (event) => {
+      if(!editing){
+        console.log('set editing at true')
+            let codeBox = document.getElementById("code_box");
+            // remove all html except the <br>. the alternative is to go full text with the css option and turn the <br> in \n
+            // that way we would be sure to not have (badly managed) html anymore
+            codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true});
+            editing = true
+        }
     });
 
-    codeBox.addEventListener('blur', (event) => {
-      // send save request and so
-    });
+    // codeBox.addEventListener('blur', (event) => {
+    //   saveCode()
+    // });
 }
+
+let setKeyEventsHandler = () => {
+  const codeBox = document.getElementById("code_box");
+  codeBox.addEventListener("keydown", event => {
+    if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
+      saveCode()
+    }
+  });
+}
+
    useEffect(() => {
+    setKeyEventsHandler()
     setFocusEventsHandler()
     setCode(initialText)
     fetcData();
@@ -77,7 +102,7 @@ function App() {
 
           </div>
           </div>
-          <div onClick={saveCode} className="SaveButton">
+          <div className="SaveButton">
           Save
           </div>
           </div>

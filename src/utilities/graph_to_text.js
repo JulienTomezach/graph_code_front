@@ -92,21 +92,26 @@ let graph_to_text_aux = (graph_input, type=null) => {
   }
 }
 
+let replaceMostHTMLTag = (content) =>{
+  let regex = /<span class="\w*">/g
+  let text = content.replace(regex, '')
 
-let htmlToTextCode = (html) => {
-  let regex = /<br>/g;
+  regex = /<span>/g
+  text = text.replace(regex, '')
 
-  let text = html.replace(regex, '\n')
-
-  // regex = /<span class="\w*">/g
-  // text = text.replace(regex, '')
-
-  // regex = /<span>/g
-  // text = text.replace(regex, '')
-
-  // regex = /<\/span>/g
-  // text = text.replace(regex, '')
+  regex = /<\/span>/g
+  text = text.replace(regex, '')
   return text
+}
+
+let htmlToTextCode = (html, opts={}) => {
+  if(opts.keepReturn){
+    return replaceMostHTMLTag(html)
+  }
+
+  let regex = /<br>/g;
+  let text = html.replace(regex, '\n')
+  return replaceMostHTMLTag(text)
 }
 
 
