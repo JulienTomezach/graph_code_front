@@ -49,7 +49,6 @@ const SPAN = (content, className) => {
 }
 
 let graph_to_text_aux = (graph_input, type=null) => {
-  console.log(graph_input)
   if('definitions' in graph_input){
     let definitions = graph_input.definitions
     return definitions.map(([condition, formula]) => graph_to_text_aux(condition)+" | "+graph_to_text_aux(formula)).join('\n')
@@ -99,15 +98,15 @@ let htmlToTextCode = (html) => {
 
   let text = html.replace(regex, '\n')
 
-  regex = /<span class="\w*">/g
-  text = text.replace(regex, '')
+  // regex = /<span class="\w*">/g
+  // text = text.replace(regex, '')
 
-  regex = /<span>/g
-  text = text.replace(regex, '')
+  // regex = /<span>/g
+  // text = text.replace(regex, '')
 
-  regex = /<\/span>/g
-  text = text.replace(regex, '')
-  return
+  // regex = /<\/span>/g
+  // text = text.replace(regex, '')
+  return text
 }
 
 

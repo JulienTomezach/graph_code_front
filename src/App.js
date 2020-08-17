@@ -17,7 +17,10 @@ function App() {
 
   let getTextCode = () =>{
     const el = document.getElementById("code_box");
-    return htmlToTextCode(el.innerHTML)
+    // return htmlToTextCode(el.innerHTML)
+    let span = document.createElement('span');
+    span.innerHTML = htmlToTextCode(el.innerHTML);
+    return span.textContent || span.innerText;
   }
 
    const fetcData = async () => {
