@@ -50,12 +50,16 @@ function App() {
     codeBox.addEventListener('input', (event) => {
       if(!editing){
         console.log('set editing at true')
-            let codeBox = document.getElementById("code_box");
-            console.log('caret pos', window.getSelection())
-            // remove all html except the <br>. the alternative is to go full text with the css option and turn the <br> in \n
-            // that way we would be sure to not have (badly managed) html anymore
-            // codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true});
-            // editing = true
+            let cursor = document.createElement("span");
+            cursor.id = "cursor"
+            let sel = window.getSelection();
+            let range = sel.getRangeAt(0);
+            range.insertNode(cursor);
+            const codeBox = document.getElementById("code_box");
+            codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true, keepCursor: true});
+            cursor = document.getElementById("cursor");
+            cursor.focus()
+            editing = true
         }
     });
 
