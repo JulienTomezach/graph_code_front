@@ -4,10 +4,12 @@ import './App.css';
 import {graph_to_text, htmlToTextCode} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
+// .selectionStart
+
 function App() {
     let editing = false
     const initialText = "The code is <br/> <span class='Function'>loading</span>...";
-   const axios = axios_base.create({
+    const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
 
@@ -49,10 +51,11 @@ function App() {
       if(!editing){
         console.log('set editing at true')
             let codeBox = document.getElementById("code_box");
+            console.log('caret pos', window.getSelection())
             // remove all html except the <br>. the alternative is to go full text with the css option and turn the <br> in \n
             // that way we would be sure to not have (badly managed) html anymore
-            codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true});
-            editing = true
+            // codeBox.innerHTML = htmlToTextCode(codeBox.innerHTML, {keepReturn: true});
+            // editing = true
         }
     });
 
