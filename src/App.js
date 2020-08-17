@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {graph_to_text} from './utilities/graph_to_text'
+import {graph_to_text, htmlToTextCode} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
 
   let getTextCode = () =>{
     const el = document.getElementById("code_box");
-    return el.innerHTML
+    return htmlToTextCode(el.innerHTML)
   }
 
    const fetcData = async () => {

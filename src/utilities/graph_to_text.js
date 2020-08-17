@@ -94,5 +94,22 @@ let graph_to_text_aux = (graph_input, type=null) => {
 }
 
 
+let htmlToTextCode = (html) => {
+  let regex = /<br>/g;
 
-module.exports = {graph_to_text};
+  let text = html.replace(regex, '\n')
+
+  regex = /<span class="\w*">/g
+  text = text.replace(regex, '')
+
+  regex = /<span>/g
+  text = text.replace(regex, '')
+
+  regex = /<\/span>/g
+  text = text.replace(regex, '')
+  return
+}
+
+
+
+module.exports = {graph_to_text, htmlToTextCode};
