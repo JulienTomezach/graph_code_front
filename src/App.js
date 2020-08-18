@@ -119,9 +119,6 @@ let setKeyEventsHandler = () => {
 
           </div>
           </div>
-          <div className="SaveButton">
-          Save
-          </div>
           </div>
 
       </div>
