@@ -75,6 +75,8 @@ let graph_to_text_aux = (graph_input, type=null) => {
         return graph_input['=='].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' == ', OPERATION))
     }else if('!=' in graph_input){
         return graph_input['!='].map(sub_element => graph_to_text_aux(sub_element)).join(SPAN(' != ', OPERATION))
+    }else if('()' in graph_input){
+        return SPAN(' ( ', OPERATION) + graph_to_text_aux(graph_input['()']) + SPAN(' ) ', OPERATION)
     }else if('where' in graph_input){
       // it is binary operator too like +, - ...
         let element = graph_input['where']
