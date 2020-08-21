@@ -93,7 +93,7 @@ let graph_to_text_aux = (graph_input, type=null) => {
 }
 
 let htmlToTextNodes = (htmlRoot, opts={}) => {
-  return _.flatten(htmlToTextNodesAux(htmlRoot, opts))
+  return _.flattenDeep(htmlToTextNodesAux(htmlRoot, opts))
 }
 
 // options: keepBRTag with br->\n;
@@ -116,8 +116,9 @@ let htmlToTextNodesAux = (node, opts={}) => {
 
 let htmlToTextFor = (htmlRoot, newNodes) => {
     htmlRoot.innerHTML = ""
-    console.log('node', newNodes)
+    console.log('nodes', newNodes)
     newNodes.forEach(node => {
+      console.log('node', node)
       htmlRoot.appendChild(node)
     })
 }
