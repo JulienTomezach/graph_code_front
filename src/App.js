@@ -12,6 +12,8 @@ function App() {
     const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
+   const [script, setScript] = useState('')
+   const [dataContext, setDataContext] = useState('')
 
   let setCode = (text) =>{
     const el = document.getElementById("code_box");
@@ -25,10 +27,22 @@ function App() {
     return span.textContent || span.innerText;
   }
 
+
    const fetcData = async () => {
     try {
       const response = await axios.get('/code');
       setCode(graph_to_text(response.data))
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const fetcExample = async () => {
+    try {
+      const response = await axios.get('/example');
+      console.log('example result',response.result)
+      setScript(response.data.script)
+      setDataContext(response.data.data_context)
     } catch (error) {
       console.error(error);
     }
@@ -92,6 +106,7 @@ let setKeyEventsHandler = () => {
     setFocusEventsHandler()
     setCode(initialText)
     fetcData();
+    fetcExample();
   });
 
 
@@ -123,7 +138,9 @@ let setKeyEventsHandler = () => {
           <div className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
-            <h4>Execution:</h4>
+            <div>{dataContext}</div>
+            <h4>Script:</h4>
+            <div>{script}</div>
           </div>
           </div>
           </div>
