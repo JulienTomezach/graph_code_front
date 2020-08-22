@@ -119,6 +119,13 @@ let setKeyEventsHandler = () => {
 
           </div>
           </div>
+          <div className="ExamplesParent">
+          <div className="Examples">
+            <h3>Examples:</h3>
+            <h4>Data context:</h4>
+            <h4>Execution:</h4>
+          </div>
+          </div>
           </div>
 
       </div>

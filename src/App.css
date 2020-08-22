@@ -95,6 +95,22 @@
 
 }
 
+.ExamplesParent{
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.Examples{
+  flex-grow: 1;
+  margin: 1em;
+  padding: 1em;
+  padding-left: 2em;
+  padding-right: 2em;
+}
+
 .SaveButton{
   font-weight: bold;
   background: rgba(77,208,225, 0.8);
