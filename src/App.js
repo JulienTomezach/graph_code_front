@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -14,6 +15,7 @@ function App() {
                         });
    const [script, setScript] = useState('')
    const [dataContext, setDataContext] = useState('')
+   const [execResult, setExecResult] = useState('')
 
   let setCode = (text) =>{
     const el = document.getElementById("code_box");
@@ -40,9 +42,13 @@ function App() {
   const fetcExample = async () => {
     try {
       const response = await axios.get('/example');
-      console.log('example result',response.result)
+      console.log('example result',response.data.result)
       setScript(response.data.script)
       setDataContext(response.data.data_context)
+      setExecResult(response.data.result)
+      // amount_for: {details: , value:}
+      // what do we do with result ?
+
     } catch (error) {
       console.error(error);
     }
@@ -92,6 +98,10 @@ function App() {
 
 }
 
+// how do we display results ?
+// we have it structured
+// so we can display it with html, at least with <br<, then with link etc..
+
 let setKeyEventsHandler = () => {
   const codeBox = document.getElementById("code_box");
   codeBox.addEventListener("keydown", event => {
@@ -101,13 +111,34 @@ let setKeyEventsHandler = () => {
   });
 }
 
-   useEffect(() => {
+   useEffect( () => {
     setKeyEventsHandler()
     setFocusEventsHandler()
     setCode(initialText)
-    fetcData();
-    fetcExample();
-  });
+     fetcData();
+     fetcExample();
+  }, []);
+
+// take the result in, send back an html component
+// {details:, value:}
+let resultToComponent = (result) => {
+  if(result === null) return
+  console.log('result',result)
+  // let mainKey = Object.keys(result)[0]
+  // let hash = result[mainKey]
+  // if(hash.details){
+  //   console.log('result[mainKey].value', result[mainKey].value)
+  //   let start = <span class='Index'>  {result[mainKey].value}  </span>
+  //   let end = ""
+  //   end = Object.keys(result[mainKey].details)[0]
+  //   return (<span>
+  //           {start}
+  //        </span>)
+  // }else{
+  //   console.log('resultToComponent: recursion: not impplemented, probably on demand too')
+  //   // return result[mainKey].map(elem => resultToComponent(elem))
+  // }
+}
 
 
   return (
@@ -138,9 +169,11 @@ let setKeyEventsHandler = () => {
           <div className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
-            <div>{dataContext}</div>
+            {<div>{dataContext}</div>}
             <h4>Script:</h4>
-            <div>{script}</div>
+            {<div>{script}</div>}
+            <h4>Result:</h4>
+            <div >{resultToComponent(execResult)}</div>
           </div>
           </div>
           </div>
