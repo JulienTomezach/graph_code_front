@@ -64,6 +64,15 @@ function App() {
     }
   }
 
+  const saveExample = async () => {
+    const dataContextBox = document.getElementById("data_context_box").innerText;
+    const scriptBox = document.getElementById("script_box").innerText;
+    let response = await axios.post('/example', {script: scriptBox, data_context: dataContextBox});
+    if(response.status === 200){
+      await fetcExample()
+    }
+  }
+
   let setFocusEventsHandler= () =>{
     const codeBox = document.getElementById("code_box");
     codeBox.addEventListener('input', (event) => {
@@ -107,6 +116,13 @@ let setKeyEventsHandler = () => {
   codeBox.addEventListener("keydown", event => {
     if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
       saveCode()
+    }
+  });
+
+  const exampleBox = document.getElementById("example_box");
+  exampleBox.addEventListener("keydown", event => {
+    if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
+      saveExample()
     }
   });
 }
@@ -166,12 +182,12 @@ let resultToComponent = (result) => {
           </div>
           </div>
           <div className="ExamplesParent">
-          <div className="Examples">
+          <div id='example_box' className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
-            {<div>{dataContext}</div>}
+            <div id='data_context_box' contentEditable >{dataContext}</div>
             <h4>Script:</h4>
-            {<div>{script}</div>}
+            {<div id='script_box' contentEditable>{script}</div>}
             <h4>Result:</h4>
             <div >{resultToComponent(execResult)}</div>
           </div>
