@@ -177,7 +177,7 @@ let resultToComponent = (result) => {
 
 
           <div className="Content">
-          <div id="code_box" contentEditable  className="CodeBox">
+          <div id="code_box" spellCheck={false} contentEditable  className="CodeBox">
 
           </div>
           <div id='example_box' className="Examples">
