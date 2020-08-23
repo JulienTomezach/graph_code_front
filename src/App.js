@@ -15,7 +15,7 @@ function App() {
                         });
    const [script, setScript] = useState('')
    const [dataContext, setDataContext] = useState('')
-   const [execResult, setExecResult] = useState('')
+   const [execResult, setExecResult] = useState(null)
 
   let setCode = (text) =>{
     const el = document.getElementById("code_box");
@@ -124,20 +124,20 @@ let setKeyEventsHandler = () => {
 let resultToComponent = (result) => {
   if(result === null) return
   console.log('result',result)
-  // let mainKey = Object.keys(result)[0]
-  // let hash = result[mainKey]
-  // if(hash.details){
-  //   console.log('result[mainKey].value', result[mainKey].value)
-  //   let start = <span class='Index'>  {result[mainKey].value}  </span>
-  //   let end = ""
-  //   end = Object.keys(result[mainKey].details)[0]
-  //   return (<span>
-  //           {start}
-  //        </span>)
-  // }else{
-  //   console.log('resultToComponent: recursion: not impplemented, probably on demand too')
-  //   // return result[mainKey].map(elem => resultToComponent(elem))
-  // }
+  let mainKey = Object.keys(result)[0]
+  let hash = result[mainKey]
+  if(hash.details){
+    console.log('result[mainKey].value', result[mainKey].value)
+    let start = <span className='Index'>  {result[mainKey].value}  </span>
+    let end = ""
+    end = Object.keys(result[mainKey].details)[0]
+    return (<span>
+            {start}
+         </span>)
+  }else{
+    console.log('resultToComponent: recursion: not impplemented, probably on demand too')
+    // return result[mainKey].map(elem => resultToComponent(elem))
+  }
 }
 
 
