@@ -26,13 +26,7 @@
   margin-left: 0.2em;
 }
 
-.RightScreen {
-  height:100%;
-  margin-left: 175px;
-  display: flex;
-  flex-direction: column;
-  background-color: #212121;
-}
+
 
 .Sidebar{
   height:100%;
@@ -62,9 +56,18 @@
   padding-left: 2em;
   height: 25px;
 }
+
+.RightScreen {
+  /*height:100%;*/
+  margin-left: 175px;
+  display: flex;
+  flex-direction: column;
+  background-color: #212121;
+}
+
 .Content {
-  padding: 1em;
-  flex-grow: 1;
+  /*padding: 1em;*/
+  margin: 1em;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -72,22 +75,14 @@
   overflow: scroll;
 }
 
-.CodeBoxParent {
-
- flex-grow: 1;
- width: 100%;
- display: flex;
-  flex-direction: column;
-  overflow: scroll;
-
-}
-
 .CodeBox{
-  flex-grow: 1;
-  margin: 1em;
+  /*flex-grow: 1;*/
+
+ width: 100%;
+
   /*background-color: #313131;*/
   border-radius: 5px;
-  padding: 1em;
+  /*padding: 1em;*/
   padding-left: 2em;
   padding-right: 2em;
   /*for text*/
@@ -95,16 +90,8 @@
 
 }
 
-.ExamplesParent{
-  flex-grow: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: scroll;
-}
-
 .Examples{
-  flex-grow: 1;
+  width: 100%;
   margin: 1em;
   padding: 1em;
   padding-left: 2em;

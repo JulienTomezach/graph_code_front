@@ -5,7 +5,8 @@ import './App.css';
 import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
-// .selectionStart
+//
+// problem of "connection refused" must come from contentEditable and react driven
 
 function App() {
     let editing = false
@@ -176,12 +177,9 @@ let resultToComponent = (result) => {
 
 
           <div className="Content">
-          <div className="CodeBoxParent">
           <div id="code_box" contentEditable  className="CodeBox">
 
           </div>
-          </div>
-          <div className="ExamplesParent">
           <div id='example_box' className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
@@ -190,7 +188,6 @@ let resultToComponent = (result) => {
             {<div id='script_box' contentEditable>{script}</div>}
             <h4>Result:</h4>
             <div >{resultToComponent(execResult)}</div>
-          </div>
           </div>
           </div>
 
