@@ -18,6 +18,17 @@ function App() {
    const [dataContext, setDataContext] = useState('')
    const [execResult, setExecResult] = useState(null)
 
+   let insertNodeAtCursor = (node) => {
+      let sel = window.getSelection();
+      let range = sel.getRangeAt(0);
+      range.insertNode(node);
+
+      range.setStart(node, node.textContent.length)
+      range.collapse(true)
+
+      sel.removeAllRanges()
+      sel.addRange(range)
+   }
   let setCode = (text) =>{
     const el = document.getElementById("code_box");
     el.innerHTML = text
@@ -124,6 +135,9 @@ let setKeyEventsHandler = () => {
   exampleBox.addEventListener("keydown", event => {
     if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
       saveExample()
+    }else if(event.key === "Tab"){
+      event.preventDefault()
+      insertNodeAtCursor(document.createTextNode("\t"));
     }
   });
 }
@@ -183,9 +197,9 @@ let resultToComponent = (result) => {
           <div id='example_box' className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
-            <div id='data_context_box' contentEditable >{dataContext}</div>
+            <div spellCheck={false} id='data_context_box' contentEditable >{dataContext}</div>
             <h4>Script:</h4>
-            {<div id='script_box' contentEditable>{script}</div>}
+            {<div  spellCheck={false} id='script_box' contentEditable>{script}</div>}
             <h4>Result:</h4>
             <div >{resultToComponent(execResult)}</div>
           </div>
