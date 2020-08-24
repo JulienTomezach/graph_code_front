@@ -191,7 +191,7 @@ let resultToComponent = (result) => {
       </div>
       </div>
 
-      <div className="RightScreen">
+      {/*<div className="RightScreen">*/}
 
           {/*<div className="Header">
 
@@ -213,7 +213,7 @@ let resultToComponent = (result) => {
           </div>
           </div>
 
-      </div>
+      {/*</div>*/}
 
     </div>
   );

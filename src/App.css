@@ -63,16 +63,18 @@
   margin-left: 175px;
   display: flex;
   flex-direction: column;
-  background-color: #212121;
 }
 
 .Content {
+  background-color: #212121;
+  margin-left: 175px;
+
+  height:100%;
   /*padding: 1em;*/
-  margin: 1em;
-  justify-content: center;
+  /*justify-content: center;
   align-items: center;
   display: flex;
-  flex-direction: column;
+  flex-direction: column;*/
   overflow: scroll;
 }
 
@@ -83,9 +85,9 @@
 
   /*background-color: #313131;*/
   border-radius: 5px;
-  /*padding: 1em;*/
-  padding-left: 2em;
-  padding-right: 2em;
+  margin: 1em;
+  /*padding-left: 2em;
+  padding-right: 2em;*/
   /*for text*/
   white-space: pre-wrap;
 
@@ -94,9 +96,9 @@
 .Examples{
   width: 100%;
   margin: 1em;
-  padding: 1em;
+  /*padding: 1em;
   padding-left: 2em;
-  padding-right: 2em;
+  padding-right: 2em;*/
   white-space: pre-wrap;
 }
 
