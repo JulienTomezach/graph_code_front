@@ -42,7 +42,7 @@ function App() {
   }
 
 
-   const fetcData = async () => {
+   const fetchData = async () => {
     try {
       const response = await axios.get('/code');
       setCode(graph_to_text(response.data))
@@ -51,7 +51,7 @@ function App() {
     }
   }
 
-  const fetcExample = async () => {
+  const fetchExample = async () => {
     try {
       const response = await axios.get('/example');
       console.log('example result',response.data.result)
@@ -70,7 +70,7 @@ function App() {
     let response = await axios.post('/code', {code: getTextCode()});
     // thats inneficient, better to get graph from post response
     if(response.status === 200){
-      await fetcData()
+      await fetchAllData()
       editing = false
       console.log('set editing at false')
     }
@@ -81,14 +81,12 @@ function App() {
     const scriptBox = document.getElementById("script_box").innerText;
     let response = await axios.post('/example', {script: scriptBox, data_context: dataContextBox});
     if(response.status === 200){
-      await fetcExample()
+      await fetchAllData()
     }
   }
 
-  let setFocusEventsHandler= () =>{
-    const codeBox = document.getElementById("code_box");
-    codeBox.addEventListener('input', (event) => {
-      if(!editing){
+  let toEditingMode = () => {
+    if(!editing){
             editing = true
             console.log('set editing at true')
             let cursor = document.createElement("span");
@@ -115,19 +113,30 @@ function App() {
             sel.addRange(range)
             // cursor.focus()
         }
+  }
+
+  let setFocusEventsHandler= () => {
+    const codeBox = document.getElementById("code_box");
+    codeBox.addEventListener('input', (event) => {
+      toEditingMode()
     });
 
-}
+  }
 
-// how do we display results ?
-// we have it structured
-// so we can display it with html, at least with <br<, then with link etc..
+let fetchAllData = () => {
+  fetchData();
+  fetchExample();
+}
 
 let setKeyEventsHandler = () => {
   const codeBox = document.getElementById("code_box");
   codeBox.addEventListener("keydown", event => {
     if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
       saveCode()
+    }else if(event.key === "Tab"){
+      insertNodeAtCursor(document.createTextNode("\t"));
+      toEditingMode()
+      event.preventDefault()
     }
   });
 
@@ -146,8 +155,7 @@ let setKeyEventsHandler = () => {
     setKeyEventsHandler()
     setFocusEventsHandler()
     setCode(initialText)
-     fetcData();
-     fetcExample();
+     fetchAllData();
   }, []);
 
 // take the result in, send back an html component
