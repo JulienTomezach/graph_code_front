@@ -131,8 +131,9 @@ let fetchAllData = () => {
 let setKeyEventsHandler = () => {
   const codeBox = document.getElementById("code_box");
   codeBox.addEventListener("keydown", event => {
-    if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
+    if(event.key === 's' && (event.metaKey || event.ctrlKey)){
       saveCode()
+      event.preventDefault()
     }else if(event.key === "Tab"){
       insertNodeAtCursor(document.createTextNode("\t"));
       toEditingMode()
@@ -142,8 +143,9 @@ let setKeyEventsHandler = () => {
 
   const exampleBox = document.getElementById("example_box");
   exampleBox.addEventListener("keydown", event => {
-    if(event.key === 'Enter' && (event.metaKey || event.ctrlKey)){
+    if(event.key === 's' && (event.metaKey || event.ctrlKey)){
       saveExample()
+      event.preventDefault()
     }else if(event.key === "Tab"){
       event.preventDefault()
       insertNodeAtCursor(document.createTextNode("\t"));
