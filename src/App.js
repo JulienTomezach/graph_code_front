@@ -69,11 +69,11 @@ function App() {
   const saveCode = async () => {
     let response = await axios.post('/code', {code: getTextCode()});
     // thats inneficient, better to get graph from post response
-    if(response.status === 200){
-      await fetchAllData()
-      editing = false
-      console.log('set editing at false')
-    }
+    // if(response.status === 200){
+    //   await fetchAllData()
+    //   editing = false
+    //   console.log('set editing at false')
+    // }
   }
 
   const saveExample = async () => {
@@ -160,8 +160,10 @@ let setKeyEventsHandler = () => {
      fetchAllData();
   }, []);
 
-// take the result in, send back an html component
-// {details:, value:}
+// approach:
+// all the element but some are displayed. only when other are click_ed on.
+// by default, none is enabled
+// first just display those element, then add the turn on/off
 let resultToComponent = (result) => {
   if(result === null) return
   console.log('result',result)
@@ -170,17 +172,27 @@ let resultToComponent = (result) => {
   if(hash.details){
     console.log('result[mainKey].value', result[mainKey].value)
     let start = <span className='Index'>  {result[mainKey].value}  </span>
-    let end = ""
-    end = Object.keys(result[mainKey].details)[0]
+
+    let next = resultToComponentAux(result[mainKey].details)
     return (<span>
-            {start}
+            {start} = {next}
          </span>)
   }else{
     console.log('resultToComponent: recursion: not impplemented, probably on demand too')
     // return result[mainKey].map(elem => resultToComponent(elem))
   }
 }
+ // {"amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":231}},{"line_for":{"details":{},"value":0}}],"value":231}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0}},{"line_for":{"details":{},"value":630}}],"value":630}}],"value":861}},"value":861}}
 
+let resultToComponentAux = (elem) => {
+  let mainKey = Object.keys(elem)[0]
+  let mainElement = elem[mainKey]
+  if(mainKey === 'sum_on'){
+    console.log("details", mainElement.details)
+    return '( ' +mainElement.details.map(elem => resultToComponentAux(elem)).join(' + ')+ ' )'
+  }
+  return mainElement.value
+}
 
   return (
 
