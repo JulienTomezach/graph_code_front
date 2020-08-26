@@ -21,20 +21,27 @@ let graph_to_text = (graph_input) => {
 
   let textCode=""
   graph_input.forEach(element => {
-    if('comment' in element){
-        textCode +=  SPAN("# "+element.comment, COMMENT) + '<br/>'
-    }else{
-      let keys = Object.keys(element)
-      if(keys.length >1) throw Error('graph_to_text: several keys for an element of the graph')
-      let key = keys[0]
-      let value = Object.values(element)[0]
-      if(!('formulas' in value)) throw Error('graph_to_text: formulas not in element')
-      let formula = value.formulas
+
+    let keys = Object.keys(element)
+    if(keys.length >1) throw Error(`graph_to_text: several keys for an element of the graph ${keys.join('')}`)
+    let main_key = keys[0]
+
+    // first add the comments
+    if('comments' in element[main_key]){
+      element[main_key].comments.map(comment => {
+          textCode +=  SPAN("# "+comment, COMMENT) + '<br/>'
+      })
+    }
+
+    let value = Object.values(element)[0]
+    if(!('formulas' in value)) throw Error('graph_to_text: "formulas" not in element')
+    let formula = value.formulas
     // do something with the name of formula, the parameters
     let parameters = value.parameters.map(param =>  graph_to_text_aux(param, PARAM)).join(", ")
     let line_break = formula.definitions ? "\n" : ""
-    textCode += SPAN(key, FUNCTION) + "("+ parameters+ ")"+ " = " + line_break + graph_to_text_aux(formula) + '<br/>' + '<br/>'
-    }
+    textCode += SPAN(main_key, FUNCTION) + "("+ parameters+ ")"+ " = " + line_break + graph_to_text_aux(formula) + '<br/>' + '<br/>'
+
+
   })
   return textCode
 }
