@@ -47,7 +47,7 @@ let graph_to_text = (graph_input) => {
     let formula = value.formulas
     // do something with the name of formula, the parameters
     let parameters = value.parameters.map(param =>  graph_to_text_aux(param, line_break, PARAM)).join(", ")
-    let line_break_or_not = formula.definitions ? line_break : ""
+    let line_break_or_not = (formula.definitions ? line_break + '\t' : "")
     textCode += offset + SPAN(main_key, FUNCTION) + "("+ parameters+ ")"+ " = " + line_break_or_not + graph_to_text_aux(formula, line_break) + '<br/>' + '<br/>'
 
 
