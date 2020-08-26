@@ -181,16 +181,21 @@ let resultToComponent = (result) => {
     // return result[mainKey].map(elem => resultToComponent(elem))
   }
 }
- // {"amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":231}},{"line_for":{"details":{},"value":0}}],"value":231}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0}},{"line_for":{"details":{},"value":630}}],"value":630}}],"value":861}},"value":861}}
+ // "amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":21,"inputs":["lot1","fund_call1","sub1"]}},{"line_for":{"details":{},"value":0,"inputs":["lot1","fund_call1","sub2"]}}],"value":21}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0,"inputs":["lot2","fund_call1","sub1"]}},{"line_for":{"details":{},"value":600,"inputs":["lot2","fund_call1","sub2"]}}],"value":600}}],"value":621}},"value":621,"inputs":["owner1","fund_call1","budget_version1"]}}
 
 let resultToComponentAux = (elem) => {
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
   if(mainKey === 'sum_on'){
     console.log("details", mainElement.details)
-    return '( ' +mainElement.details.map(elem => resultToComponentAux(elem)).join(' + ')+ ' )'
+    let sub_elements = mainElement.details.map(elem => resultToComponentAux(elem))
+    const reducer = (accumulator, currentValue) => {
+      return accumulator.concat([currentValue, <span> + </span>])
+    }
+    sub_elements = sub_elements.reduce(reducer, [])
+    return <span> ( {sub_elements.slice(0, sub_elements.length - 1)} ) </span>
   }
-  return mainElement.value
+  return <span> {mainElement.value} </span>
 }
 
   return (
