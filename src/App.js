@@ -195,7 +195,8 @@ let resultToComponentAux = (elem) => {
     sub_elements = sub_elements.reduce(reducer, [])
     return <span> ( {sub_elements.slice(0, sub_elements.length - 1)} ) </span>
   }
-  return <span> {mainElement.value} </span>
+  {/*return <span> {mainElement.value} <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} ) </span> </span>*/}
+  return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>
 }
 
   return (

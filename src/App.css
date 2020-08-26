@@ -149,3 +149,9 @@ color: #ffaa00;
 .Index{
  color: #a959ff;
 }
+
+.Result {
+
+    font-style: italic;
+    color: #4FC3F7;
+}
