@@ -5,8 +5,7 @@ import './App.css';
 import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 const axios_base = require('axios').default;
 
-//
-// problem of "connection refused" must come from contentEditable and react driven
+// Should I not try to use react with contentEditable ?
 
 function App() {
     let editing = false
@@ -14,9 +13,7 @@ function App() {
     const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
-   const [script, setScript] = useState('')
-   const [dataContext, setDataContext] = useState('')
-   const [execResult, setExecResult] = useState(null)
+    const [execResult, setExecResult] = useState(null)
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -55,11 +52,13 @@ function App() {
     try {
       const response = await axios.get('/example');
       console.log('example result',response.data.result)
-      setScript(response.data.script)
-      setDataContext(response.data.data_context)
+      let data_context_box = document.getElementById('data_context_box')
+      data_context_box.innerHTML = response.data.data_context
+
+      let script_box = document.getElementById('script_box')
+      script_box.innerHTML = response.data.script
+
       setExecResult(response.data.result)
-      // amount_for: {details: , value:}
-      // what do we do with result ?
 
     } catch (error) {
       console.error(error);
@@ -69,11 +68,11 @@ function App() {
   const saveCode = async () => {
     let response = await axios.post('/code', {code: getTextCode()});
     // thats inneficient, better to get graph from post response
-    // if(response.status === 200){
-    //   await fetchAllData()
-    //   editing = false
-    //   console.log('set editing at false')
-    // }
+    if(response.status === 200){
+      await fetchAllData()
+      editing = false
+      console.log('set editing at false')
+    }
   }
 
   const saveExample = async () => {
@@ -219,9 +218,9 @@ let resultToComponentAux = (elem) => {
           <div id='example_box' className="Examples">
             <h3>Examples:</h3>
             <h4>Data context:</h4>
-            <div spellCheck={false} id='data_context_box' contentEditable >{dataContext}</div>
+            <div spellCheck={false} id='data_context_box' contentEditable ></div>
             <h4>Script:</h4>
-            {<div  spellCheck={false} id='script_box' contentEditable>{script}</div>}
+            <div  spellCheck={false} id='script_box' contentEditable></div>
             <h4>Result:</h4>
             <div >{resultToComponent(execResult)}</div>
           </div>
