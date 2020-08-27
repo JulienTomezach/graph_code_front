@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
+import { v4 as uuidv4 } from 'uuid';
 const axios_base = require('axios').default;
 
 // Should I not try to use react with contentEditable ?
@@ -14,6 +15,7 @@ function App() {
                           baseURL: 'http://localhost:3000/',
                         });
     const [execResult, setExecResult] = useState(null)
+    const [resultDisplay, setResultDisplay] = useState({})
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -48,6 +50,22 @@ function App() {
     }
   }
 
+// "amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":21,"inputs":["lot1","fund_call1","sub1"]}},{"line_for":{"details":{},"value":0,"inputs":["lot1","fund_call1","sub2"]}}],"value":21}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0,"inputs":["lot2","fund_call1","sub1"]}},{"line_for":{"details":{},"value":600,"inputs":["lot2","fund_call1","sub2"]}}],"value":600}}],"value":621}},"value":621,"inputs":["owner1","fund_call1","budget_version1"]}}
+// details : {}
+// or details: []
+  let attachUUID = (hash) => {
+    if(Object.keys(hash).length === 0) return
+    let mainKey = Object.keys(hash)[0]
+    let mainElement = hash[mainKey]
+    console.log('debug hash', mainElement)
+    mainElement.uuid = uuidv4();
+    if(Array.isArray(mainElement.details)){
+      mainElement.details.map(subHash => attachUUID(subHash))
+    }else{
+        attachUUID(mainElement.details)
+      }
+  }
+
   const fetchExample = async () => {
     try {
       const response = await axios.get('/example');
@@ -58,8 +76,9 @@ function App() {
       let script_box = document.getElementById('script_box')
       script_box.innerHTML = response.data.script
 
-      setExecResult(response.data.result)
-
+      let resultDetails = response.data.result
+      attachUUID(resultDetails)
+      setExecResult(resultDetails)
     } catch (error) {
       console.error(error);
     }
@@ -183,6 +202,10 @@ let resultToComponent = (result) => {
 }
  // "amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":21,"inputs":["lot1","fund_call1","sub1"]}},{"line_for":{"details":{},"value":0,"inputs":["lot1","fund_call1","sub2"]}}],"value":21}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0,"inputs":["lot2","fund_call1","sub1"]}},{"line_for":{"details":{},"value":600,"inputs":["lot2","fund_call1","sub2"]}}],"value":600}}],"value":621}},"value":621,"inputs":["owner1","fund_call1","budget_version1"]}}
 
+let showDetail = (id_elem) => {
+  setResultDisplay(state => ({...state, [id_elem]: true}) )
+}
+
 let resultToComponentAux = (elem) => {
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
@@ -195,9 +218,16 @@ let resultToComponentAux = (elem) => {
     sub_elements = sub_elements.reduce(reducer, [])
     return <span> ( {sub_elements.slice(0, sub_elements.length - 1)} ) </span>
   }
-  {/*return <span> {mainElement.value} <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} ) </span> </span>*/}
-  return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>
+
+  const id_elem = mainElement.uuid;
+
+  let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
+  console.log('resultDisplay',resultDisplay)
+  return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
+  {/*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/}
 }
+
+  let resultComponent = () => resultToComponent(execResult)
 
   return (
 
@@ -228,7 +258,7 @@ let resultToComponentAux = (elem) => {
             <h4>Script:</h4>
             <div  spellCheck={false} id='script_box' contentEditable></div>
             <h4>Result:</h4>
-            <div >{resultToComponent(execResult)}</div>
+            <div >{resultComponent()}</div>
           </div>
           </div>
 
