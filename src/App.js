@@ -199,7 +199,7 @@ let resultToComponent = (result) => {
  // "amount_for":{"details":{"sum_on":{"details":[{"sum_on":{"details":[{"line_for":{"details":{},"value":21,"inputs":["lot1","fund_call1","sub1"]}},{"line_for":{"details":{},"value":0,"inputs":["lot1","fund_call1","sub2"]}}],"value":21}},{"sum_on":{"details":[{"line_for":{"details":{},"value":0,"inputs":["lot2","fund_call1","sub1"]}},{"line_for":{"details":{},"value":600,"inputs":["lot2","fund_call1","sub2"]}}],"value":600}}],"value":621}},"value":621,"inputs":["owner1","fund_call1","budget_version1"]}}
 
 let showDetail = (id_elem) => {
-  setResultDisplay(state => ({...state, [id_elem]: true}) )
+  setResultDisplay(state => ({...state, [id_elem]: !state[id_elem]}) )
 }
 
 let resultToComponentAux = (elem) => {
