@@ -57,7 +57,6 @@ function App() {
     if(Object.keys(hash).length === 0) return
     let mainKey = Object.keys(hash)[0]
     let mainElement = hash[mainKey]
-    console.log('debug hash', mainElement)
     mainElement.uuid = uuidv4();
     if(Array.isArray(mainElement.details)){
       mainElement.details.map(subHash => attachUUID(subHash))
@@ -69,7 +68,6 @@ function App() {
   const fetchExample = async () => {
     try {
       const response = await axios.get('/example');
-      console.log('example result',response.data.result)
       let data_context_box = document.getElementById('data_context_box')
       data_context_box.innerHTML = response.data.data_context
 
@@ -184,11 +182,9 @@ let setKeyEventsHandler = () => {
 // first just display those element, then add the turn on/off
 let resultToComponent = (result) => {
   if(result === null) return
-  console.log('result',result)
   let mainKey = Object.keys(result)[0]
   let hash = result[mainKey]
   if(hash.details){
-    console.log('result[mainKey].value', result[mainKey].value)
     let start = <span className='Index'>  {result[mainKey].value}  </span>
 
     let next = resultToComponentAux(result[mainKey].details)
@@ -210,7 +206,6 @@ let resultToComponentAux = (elem) => {
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
   if(mainKey === 'sum_on'){
-    console.log("details", mainElement.details)
     let sub_elements = mainElement.details.map(elem => resultToComponentAux(elem))
     const reducer = (accumulator, currentValue) => {
       return accumulator.concat([currentValue, <span> + </span>])
@@ -222,7 +217,6 @@ let resultToComponentAux = (elem) => {
   const id_elem = mainElement.uuid;
 
   let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
-  console.log('resultDisplay',resultDisplay)
   return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
   {/*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/}
 }
