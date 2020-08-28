@@ -54,8 +54,13 @@ function App() {
 // details : {}
 // or details: []
   let attachUUID = (hash) => {
+    if('details' in hash){
+      // certainly bad, thats a layer for nothing acutally.
+      hash = hash.details
+    }
     if(Object.keys(hash).length === 0) return
     let mainKey = Object.keys(hash)[0]
+    console.log('attachUUID',mainKey)
     let mainElement = hash[mainKey]
     mainElement.uuid = uuidv4();
     if(Array.isArray(mainElement.details)){
@@ -187,9 +192,12 @@ let resultToComponent = (result) => {
   if(hash.details){
     let start = <span className='Index'>  {result[mainKey].value}  </span>
 
-    let next = resultToComponentAux(result[mainKey].details)
+    let next_content = []
+    resultToComponentAux(result[mainKey].details, next_content)
+    let next = <div>{next_content}</div>
     return (<span>
-            {start} = {next}
+            {start}
+            {next}
          </span>)
   }else{
     console.log('resultToComponent: recursion: not impplemented, probably on demand too')
@@ -202,22 +210,51 @@ let showDetail = (id_elem) => {
   setResultDisplay(state => ({...state, [id_elem]: !state[id_elem]}) )
 }
 
-let resultToComponentAux = (elem) => {
+let resultToComponentAux = (elem, lines) => {
+
+  if('details' in elem){
+    elem = elem.details
+  }
+  console.log('elem', elem)
+  if(Object.keys(elem).length === 0) return
+
+
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
   if(mainKey === 'sum_on'){
-    let sub_elements = mainElement.details.map(elem => resultToComponentAux(elem))
+
+    // TODO: add an on click on the value
+    let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
     const reducer = (accumulator, currentValue) => {
       return accumulator.concat([currentValue, <span> + </span>])
     }
     sub_elements = sub_elements.reduce(reducer, [])
-    return <span> ( {sub_elements.slice(0, sub_elements.length - 1)} ) </span>
+
+    lines.push(<div> {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
+
+    // now add the other lines
+    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+  }else if(Array.isArray(mainElement.details)) {
+    let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
+    const reducer = (accumulator, currentValue) => {
+      return accumulator.concat([currentValue, <span> {mainKey} </span>])
+    }
+    sub_elements = sub_elements.reduce(reducer, [])
+
+    lines.push(<div> {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
+
+    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+  }else{
+    // main_key is probably a function call.
+    resultToComponentAux(mainElement.details, lines)
   }
+  return
 
-  const id_elem = mainElement.uuid;
+  // leaf
+  // const id_elem = mainElement.uuid;
 
-  let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
-  return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
+  // let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
+  // return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
   {/*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/}
 }
 
