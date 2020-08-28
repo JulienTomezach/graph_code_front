@@ -69,7 +69,7 @@ function App() {
     try {
       const response = await axios.get('/example');
       let data_context_box = document.getElementById('data_context_box')
-      data_context_box.innerHTML = response.data.data_context
+      data_context_box.innerHTML = JSON.stringify(response.data.data_context)
 
       let script_box = document.getElementById('script_box')
       script_box.innerHTML = response.data.script
