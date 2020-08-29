@@ -60,7 +60,6 @@ function App() {
     }
     if(Object.keys(hash).length === 0) return
     let mainKey = Object.keys(hash)[0]
-    console.log('attachUUID',mainKey)
     let mainElement = hash[mainKey]
     mainElement.uuid = uuidv4();
     if(Array.isArray(mainElement.details)){
@@ -210,11 +209,13 @@ let showDetail = (id_elem) => {
   setResultDisplay(state => ({...state, [id_elem]: !state[id_elem]}) )
 }
 
+// 1 = rien
 let resultToComponentAux = (elem, lines) => {
 
   if('details' in elem){
     elem = elem.details
   }
+    // the 1 is called_on_platform, that have details: {sum_on: {details:}}
   console.log('elem', elem)
   if(Object.keys(elem).length === 0) return
 
@@ -243,7 +244,7 @@ let resultToComponentAux = (elem, lines) => {
 
     lines.push(<div> {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
 
-    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+    mainElement.details.forEach(detail => resultToComponentAux(detail, lines))
   }else{
     // main_key is probably a function call.
     resultToComponentAux(mainElement.details, lines)
