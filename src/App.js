@@ -209,45 +209,55 @@ let showDetail = (id_elem) => {
   setResultDisplay(state => ({...state, [id_elem]: !state[id_elem]}) )
 }
 
+let details = (displayTriggered, mainKey, mainElement) => {
+  if (mainElement.inputs){
+    let more_details = <span> ( {mainElement.inputs.join(' , ')} )</span>
+    let retour = ( displayTriggered ? <span className="InfoResult"> {mainKey} {more_details()} </span> : null )
+    return retour
+  }
+  return null
+}
+
+let addLine = (mainElement, mainKey, sub_elements, lines) => {
+  lines.push(<div> {details(true, mainKey, mainElement)} {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
+}
+
+let processElement = (mainElement, mainKey, operation, lines) => {
+  let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
+    const reducer = (accumulator, currentValue) => {
+      return accumulator.concat([currentValue, <span> {operation} </span>])
+    }
+    sub_elements = sub_elements.reduce(reducer, [])
+
+    addLine(mainElement, mainKey, sub_elements, lines)
+    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+}
 // 1 = rien
 let resultToComponentAux = (elem, lines) => {
+  // console.log('current elem', elem)
 
-  if('details' in elem){
+  if('details' in elem) {
     elem = elem.details
   }
-    // the 1 is called_on_platform, that have details: {sum_on: {details:}}
-  console.log('elem', elem)
+
+  // the 1 is called_on_platform, that have details: {sum_on: {details:}}
   if(Object.keys(elem).length === 0) return
 
 
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
   if(mainKey === 'sum_on'){
-
     // TODO: add an on click on the value
-    let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
-    const reducer = (accumulator, currentValue) => {
-      return accumulator.concat([currentValue, <span> + </span>])
-    }
-    sub_elements = sub_elements.reduce(reducer, [])
-
-    lines.push(<div> {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
-
-    // now add the other lines
-    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+    processElement(mainElement, mainKey, '+', lines)
   }else if(Array.isArray(mainElement.details)) {
-    let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
-    const reducer = (accumulator, currentValue) => {
-      return accumulator.concat([currentValue, <span> {mainKey} </span>])
-    }
-    sub_elements = sub_elements.reduce(reducer, [])
-
-    lines.push(<div> {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
-
-    mainElement.details.forEach(detail => resultToComponentAux(detail, lines))
+    processElement(mainElement, mainKey, mainKey, lines)
   }else{
     // main_key is probably a function call.
-    resultToComponentAux(mainElement.details, lines)
+    // So we dont see it, we just need to get one level below.
+    console.log('else', mainElement, mainKey)
+    let subMainKey = Object.keys(mainElement.details)[0]
+    mainElement = Object.values(mainElement.details)[0]
+    processElement(mainElement, mainKey, subMainKey, lines)
   }
   return
 
