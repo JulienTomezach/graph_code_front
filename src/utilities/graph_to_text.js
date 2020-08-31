@@ -160,8 +160,9 @@ let dataToText = (hash, offset='') => {
     let jointure = isSimpleHashRes ? ', ' : ',\n'
     let content = Object.entries(hash).map(([key, value]) => {
       let key_value_text = ''
-      key_value_text = offset + `${key} : `
-      let actualOffset = isSimpleHashRes ? '' : offset+'\t'
+      let actualOffset = isSimpleHashRes ? '' : offset
+      key_value_text = actualOffset + `${key} : `
+      actualOffset = isSimpleHashRes ? '' : offset+'\t'
       key_value_text += dataToText(value, actualOffset)
       return key_value_text
     }).join(jointure)
