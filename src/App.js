@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useState, useEffect, useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
+import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
 const axios_base = require('axios').default;
 
@@ -69,16 +69,12 @@ function App() {
       }
   }
 
-  let toDataText = (hash) => {
-    const json = JSON.stringify(hash);
-    return json.replace(/"([^"]+)":/g, '$1:').replace(/"(true|false)"/g, '$1')
-  }
 
   const fetchExample = async () => {
     try {
       const response = await axios.get('/example');
       let data_context_box = document.getElementById('data_context_box')
-      data_context_box.innerHTML = toDataText(response.data.data_context)
+      data_context_box.innerHTML = dataToText(response.data.data_context)
 
       let script_box = document.getElementById('script_box')
       script_box.innerHTML = response.data.script

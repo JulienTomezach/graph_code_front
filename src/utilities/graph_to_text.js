@@ -145,6 +145,21 @@ let htmlToTextFor = (htmlRoot, newNodes) => {
 }
 
 
+let dataToText = (hash, offset='') => {
+    if(typeof hash === 'string'){
+      return hash
+    }
+    let text = ''
+    let content = Object.entries(hash).map(([key, value]) => {
+      let key_value_text = ''
+      key_value_text = offset + `${key} : `
+      key_value_text += dataToText(value, offset+'\t')
+      return key_value_text
+    }).join(',\n')
+    text = '{\n' + content + '\n' + offset + '}'
+    return text
+  }
 
 
-module.exports = {graph_to_text, htmlToTextNodes, htmlToTextFor};
+
+module.exports = {graph_to_text, dataToText, htmlToTextNodes, htmlToTextFor};
