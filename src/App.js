@@ -195,7 +195,6 @@ let resultToComponent = (result) => {
     resultToComponentAux(result[mainKey].details, next_content)
     let next = <div>{next_content}</div>
     return (<span>
-            {start}
             {next}
          </span>)
   }else{
@@ -228,7 +227,7 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
-  console.log('processElement', elements)
+  console.log('processElement', elements, mainKey)
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     return addLine(mainElementArg, mainKey, [], lines)
   }
@@ -251,7 +250,7 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
       uuid = elem.uuid
     }
 
-    return (<span onClick={() => showDetail(uuid)}> {value} </span>)
+    return (<span className="Result" onClick={() => showDetail(uuid)}> {value} </span>)
   })
   const reducer = (accumulator, currentValue) => {
     return accumulator.concat([currentValue, <span> {operation} </span>])
