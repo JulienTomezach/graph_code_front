@@ -210,9 +210,10 @@ let showDetail = (id_elem) => {
 }
 
 let details = (displayTriggered, mainKey, mainElement) => {
+  console.log('mainElement',mainElement)
   if (mainElement.inputs){
     let more_details = <span> ( {mainElement.inputs.join(' , ')} )</span>
-    let retour = ( displayTriggered ? <span className="InfoResult"> {mainKey} {more_details()} </span> : null )
+    let retour = ( displayTriggered ? <span className="InfoResult"> {mainKey} {more_details} </span> : null )
     return retour
   }
   return null
@@ -222,15 +223,23 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
   lines.push(<div> {details(true, mainKey, mainElement)} {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
 }
 
-let processElement = (mainElement, mainKey, operation, lines) => {
-  let sub_elements = mainElement.details.map(elem => (<span> {elem.value} </span>))
-    const reducer = (accumulator, currentValue) => {
-      return accumulator.concat([currentValue, <span> {operation} </span>])
-    }
-    sub_elements = sub_elements.reduce(reducer, [])
+let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
+  console.log('processElement', elements)
+  if(elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
+    return
+  }
+  let sub_elements = elements.details.map(elem => {
+    let value =  Object.values(elem)[0]
+    return (<span> {value.value} </span>)
+  })
+  const reducer = (accumulator, currentValue) => {
+    return accumulator.concat([currentValue, <span> {operation} </span>])
+  }
+  sub_elements = sub_elements.reduce(reducer, [])
 
-    addLine(mainElement, mainKey, sub_elements, lines)
-    mainElement.details.map(detail => resultToComponentAux(detail, lines))
+  let mainElement = mainElementArg || elements
+  addLine(mainElement, mainKey, sub_elements, lines)
+  elements.details.forEach(detail => resultToComponentAux(detail, lines))
 }
 // 1 = rien
 let resultToComponentAux = (elem, lines) => {
@@ -254,11 +263,12 @@ let resultToComponentAux = (elem, lines) => {
   }else{
     // main_key is probably a function call.
     // So we dont see it, we just need to get one level below.
-    console.log('else', mainElement, mainKey)
-    let subMainKey = Object.keys(mainElement.details)[0]
-    mainElement = Object.values(mainElement.details)[0]
-    processElement(mainElement, mainKey, subMainKey, lines)
-  }
+      let operation = Object.keys(mainElement.details)[0]
+      let elements = Object.values(mainElement.details)[0]
+      if(elements){
+          processElement(elements, mainKey, operation, lines, mainElement)
+      }
+    }
   return
 
   // leaf
@@ -266,7 +276,7 @@ let resultToComponentAux = (elem, lines) => {
 
   // let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
   // return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
-  {/*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/}
+  /*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/
 }
 
   let resultComponent = () => resultToComponent(execResult)
