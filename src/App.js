@@ -229,8 +229,9 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
     return
   }
   let sub_elements = elements.details.map(elem => {
-    let value =  Object.values(elem)[0]
-    return (<span> {value.value} </span>)
+    let value =  Object.values(elem)[0].value
+    value = !_.isNil(value) ? value: elem.value
+    return (<span> {value} </span>)
   })
   const reducer = (accumulator, currentValue) => {
     return accumulator.concat([currentValue, <span> {operation} </span>])
