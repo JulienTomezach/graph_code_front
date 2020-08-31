@@ -144,19 +144,30 @@ let htmlToTextFor = (htmlRoot, newNodes) => {
     })
 }
 
-
+let isSimpleHash = (hash) => {
+  // no more keys than 2.
+  let firstCond = Object.keys(hash).length < 3
+  // no vlaue that is an hash.
+  let sndCond = Object.values(hash).filter(value => (typeof value === 'object') && !_.isNil(value) && Object.keys(value).length > 0 ).length === 0
+  return firstCond && sndCond
+}
 let dataToText = (hash, offset='') => {
     if(typeof hash === 'string'){
       return hash
     }
     let text = ''
+    let isSimpleHashRes = isSimpleHash(hash)
+    let jointure = isSimpleHashRes ? ', ' : ',\n'
     let content = Object.entries(hash).map(([key, value]) => {
       let key_value_text = ''
       key_value_text = offset + `${key} : `
-      key_value_text += dataToText(value, offset+'\t')
+      let actualOffset = isSimpleHashRes ? '' : offset+'\t'
+      key_value_text += dataToText(value, actualOffset)
       return key_value_text
-    }).join(',\n')
-    text = '{\n' + content + '\n' + offset + '}'
+    }).join(jointure)
+    let carriageReturnEnd =  content.length > 0 && !isSimpleHashRes ? ('\n' + offset) : ''
+    let carriageReturnStart = content.length > 0 &&  !isSimpleHashRes  ? ('\n') : ''
+    text = '{' + carriageReturnStart + content + carriageReturnEnd  + '}'
     return text
   }
 
