@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
@@ -177,7 +177,7 @@ let setKeyEventsHandler = () => {
     setKeyEventsHandler()
     setFocusEventsHandler()
     setCode(initialText)
-     fetchAllData();
+    fetchAllData();
   }, []);
 
 // approach:
@@ -210,17 +210,20 @@ let showDetail = (id_elem) => {
 }
 
 let details = (displayTriggered, mainKey, mainElement) => {
-  console.log('mainElement',mainElement)
   if (mainElement.inputs){
-    let more_details = <span> ( {mainElement.inputs.join(' , ')} )</span>
-    let retour = ( displayTriggered ? <span className="InfoResult"> {mainKey} {more_details} </span> : null )
+    let inputs = <span> ( {mainElement.inputs.join(' , ')} )</span>
+    let retour = ( displayTriggered ? <span className="InfoResult"> {mainKey} {inputs} </span> : null )
     return retour
   }
   return null
 }
 
 let addLine = (mainElement, mainKey, sub_elements, lines) => {
-  lines.push(<div> {details(true, mainKey, mainElement)} {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>)
+  let condition = lines.length === 0 ? true : resultDisplay[mainElement.uuid]
+  let newLine= () => {
+    return condition ? (<div> {details(true, mainKey, mainElement)} {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>) : null
+  }
+  lines.push(newLine())
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
@@ -229,9 +232,17 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
     return
   }
   let sub_elements = elements.details.map(elem => {
-    let value =  Object.values(elem)[0].value
-    value = !_.isNil(value) ? value: elem.value
-    return (<span> {value} </span>)
+    console.log('elem', elem)
+    if(elem.details){
+        let maybe_elem = Object.values(elem.details)[0]
+        elem =  !_.isNil(maybe_elem) && Object.keys(maybe_elem.details).length > 0 ? maybe_elem : elem
+    }else{
+      elem =  Object.values(elem)[0]
+    }
+
+    let value =  elem.value
+    let uuid = elem.uuid
+    return (<span onClick={() => showDetail(uuid)}> {value} </span>)
   })
   const reducer = (accumulator, currentValue) => {
     return accumulator.concat([currentValue, <span> {operation} </span>])
@@ -245,7 +256,6 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
 // 1 = rien
 let resultToComponentAux = (elem, lines) => {
   // console.log('current elem', elem)
-
   if('details' in elem) {
     elem = elem.details
   }
@@ -256,6 +266,11 @@ let resultToComponentAux = (elem, lines) => {
 
   let mainKey = Object.keys(elem)[0]
   let mainElement = elem[mainKey]
+
+  if(!resultDisplay[mainElement.uuid] && lines.length > 0){
+    return
+  }
+
   if(mainKey === 'sum_on'){
     // TODO: add an on click on the value
     processElement(mainElement, mainKey, '+', lines)
@@ -280,7 +295,7 @@ let resultToComponentAux = (elem, lines) => {
   /*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/
 }
 
-  let resultComponent = () => resultToComponent(execResult)
+  let resultComponent = () =>  resultToComponent(execResult)
 
   return (
 
