@@ -36,6 +36,9 @@ function App() {
   let getTextCode = () =>{
     const codeBox = document.getElementById("code_box");
     let span = document.createElement('span');
+    // console.log('DEBUG')
+    // console.log(codeBox)
+    // console.log(htmlToTextNodes(codeBox))
     htmlToTextFor(span, htmlToTextNodes(codeBox));
     return span.textContent || span.innerText;
   }
@@ -159,6 +162,10 @@ let setKeyEventsHandler = () => {
       insertNodeAtCursor(document.createTextNode("\t"));
       toEditingMode()
       event.preventDefault()
+    }else if(event.key === "Enter"){
+      toEditingMode()
+      insertNodeAtCursor(document.createTextNode("\n"));
+      event.preventDefault()
     }
   });
 
@@ -228,12 +235,10 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
-  console.log('processElement', elements, mainKey)
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     return addLine(mainElementArg, mainKey, [], lines)
   }
   let sub_elements = elements.details.map(elem => {
-    console.log('elem', elem)
     let value = null
     let uuid = null
     if(elem.details){

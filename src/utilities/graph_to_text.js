@@ -121,7 +121,6 @@ let htmlToTextNodes = (htmlRoot, opts={}) => {
 let htmlToTextNodesAux = (node, opts={}) => {
       const childNodes = Array.from(node.childNodes)
       if(childNodes.length > 1){
-        console.log('childNodes', childNodes)
         return childNodes.map( node => htmlToTextNodesAux(node, opts))
       }
       if(node.tagName === "SPAN"){
@@ -137,9 +136,7 @@ let htmlToTextNodesAux = (node, opts={}) => {
 
 let htmlToTextFor = (htmlRoot, newNodes) => {
     htmlRoot.innerHTML = ""
-    console.log('nodes', newNodes)
     newNodes.forEach(node => {
-      console.log('node', node)
       htmlRoot.appendChild(node)
     })
 }
