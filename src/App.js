@@ -220,28 +220,37 @@ let details = (displayTriggered, mainKey, mainElement) => {
 
 let addLine = (mainElement, mainKey, sub_elements, lines) => {
   let condition = lines.length === 0 ? true : resultDisplay[mainElement.uuid]
+  let subElementsDiv =  sub_elements.length > 0 ? <span> = {sub_elements.slice(0, sub_elements.length - 1)} </span> : null
   let newLine= () => {
-    return condition ? (<div> {details(true, mainKey, mainElement)} {mainElement.value} = {sub_elements.slice(0, sub_elements.length - 1)} </div>) : null
+    return condition ? (<div> {details(true, mainKey, mainElement)} {mainElement.value} {subElementsDiv} </div>) : null
   }
   lines.push(newLine())
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
   console.log('processElement', elements)
-  if(elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
-    return
+  if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
+    return addLine(mainElementArg, mainKey, [], lines)
   }
   let sub_elements = elements.details.map(elem => {
     console.log('elem', elem)
+    let value = null
+    let uuid = null
     if(elem.details){
         let maybe_elem = Object.values(elem.details)[0]
-        elem =  !_.isNil(maybe_elem) && Object.keys(maybe_elem.details).length > 0 ? maybe_elem : elem
+        if(!_.isNil(maybe_elem)){
+          value =  maybe_elem.value ? maybe_elem.value : elem.value
+          uuid = maybe_elem.uuid
+        }else{
+          value = elem.value
+          uuid = elem.uuid
+        }
     }else{
       elem =  Object.values(elem)[0]
+      value =  elem.value
+      uuid = elem.uuid
     }
 
-    let value =  elem.value
-    let uuid = elem.uuid
     return (<span onClick={() => showDetail(uuid)}> {value} </span>)
   })
   const reducer = (accumulator, currentValue) => {
@@ -256,16 +265,17 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
 // 1 = rien
 let resultToComponentAux = (elem, lines) => {
   // console.log('current elem', elem)
+  let elemContent = elem
   if('details' in elem) {
-    elem = elem.details
+    elemContent = elemContent.details
   }
 
   // the 1 is called_on_platform, that have details: {sum_on: {details:}}
-  if(Object.keys(elem).length === 0) return
+  if(Object.keys(elemContent).length === 0) return
 
 
-  let mainKey = Object.keys(elem)[0]
-  let mainElement = elem[mainKey]
+  let mainKey = Object.keys(elemContent)[0]
+  let mainElement = elemContent[mainKey]
 
   if(!resultDisplay[mainElement.uuid] && lines.length > 0){
     return
@@ -279,10 +289,14 @@ let resultToComponentAux = (elem, lines) => {
   }else{
     // main_key is probably a function call.
     // So we dont see it, we just need to get one level below.
+
+    // TODO: problem is here
       let operation = Object.keys(mainElement.details)[0]
       let elements = Object.values(mainElement.details)[0]
       if(elements){
           processElement(elements, mainKey, operation, lines, mainElement)
+      }else{
+        processElement({}, mainKey, "", lines, {...mainElement, value: elem.value})
       }
     }
   return
