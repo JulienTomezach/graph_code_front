@@ -143,7 +143,9 @@ let isSimpleHash = (hash) => {
   return firstCond && sndCond
 }
 let dataToText = (hash, offset='') => {
-    if((typeof hash === 'string') || Number.isInteger(hash)){
+    if((typeof hash === 'string') ){
+      return '"' + hash + '"'
+    }else if(Number.isInteger(hash) || (typeof hash === "boolean")){
       return hash
     }
     let text = ''
