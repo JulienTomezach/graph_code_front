@@ -118,7 +118,7 @@ let htmlToTextNodesAux = (node, opts={}) => {
         return childNodes.map( node => htmlToTextNodesAux(node, opts))
       }
       if(node.tagName === "SPAN"){
-        return node.id === "cursor" ? node : document.createTextNode(node.innerHTML)
+        return node.id === "cursor" ? node : document.createTextNode(node.innerText)
       }else if(node.tagName === "BR"){
         return opts.keepBRTag ? node :  document.createTextNode('\n')
       }else if(!node.tagName){
