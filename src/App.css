@@ -94,6 +94,8 @@
   margin: 1em;
   width: 80%;
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .CasesBox .Json {
