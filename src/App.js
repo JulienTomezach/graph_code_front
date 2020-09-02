@@ -95,9 +95,16 @@ function App() {
     try {
       const response = await axios.get('/example');
       let data_context_box = document.getElementById('data_context_box')
-      data_context_box.innerHTML = dataToText(response.data.data_context)
-
       let script_box = document.getElementById('script_box')
+
+      if(Object.keys(response.data).length === 0){
+        setExecResult(null)
+        data_context_box.innerHTML = ''
+        script_box.innerHTML = ''
+        return
+      }
+
+      data_context_box.innerHTML = dataToText(response.data.data_context)
       script_box.innerHTML = response.data.script
 
       let resultDetails = response.data.result
@@ -343,6 +350,20 @@ let resultToComponentAux = (elem, lines) => {
 
   let resultComponent = () =>  resultToComponent(execResult)
 
+  let oneExample = () => {
+
+    // we would have liked to not display it ... but
+    return (<span>
+            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available </span>)}
+            <h4>Data context:</h4>
+            <div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>
+            <h4>Script:</h4>
+            <div  spellCheck={false} id='script_box' contentEditable={!_.isNil(execResult)}></div>
+            <h4>Result:</h4>
+            <div >{resultComponent()}</div>
+        </span>)
+  }
+
   return (
 
     <div className="App">
@@ -363,7 +384,10 @@ let resultToComponentAux = (elem, lines) => {
 
           <div className="Content">
           <div  className="CasesBoxParent">
-            <h5>Business Cases</h5>
+            <div>
+            <h5>Business Cases (wip, see doc) : </h5>
+            {/*<span>Beta Feature: see doc</span>*/}
+            </div>
           <div  className="CasesBox">
             <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
             <div onClick={saveCases} className="Button"> Filter </div>
@@ -374,12 +398,7 @@ let resultToComponentAux = (elem, lines) => {
           </div>
           <div id='example_box' className="Examples">
             <h3>Examples:</h3>
-            <h4>Data context:</h4>
-            <div spellCheck={false} id='data_context_box' contentEditable ></div>
-            <h4>Script:</h4>
-            <div  spellCheck={false} id='script_box' contentEditable></div>
-            <h4>Result:</h4>
-            <div >{resultComponent()}</div>
+            {oneExample()}
           </div>
           </div>
 
