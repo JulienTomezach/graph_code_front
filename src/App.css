@@ -78,6 +78,34 @@
   overflow: scroll;
 }
 
+.CasesBox {
+  margin: 1em;
+  width: 80%;
+  display: flex;
+}
+
+.CasesBox .Json {
+  white-space: pre-wrap;
+  flex: 1;
+}
+
+.CasesBox .Button {
+  font-weight: bold;
+  background: rgba(77,208,225, 0.8);
+  width: 60px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  font-size: 12;
+}
+
+.CasesBox .SaveButton:hover {
+  background: rgba(77,208,225);
+}
+
+
 .CodeBox{
   /*flex-grow: 1;*/
 
