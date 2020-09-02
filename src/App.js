@@ -14,6 +14,9 @@ function App() {
     const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
+    // arbitraty choice, we use two tables for the details of the result
+    // and if we have clicked for more detail or not.
+    // joint key is uuid
     const [execResult, setExecResult] = useState(null)
     const [resultDisplay, setResultDisplay] = useState({})
 
@@ -43,8 +46,21 @@ function App() {
     return span.textContent || span.innerText;
   }
 
+  let setCases = (text) => {
+    const el = document.getElementById("cases_box");
+    el.innerHTML = text
+  }
 
-   const fetchData = async () => {
+  let fetchCases = async () => {
+     try {
+      const response = await axios.get('/cases');
+      setCases(response.data)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+   const fetchCode = async () => {
     try {
       const response = await axios.get('/code');
       setCode(graph_to_text(response.data))
@@ -145,7 +161,8 @@ function App() {
   }
 
 let fetchAllData = () => {
-  fetchData();
+  fetchCases();
+  fetchCode();
   fetchExample();
 }
 
@@ -331,12 +348,14 @@ let resultToComponentAux = (elem, lines) => {
 
 
           <div className="Content">
-
+          <div  className="CasesBoxParent">
+            <h4>Business Cases</h4>
           <div  className="CasesBox">
-            <div id="cases" spellCheck={false} contentEditable className="Json"></div>
+            <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
             <div className="Button"> Filter </div>
           </div>
-
+          </div>
+          <hr className="Line"></hr>
           <div id="code_box" spellCheck={false} contentEditable  className="CodeBox">
           </div>
           <div id='example_box' className="Examples">

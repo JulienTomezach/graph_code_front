@@ -78,6 +78,18 @@
   overflow: scroll;
 }
 
+.Line{
+  /*width: 100%;*/
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+.CasesBoxParent {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
 .CasesBox {
   margin: 1em;
   width: 80%;
@@ -99,9 +111,10 @@
   align-items: center;
   border-radius: 10px;
   font-size: 12;
+  cursor: pointer;
 }
 
-.CasesBox .SaveButton:hover {
+.CasesBox .Button:hover {
   background: rgba(77,208,225);
 }
 
