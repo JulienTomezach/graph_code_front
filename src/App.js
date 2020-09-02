@@ -6,7 +6,8 @@ import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utili
 import { v4 as uuidv4 } from 'uuid';
 const axios_base = require('axios').default;
 
-// Should I not try to use react with contentEditable ?
+// How manage state between rendering is really bad.
+// basically, the html dom is my state : beeerk
 
 function App() {
     let editing = false
@@ -364,6 +365,12 @@ let resultToComponentAux = (elem, lines) => {
         </span>)
   }
 
+  let casesEmpty = () => {
+    const el = document.getElementById("cases_box");
+    if(!el) return false
+    return Object.keys(JSON.parse(el.innerText)).length === 0
+  }
+
   return (
 
     <div className="App">
@@ -394,7 +401,7 @@ let resultToComponentAux = (elem, lines) => {
           </div>
           </div>
           <hr className="Line"></hr>
-          <div id="code_box" spellCheck={false} contentEditable  className="CodeBox">
+          <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox">
           </div>
           <div id='example_box' className="Examples">
             <h3>Examples:</h3>
