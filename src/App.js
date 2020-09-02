@@ -36,6 +36,11 @@ function App() {
     el.innerHTML = text
   }
 
+  let getTextCases = () => {
+    const casesBox = document.getElementById("cases_box");
+    return casesBox.innerText;
+  }
+
   let getTextCode = () =>{
     const codeBox = document.getElementById("code_box");
     let span = document.createElement('span');
@@ -103,13 +108,21 @@ function App() {
     }
   }
 
+  const saveCases = async () => {
+    let response = await axios.post('/cases', {cases: getTextCases()});
+    if(response.status === 200){
+      // so we reload the filtered code and the filtered example
+      await fetchAllData()
+      editing = false
+    }
+  }
+
   const saveCode = async () => {
     let response = await axios.post('/code', {code: getTextCode()});
     // thats inneficient, better to get graph from post response
     if(response.status === 200){
       await fetchAllData()
       editing = false
-      console.log('set editing at false')
     }
   }
 
@@ -119,6 +132,7 @@ function App() {
     let response = await axios.post('/example', {script: scriptBox, data_context: dataContextBox});
     if(response.status === 200){
       await fetchAllData()
+      editing = false
     }
   }
 
@@ -349,10 +363,10 @@ let resultToComponentAux = (elem, lines) => {
 
           <div className="Content">
           <div  className="CasesBoxParent">
-            <h4>Business Cases</h4>
+            <h5>Business Cases</h5>
           <div  className="CasesBox">
             <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
-            <div className="Button"> Filter </div>
+            <div onClick={saveCases} className="Button"> Filter </div>
           </div>
           </div>
           <hr className="Line"></hr>
