@@ -59,7 +59,7 @@ function App() {
 
   let fetchCases = async () => {
      try {
-      const response = await axios.get('/cases');
+      const response = await axios.get('amount_for/cases');
       setCases(response.data)
     } catch (error) {
       console.error(error);
@@ -94,7 +94,7 @@ function App() {
 
   const fetchExample = async () => {
     try {
-      const response = await axios.get('/example');
+      const response = await axios.get('amount_for/example');
       let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
 
@@ -117,7 +117,7 @@ function App() {
   }
 
   const saveCases = async () => {
-    let response = await axios.post('/cases', {cases: getTextCases()});
+    let response = await axios.post('amount_for/cases', {cases: getTextCases()});
     if(response.status === 200){
       // so we reload the filtered code and the filtered example
       await fetchAllData()
@@ -126,7 +126,7 @@ function App() {
   }
 
   const saveCode = async () => {
-    let response = await axios.post('/code', {code: getTextCode()});
+    let response = await axios.post('amount_for/code', {code: getTextCode()});
     // thats inneficient, better to get graph from post response
     if(response.status === 200){
       await fetchAllData()
@@ -137,7 +137,7 @@ function App() {
   const saveExample = async () => {
     const dataContextBox = document.getElementById("data_context_box").innerText;
     const scriptBox = document.getElementById("script_box").innerText;
-    let response = await axios.post('/example', {script: scriptBox, data_context: dataContextBox});
+    let response = await axios.post('amount_for/example', {script: scriptBox, data_context: dataContextBox});
     if(response.status === 200){
       await fetchAllData()
       editing = false
