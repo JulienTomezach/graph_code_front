@@ -68,7 +68,7 @@ function App() {
 
    const fetchCode = async () => {
     try {
-      const response = await axios.get('/code');
+      const response = await axios.get('amount_for/code');
       setCode(graph_to_text(response.data))
     } catch (error) {
       console.error(error);
