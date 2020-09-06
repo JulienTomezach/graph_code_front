@@ -122,7 +122,7 @@ function App() {
   }
 
   const saveCases = async () => {
-    let response = await axios.post(`files/${currentFile}/cases`, {cases: getTextCases()});
+    let response = await axios.put(`files/${currentFile}/cases`, {cases: getTextCases()});
     if(response.status === 200){
       // so we reload the filtered code and the filtered example
       await fetchAllData(currentFile)
@@ -131,7 +131,7 @@ function App() {
   }
 
   const saveCode = async () => {
-    let response = await axios.post(`files/${currentFile}/code`, {code: getTextCode()});
+    let response = await axios.put(`files/${currentFile}/code`, {code: getTextCode()});
     // thats inneficient, better to get graph from post response
     if(response.status === 200){
       await fetchAllData(currentFile)
@@ -142,10 +142,17 @@ function App() {
   const saveExample = async () => {
     const dataContextBox = document.getElementById("data_context_box").innerText;
     const scriptBox = document.getElementById("script_box").innerText;
-    let response = await axios.post(`files/${currentFile}/example`, {script: scriptBox, data_context: dataContextBox});
+    let response = await axios.put(`files/${currentFile}/example`, {script: scriptBox, data_context: dataContextBox});
     if(response.status === 200){
       await fetchAllData(currentFile)
       editing = false
+    }
+  }
+
+  const createFile =  async (filename) => {
+    let response = await axios.post(`files`, {name: filename});
+    if(response.status === 200){
+      await fetchFiles()
     }
   }
 
@@ -191,7 +198,8 @@ let fetchFiles = async () => {
   let response = await axios.get('files', {});
   let files = response.data.files
   setFiles(files)
-  setCurrentFile(files[0])
+  if(currentFile === null)
+    setCurrentFile(files[0]);
 };
 
 let fetchAllData = (file) => {
@@ -374,7 +382,8 @@ let resultToComponentAux = (elem, lines) => {
 
   let addFileContent = () => {
     return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}}  className="AddFile">
-      <span>Nom du fichier</span>
+      <input id="filename_input" type="text" className="Input" />
+      <div className="Button" onClick={() => {createFile(document.getElementById("filename_input"))}} > Save </div>
     </div>)
   }
 

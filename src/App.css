@@ -118,6 +118,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
+  color: white;
 }
 
 .Button:hover{
@@ -215,8 +217,16 @@ color: #ffaa00;
     cursor: pointer;
 }
 
+.Input{
+ -webkit-appearance: none;
+ border: none;
+ border-bottom: 1px solid black;
+ margin: 1em;
+}
 
-
+.Input:focus{
+  outline: none;
+}
 
 
 /*Modal*/
@@ -234,18 +244,26 @@ color: #ffaa00;
   justify-content: center;
   align-items: center;
 }
-
-
+.AddFile .Input{
+  width: 75px;
+}
 .AddFile{
   width: 200px;
+  padding: 1em;
   height: 100px;
   background-color: white;
   border-radius: 10px;
   color: gray;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
 
 }
+
+.AddFile .Button {
+  width: 50px;
+  /*height: 100px;*/
+}
+
 
 
