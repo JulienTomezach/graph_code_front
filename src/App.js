@@ -418,7 +418,7 @@ let resultToComponentAux = (elem, lines) => {
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
-      return (<div href="#" className={className}><span className="material-icons">text_snippet</span>
+      return (<div href="#" onClick={() => fetchAllData(filename)} className={className}><span className="material-icons">text_snippet</span>
               <span className="ItemText">{filename}</span>
             </div>)
     })

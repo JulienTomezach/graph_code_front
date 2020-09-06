@@ -25,6 +25,7 @@
 .Item{
   margin-bottom: 1em;
   margin-top: 1em;
+  cursor: pointer;
 }
 
 .ItemText{
