@@ -121,6 +121,11 @@ function App() {
       script_box.innerHTML = response.data.script
 
       let resultDetails = response.data.result
+      if(_.isNil(resultDetails)) {
+        setExecResult(null)
+        return
+      };
+
       attachUUID(resultDetails)
       setExecResult(resultDetails)
     } catch (error) {
@@ -264,7 +269,9 @@ let setKeyEventsHandler = () => {
 // by default, none is enabled
 // first just display those element, then add the turn on/off
 let resultToComponent = (result) => {
-  if(result === null) return
+  if(result === null){
+   return
+ }
   let mainKey = Object.keys(result)[0]
   let hash = result[mainKey]
   if(hash.details){
@@ -398,7 +405,11 @@ let resultToComponentAux = (elem, lines) => {
 
   let modalAddFile = React.useMemo(() => modalGeneric(addingFile, addFileContent(), triggerAddFileModal), [addingFile])
 
-  let resultComponent = () =>  resultToComponent(execResult)
+  let resultComponent = () =>   {
+    console.log("resultComponent execResult",execResult)
+    return resultToComponent(execResult)
+  }
+
 
   let oneExample = () => {
 
