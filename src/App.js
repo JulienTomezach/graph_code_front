@@ -4,6 +4,15 @@ import logo from './logo.svg';
 import './App.css';
 import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
 const axios_base = require('axios').default;
 
 // How manage state between rendering is really bad.
@@ -24,7 +33,6 @@ function App() {
     const [currentFile, setCurrentFile] = useState(null)
 
     const [addingFile, setAddingFile] = useState(false)
-
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -71,10 +79,15 @@ function App() {
     }
   }
 
+  const defaultCode = () => {
+    return [{function: {name: "foo", formulas: {'+': [{name: '1'}, {name: '1'}]}, level: 0, parameters: [],
+    comments:["put your code here"]}}]
+  }
+
    const fetchCode = async (filename) => {
     try {
       const response = await axios.get(`files/${filename}/code`);
-      setCode(graph_to_text(response.data))
+      setCode(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
     } catch (error) {
       console.error(error);
     }
@@ -224,6 +237,7 @@ let fetchAllData = (file) => {
 
 let setKeyEventsHandler = () => {
   const codeBox = document.getElementById("code_box");
+  // codeBox.removeEventListener("keydown")
   codeBox.addEventListener("keydown", event => {
     if(event.key === 's' && (event.metaKey || event.ctrlKey)){
       saveCode()
@@ -256,6 +270,7 @@ let setKeyEventsHandler = () => {
   }, []);
 
    useEffect( () => {
+    console.log("add key events", currentFile)
     if(currentFile !== null){
           setCode(initialText)
           fetchAllData(currentFile);
@@ -415,7 +430,7 @@ let resultToComponentAux = (elem, lines) => {
 
     // we would have liked to not display it ... but
     return (<span>
-            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available </span>)}
+            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available or create one </span>)}
             <h4>Data context:</h4>
             <div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>
             <h4>Script:</h4>
@@ -428,7 +443,13 @@ let resultToComponentAux = (elem, lines) => {
   let casesEmpty = () => {
     const el = document.getElementById("cases_box");
     if(!el) return false
+
     return Object.keys(JSON.parse(el.innerText)).length === 0
+  }
+
+  let changeFileName = (filename) => {
+    setCurrentFile(filename)
+    fetchAllData(filename)
   }
 
   let fileNames = (files) => {
@@ -436,57 +457,67 @@ let resultToComponentAux = (elem, lines) => {
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
-      return (<div href="#" onClick={() => fetchAllData(filename)} className={className}><span className="material-icons">text_snippet</span>
+      return (<div href="#" onClick={() => changeFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
               <span className="ItemText">{filename}</span>
             </div>)
     })
   }
 
-  let mainComponent = currentFile !== null ? (
+  let File = (props) => {
+      // let { filename } = useParams();
+      return currentFile !== null ? (
 
-    <div className="App">
-    {modalAddFile}
-    {console.log('rendu')}
-      <div className="Sidebar">
-        <div className="SidebarContent">
-          <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
-          {fileNames(files)}
-        <div onClick={triggerAddFileModal} className="Button Item"> Add a File </div>
-      </div>
-      </div>
+      <div className="App">
+      {modalAddFile}
+      {console.log('rendu')}
+        <div className="Sidebar">
+          <div className="SidebarContent">
+            <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
+            {fileNames(files)}
+          <div onClick={triggerAddFileModal} className="Button Item"> Add a File </div>
+        </div>
+        </div>
 
-      {/*<div className="RightScreen">*/}
+        {/*<div className="RightScreen">*/}
 
-          {/*<div className="Header">
+            {/*<div className="Header">
 
-          </div>*/}
+            </div>*/}
 
 
-          <div className="Content">
-          <div  className="CasesBoxParent">
-            <div>
-            <h5>Business Cases (wip, see doc) : </h5>
-            {/*<span>Beta Feature: see doc</span>*/}
+            <div className="Content">
+            <div  className="CasesBoxParent">
+              <div>
+              <h5>Business Cases (wip, see doc) : </h5>
+              {/*<span>Beta Feature: see doc</span>*/}
+              </div>
+            <div  className="CasesBox">
+              <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
+              <div onClick={saveCases} className="Button"> Filter </div>
             </div>
-          <div  className="CasesBox">
-            <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
-            <div onClick={saveCases} className="Button"> Filter </div>
-          </div>
-          </div>
-          <hr className="Line"></hr>
-          <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox">
-          </div>
-          <div id='example_box' className="Examples">
-            <h3>Examples:</h3>
-            {oneExample()}
-          </div>
-          </div>
+            </div>
+            <hr className="Line"></hr>
+            <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox">
+            </div>
+            <div id='example_box' className="Examples">
+              <h3>Examples:</h3>
+              {oneExample()}
+            </div>
+            </div>
 
-      {/*</div>*/}
+        {/*</div>*/}
 
-    </div>
-  ): null;
-  return mainComponent;
+      </div>
+    ): null;
+  }
+  return  (<Router>
+
+   <Switch>
+          <Route path="/" children={File} />
+          <Route path="/:filename" children={File} />
+  </Switch>
+   </Router>
+   );
 }
 
 export default App;
