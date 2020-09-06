@@ -23,6 +23,8 @@ function App() {
     const [files, setFiles] = useState([])
     const [currentFile, setCurrentFile] = useState(null)
 
+    const [addingFile, setAddingFile] = useState(false)
+
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -356,14 +358,27 @@ let resultToComponentAux = (elem, lines) => {
       }
     }
   return
-
-  // leaf
-  // const id_elem = mainElement.uuid;
-
-  // let details = () => ( resultDisplay[id_elem] ? <span className="InfoResult"> {mainKey}( {mainElement.inputs.join(' , ')} )</span> : null )
-  // return <span onClick={() => showDetail(id_elem)} className="Result"> {mainElement.value}  {details()} </span>
-  /*return <span className="Result" title={mainKey + '(' + mainElement.inputs.join(' , ') + ')'}> {mainElement.value}</span>*/
 }
+
+  let triggerAddFileModal = () => {
+    setAddingFile(value => !value)
+  }
+
+  let modalGeneric = (triggered, content, trigger) =>  {
+  return triggered ? (
+    <div onClick = {() => trigger()} class="Modal">
+      {content}
+    </div>
+    ) : null;
+  }
+
+  let addFileContent = () => {
+    return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}}  className="AddFile">
+      <span>Nom du fichier</span>
+    </div>)
+  }
+
+  let modalAddFile = React.useMemo(() => modalGeneric(addingFile, addFileContent(), triggerAddFileModal), [addingFile])
 
   let resultComponent = () =>  resultToComponent(execResult)
 
@@ -391,6 +406,7 @@ let resultToComponentAux = (elem, lines) => {
 
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
+      className += " Item"
       return (<div href="#" className={className}><span className="material-icons">text_snippet</span>
               <span className="ItemText">{filename}</span>
             </div>)
@@ -400,11 +416,13 @@ let resultToComponentAux = (elem, lines) => {
   let mainComponent = currentFile !== null ? (
 
     <div className="App">
+    {modalAddFile}
     {console.log('rendu')}
       <div className="Sidebar">
-      <div className="SidebarContent">
-        <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
-        {fileNames(files)}
+        <div className="SidebarContent">
+          <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
+          {fileNames(files)}
+        <div onClick={triggerAddFileModal} className="Button Item"> Add a File </div>
       </div>
       </div>
 

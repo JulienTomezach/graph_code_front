@@ -22,6 +22,11 @@
   /*background-color: #9E9E9E;*/
 }
 
+.Item{
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
 .ItemText{
   margin-left: 0.2em;
 }
@@ -34,15 +39,14 @@
   width:175px;
   background-color:#222323;
   position:fixed!important;
-  z-index:1;
+  z-index:0;
   overflow:auto;
   /*box-shadow: 1px 0px 10px #112121;*/
 }
 
 .SidebarContent{
-  /*height:100%;*/
-  width:100px;
-  padding-left: 1em;
+  flex:1;
+  margin-left: 1em;
 
 }
 
@@ -103,21 +107,28 @@
   flex: 1;
 }
 
-.CasesBox .Button {
+.Button{
   font-weight: bold;
   background: rgba(77,208,225, 0.8);
-  width: 60px;
+  width: 80%;
   height: 40px;
+  border-radius: 10px;
+  font-size: 12;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
-  font-size: 12;
   cursor: pointer;
 }
 
-.CasesBox .Button:hover {
+.Button:hover{
   background: rgba(77,208,225);
+}
+
+.CasesBox .Button {
+  width: 60px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 12;
 }
 
 
@@ -203,3 +214,38 @@ color: #ffaa00;
     color: #4FC3F7;
     cursor: pointer;
 }
+
+
+
+
+
+/*Modal*/
+.Modal{
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.AddFile{
+  width: 200px;
+  height: 100px;
+  background-color: white;
+  border-radius: 10px;
+  color: gray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
