@@ -104,11 +104,18 @@ function App() {
       let script_box = document.getElementById('script_box')
 
       if(Object.keys(response.data).length === 0){
-        setExecResult(null)
         data_context_box.innerHTML = ''
         script_box.innerHTML = ''
         return
       }
+
+      // if(Object.keys(response.data).length === 0){
+      // // setExecResult(null)
+      //   data_context_box.innerHTML = ''
+      //   script_box.innerHTML = ''
+      //   return
+      // }
+
 
       data_context_box.innerHTML = dataToText(response.data.data_context)
       script_box.innerHTML = response.data.script
