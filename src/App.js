@@ -387,6 +387,16 @@ let resultToComponentAux = (elem, lines) => {
     return Object.keys(JSON.parse(el.innerText)).length === 0
   }
 
+  let fileNames = (files) => {
+
+    return files.map((filename) => {
+      let className = (filename === currentFile) ? "SelectedItem" : ""
+      return (<div href="#" className={className}><span className="material-icons">text_snippet</span>
+              <span className="ItemText">{filename}</span>
+            </div>)
+    })
+  }
+
   let mainComponent = currentFile !== null ? (
 
     <div className="App">
@@ -394,7 +404,7 @@ let resultToComponentAux = (elem, lines) => {
       <div className="Sidebar">
       <div className="SidebarContent">
         <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
-        <div href="#" className="SelectedItem"><span className="material-icons">text_snippet</span><span className="ItemText">amount_for</span></div>
+        {fileNames(files)}
       </div>
       </div>
 
