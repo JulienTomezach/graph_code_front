@@ -20,6 +20,9 @@ function App() {
     // joint key is uuid
     const [execResult, setExecResult] = useState(null)
     const [resultDisplay, setResultDisplay] = useState({})
+    const [files, setFiles] = useState([])
+    const [currentFile, setCurrentFile] = useState(null)
+
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -57,18 +60,18 @@ function App() {
     el.innerHTML = text
   }
 
-  let fetchCases = async () => {
+  let fetchCases = async (filename) => {
      try {
-      const response = await axios.get('files/amount_for/cases');
+      const response = await axios.get(`files/${filename}/cases`);
       setCases(response.data)
     } catch (error) {
       console.error(error);
     }
   }
 
-   const fetchCode = async () => {
+   const fetchCode = async (filename) => {
     try {
-      const response = await axios.get('files/amount_for/code');
+      const response = await axios.get(`files/${filename}/code`);
       setCode(graph_to_text(response.data))
     } catch (error) {
       console.error(error);
@@ -92,9 +95,9 @@ function App() {
   }
 
 
-  const fetchExample = async () => {
+  const fetchExample = async (filename) => {
     try {
-      const response = await axios.get('files/amount_for/example');
+      const response = await axios.get(`files/${filename}/example`);
       let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
 
@@ -117,19 +120,19 @@ function App() {
   }
 
   const saveCases = async () => {
-    let response = await axios.post('files/amount_for/cases', {cases: getTextCases()});
+    let response = await axios.post(`files/${currentFile}/cases`, {cases: getTextCases()});
     if(response.status === 200){
       // so we reload the filtered code and the filtered example
-      await fetchAllData()
+      await fetchAllData(currentFile)
       editing = false
     }
   }
 
   const saveCode = async () => {
-    let response = await axios.post('files/amount_for/code', {code: getTextCode()});
+    let response = await axios.post(`files/${currentFile}/code`, {code: getTextCode()});
     // thats inneficient, better to get graph from post response
     if(response.status === 200){
-      await fetchAllData()
+      await fetchAllData(currentFile)
       editing = false
     }
   }
@@ -137,9 +140,9 @@ function App() {
   const saveExample = async () => {
     const dataContextBox = document.getElementById("data_context_box").innerText;
     const scriptBox = document.getElementById("script_box").innerText;
-    let response = await axios.post('files/amount_for/example', {script: scriptBox, data_context: dataContextBox});
+    let response = await axios.post(`files/${currentFile}/example`, {script: scriptBox, data_context: dataContextBox});
     if(response.status === 200){
-      await fetchAllData()
+      await fetchAllData(currentFile)
       editing = false
     }
   }
@@ -182,10 +185,17 @@ function App() {
 
   }
 
-let fetchAllData = () => {
-  fetchCases();
-  fetchCode();
-  fetchExample();
+let fetchFiles = async () => {
+  let response = await axios.get('files', {});
+  let files = response.data.files
+  setFiles(files)
+  setCurrentFile(files[0])
+};
+
+let fetchAllData = (file) => {
+  fetchCases(file);
+  fetchCode(file);
+  fetchExample(file);
 }
 
 let setKeyEventsHandler = () => {
@@ -218,11 +228,17 @@ let setKeyEventsHandler = () => {
 }
 
    useEffect( () => {
-    setKeyEventsHandler()
-    setFocusEventsHandler()
-    setCode(initialText)
-    fetchAllData();
+    fetchFiles();
   }, []);
+
+   useEffect( () => {
+    if(currentFile !== null){
+          setCode(initialText)
+          fetchAllData(currentFile);
+          setKeyEventsHandler()
+          setFocusEventsHandler()
+        }
+  }, [currentFile]);
 
 // approach:
 // all the element but some are displayed. only when other are click_ed on.
@@ -371,7 +387,7 @@ let resultToComponentAux = (elem, lines) => {
     return Object.keys(JSON.parse(el.innerText)).length === 0
   }
 
-  return (
+  let mainComponent = currentFile !== null ? (
 
     <div className="App">
     {console.log('rendu')}
@@ -412,7 +428,8 @@ let resultToComponentAux = (elem, lines) => {
       {/*</div>*/}
 
     </div>
-  );
+  ): null;
+  return mainComponent;
 }
 
 export default App;
