@@ -150,9 +150,11 @@ function App() {
   }
 
   const createFile =  async (filename) => {
+    if(filename.length === 0 ) return
     let response = await axios.post(`files`, {name: filename});
     if(response.status === 200){
       await fetchFiles()
+      triggerAddFileModal()
     }
   }
 
@@ -383,7 +385,7 @@ let resultToComponentAux = (elem, lines) => {
   let addFileContent = () => {
     return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}}  className="AddFile">
       <input id="filename_input" type="text" className="Input" />
-      <div className="Button" onClick={() => {createFile(document.getElementById("filename_input"))}} > Save </div>
+      <div className="Button" onClick={() => {createFile(document.getElementById("filename_input").value)}} > Save </div>
     </div>)
   }
 
