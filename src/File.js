@@ -159,6 +159,10 @@ function File(props) {
 
   const setDataExampleComplete = (value) => {
     setDataExample(value)
+    if(_.isNil(value)){
+      setDataExampleHtml('')
+      return
+    }
     if(Object.keys(value).length === 0)
       setDataExampleHtml('{}')
     else setDataExampleHtml(dataToText(value))
@@ -166,6 +170,10 @@ function File(props) {
 
   const setScriptComplete = (value) => {
     setScript(value)
+    if(_.isNil(value)){
+      setScriptHtml('')
+      return
+    }
     if(value.length === 0)
       setScriptHtml('')
     else setScriptHtml(value)
@@ -177,6 +185,13 @@ function File(props) {
       const response = await axios.get(`files/${filename}/example`);
       // let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
+
+      // no example for this filter
+      if(Object.keys(response.data).length === 1 && response.data.filter){
+        setDataExampleComplete(null)
+        setScriptComplete(null)
+        return
+      }
 
       if(_.isNil(response.data.data_context)){
         setDataExampleComplete({})
@@ -498,17 +513,21 @@ let resultToComponentAux = (elem, lines) => {
   let oneExample = () => {
     // we would have liked to not display it ... but
     return (<span>
-            { (_.isNil(execResult) && Object.keys(JSON.parse(cases || '{}')).length > 0 ) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
+            { (_.isNil(dataExample)) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
             <span id="example_box">
               <h4>Data context:</h4>
               <ContentEditable
               onChange={dataExampleHandleChange}
-              html={dataExampleHtml} />
+              html={dataExampleHtml}
+              disabled={_.isNil(dataExample)}
+              />
               {/*<div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>*/}
               <h4>Script:</h4>
               <ContentEditable
               onChange={scriptHandleChange}
-              html={scriptHtml} />
+              html={scriptHtml}
+              disabled={_.isNil(script)}
+              />
             </span>
             <h4>Result:</h4>
             <div >{resultComponent()}</div>
@@ -570,7 +589,7 @@ let resultToComponentAux = (elem, lines) => {
             <div className="Content">
             <div  className="CasesBoxParent">
               <div>
-              <h5>Business Cases (wip, see doc) : </h5>
+              <h5>Business Cases (JSON) : </h5>
               {/*<span>Beta Feature: see doc</span>*/}
               </div>
             <div  className="CasesBox">
