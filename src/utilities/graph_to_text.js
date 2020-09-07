@@ -36,9 +36,10 @@ let graph_to_text = (graph_input) => {
     if(!('formulas' in value)) throw Error('graph_to_text: "formulas" not in element')
     let formula = value.formulas
     // do something with the name of formula, the parameters
-    let parameters = value.parameters.map(param =>  graph_to_text_aux(param, line_break, PARAM)).join(", ")
+    let parameters = () => value.parameters.map(param =>  graph_to_text_aux(param, line_break, PARAM)).join(", ")
+    let params_repr = value.parameters ? "("+ parameters()+ ")" : ""
     let line_break_or_not = (formula.definitions ? line_break + '    ' : "")
-    textCode += offset + SPAN(element.function.name, FUNCTION) + "("+ parameters+ ")"+ " = " + line_break_or_not + graph_to_text_aux(formula, line_break) + '<br/>' + '<br/>'
+    textCode += offset + SPAN(element.function.name, FUNCTION) + params_repr + " = " + line_break_or_not + graph_to_text_aux(formula, line_break) + '<br/>' + '<br/>'
 
 
   })
