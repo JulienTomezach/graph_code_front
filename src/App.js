@@ -8,10 +8,22 @@ import {
   useParams
 } from "react-router-dom";
 
+import { connect } from 'react-redux'
 
 import File from './File'
 
-function App() {
+const mapStateToProps = (state /*, ownProps*/) => {
+  return {
+    // counter: state.counter
+  }
+}
+
+const mapDispatchToProps = {
+ // increment, decrement, reset
+}
+
+
+let App = () => {
 
   return  (<Router>
 
@@ -23,7 +35,10 @@ function App() {
    );
 }
 
-export default App;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
 
 // rel="noopener noreferrer"
 
