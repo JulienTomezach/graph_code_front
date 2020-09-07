@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import logo from './logo.svg';
 import './File.css';
 import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
+import ContentEditable from 'react-contenteditable'
 
 import {
   BrowserRouter as Router,
@@ -40,6 +41,10 @@ function File(props) {
     const { filename } = useParams();
     const {history} = props;
 
+    // state of cases component
+    const [casesHtml, setCasesHtml] = useState('');
+    const [cases, setCases] = useState(null)
+
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
       let range = sel.getRangeAt(0);
@@ -57,8 +62,7 @@ function File(props) {
   }
 
   let getTextCases = () => {
-    const casesBox = document.getElementById("cases_box");
-    return casesBox.innerText;
+    return cases;
   }
 
   let getTextCode = () =>{
@@ -71,15 +75,25 @@ function File(props) {
     return span.textContent || span.innerText;
   }
 
-  let setCases = (text) => {
-    const el = document.getElementById("cases_box");
-    el.innerHTML = text
+  let casesHandleChange = (evt) => {
+    let span = document.createElement('span');
+    span.innerHTML = evt.target.value
+    setCasesHtml(span.innerHTML)
+    setCases(span.innerText)
+  }
+
+  let setCasesComplete = (text) => {
+    // const el = document.getElementById("cases_box");
+    // el.innerHTML = text
+    // in that case, html == data
+    setCases(text)
+    setCasesHtml(text)
   }
 
   let fetchCases = async (filename) => {
      try {
       const response = await axios.get(`files/${filename}/cases`);
-      setCases(response.data)
+      setCasesComplete(response.data)
     } catch (error) {
       console.error(error);
     }
@@ -122,7 +136,9 @@ function File(props) {
       let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
 
+      console.log("DEBUG fetchExample", response.data)
       if(Object.keys(response.data).length === 0){
+        setExecResult(null)
         data_context_box.innerHTML = ''
         script_box.innerHTML = ''
         return
@@ -291,7 +307,7 @@ let setKeyEventsHandler = () => {
 // first just display those element, then add the turn on/off
 let resultToComponent = (result) => {
   if(result === null){
-   return
+   return (<span></span>)
  }
   let mainKey = Object.keys(result)[0]
   let hash = result[mainKey]
@@ -300,6 +316,7 @@ let resultToComponent = (result) => {
 
     let next_content = []
     resultToComponentAux(result[mainKey].details, next_content)
+    console.log('next_content', next_content)
     let next = <div>{next_content}</div>
     return (<span>
             {next}
@@ -436,11 +453,13 @@ let resultToComponentAux = (elem, lines) => {
 
     // we would have liked to not display it ... but
     return (<span>
-            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available or create one </span>)}
-            <h4>Data context:</h4>
-            <div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>
-            <h4>Script:</h4>
-            <div  spellCheck={false} id='script_box' contentEditable={!_.isNil(execResult)}></div>
+            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available. </span>)}
+            <span id="example_box">
+              <h4>Data context:</h4>
+              <div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>
+              <h4>Script:</h4>
+              <div  spellCheck={false} id='script_box' contentEditable={!_.isNil(execResult)}></div>
+            </span>
             <h4>Result:</h4>
             <div >{resultComponent()}</div>
         </span>)
@@ -456,11 +475,11 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let changeFileName = (filename) => {
-    var element = document.getElementById("code_box");
-    element.outerHTML = element.outerHTML;
+    // var element = document.getElementById("code_box");
+    // element.outerHTML = element.outerHTML;
 
-    element = document.getElementById("example_box");
-    element.outerHTML = element.outerHTML;
+    // element = document.getElementById("example_box");
+    // element.outerHTML = element.outerHTML;
 
     history.push(`/${filename}`);
     // history.push(`/`);
@@ -505,14 +524,19 @@ let resultToComponentAux = (elem, lines) => {
               {/*<span>Beta Feature: see doc</span>*/}
               </div>
             <div  className="CasesBox">
-              <div id="cases_box" spellCheck={false} contentEditable className="Json"></div>
+
+             <ContentEditable
+             className="Json"
+             onChange={casesHandleChange}
+              html={cases} />
+              {/*<div id="cases_box" spellCheck={false} contentEditable className="Json"></div>*/}
               <div onClick={saveCases} className="Button"> Filter </div>
             </div>
             </div>
             <hr className="Line"></hr>
             <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox">
             </div>
-            <div id='example_box' className="Examples">
+            <div className="Examples">
               <h3>Examples:</h3>
               {oneExample()}
             </div>
