@@ -49,6 +49,10 @@ function File(props) {
     const [dataExampleHtml, setDataExampleHtml] = useState('');
     const [dataExample, setDataExample] = useState(null);
 
+    // state of script_example component
+    const [scriptHtml, setScriptHtml] = useState('');
+    const [script, setScript] = useState(null);
+
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
       let range = sel.getRangeAt(0);
@@ -72,9 +76,6 @@ function File(props) {
   let getTextCode = () =>{
     const codeBox = document.getElementById("code_box");
     let span = document.createElement('span');
-    // console.log('DEBUG')
-    // console.log(codeBox)
-    // console.log(htmlToTextNodes(codeBox))
     htmlToTextFor(span, htmlToTextNodes(codeBox));
     return span.textContent || span.innerText;
   }
@@ -82,12 +83,22 @@ function File(props) {
   let onKeyDown= (evt) => {
 
   }
+
+
+  // scriptHandleChange
+  let scriptHandleChange = (evt) => {
+    saveHandler(evt, saveScript)
+    let span = document.createElement('span');
+    span.innerHTML = evt.target.value
+    setScriptHtml(span.innerHTML)
+    setScript(span.innerText)
+  }
+
   // to factorise with below
   let dataExampleHandleChange = (evt) => {
     saveHandler(evt, saveDataExample)
     let span = document.createElement('span');
     span.innerHTML = evt.target.value
-    console.log('dataExampleHandleChange', span.innerText, dataExample, cases)
     setDataExampleHtml(span.innerHTML)
     setDataExample(span.innerText)
   }
@@ -153,6 +164,13 @@ function File(props) {
     else setDataExampleHtml(dataToText(value))
   }
 
+  const setScriptComplete = (value) => {
+    setScript(value)
+    if(value.length === 0)
+      setScriptHtml('')
+    else setScriptHtml(value)
+  }
+
 
   const fetchExample = async (filename) => {
     try {
@@ -160,35 +178,30 @@ function File(props) {
       // let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
 
-      console.log("DEBUG fetchExample", response.data)
+      if(_.isNil(response.data.data_context)){
+        setDataExampleComplete({})
+      }else{
+        setDataExampleComplete(response.data.data_context)
+      }
+
+      if(_.isNil(response.data.script)){
+        setScriptComplete('execute: 1+1')
+      }else{
+        setScriptComplete(response.data.script)
+      }
+
       if(Object.keys(response.data).length === 0){
         setExecResult(null)
-        // data_context_box.innerHTML = ''
-        setDataExampleComplete({})
-        script_box.innerHTML = ''
         return
       }
 
-      // if(Object.keys(response.data).length === 0){
-      // // setExecResult(null)
-      //   data_context_box.innerHTML = ''
-      //   script_box.innerHTML = ''
-      //   return
-      // }
-
-
-      // data_context_box.innerHTML = dataToText(response.data.data_context)
-      setDataExampleComplete(response.data.data_context)
-      script_box.innerHTML = response.data.script
-
-      let resultDetails = response.data.result
-      if(_.isNil(resultDetails)) {
+      if(_.isNil(response.data.result)){
         setExecResult(null)
-        return
-      };
+      }else{
+        attachUUID(response.data.result)
+        setExecResult(response.data.result)
+      }
 
-      attachUUID(resultDetails)
-      setExecResult(resultDetails)
     } catch (error) {
       console.error(error);
     }
@@ -212,16 +225,14 @@ function File(props) {
     }
   }
   const saveDataExample = async () => {
-    console.log('saveDataExample', dataExample, dataExampleHtml)
     let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
     if(response.status === 200){
       await fetchAllData(currentFile)
       editing = false
     }
   }
-  const saveScriptExample = async () => {
-    const scriptBox = document.getElementById("script_box").innerText;
-    let response = await axios.put(`files/${currentFile}/example`, {script: scriptBox});
+  const saveScript = async () => {
+    let response = await axios.put(`files/${currentFile}/example`, {script: script});
     if(response.status === 200){
       await fetchAllData(currentFile)
       editing = false
@@ -290,7 +301,6 @@ let fetchAllData = (file) => {
 }
 
 let saveHandler = (event, save) => {
-  console.log("saveHandler", dataExample, dataExampleHtml, casesHtml, cases, currentFile)
   if(event.key === 's' && (event.metaKey || event.ctrlKey)){
     save()
     // must be because we dont give the functions, only the fields
@@ -333,7 +343,6 @@ let setKeyEventsHandler = () => {
   }, [filename]);
 
    useEffect( () => {
-    console.log("add key events", currentFile)
     if(currentFile !== null){
           setCode(initialText)
           fetchAllData(currentFile);
@@ -350,22 +359,18 @@ let resultToComponent = (result) => {
   if(result === null){
    return (<span></span>)
  }
-  let mainKey = Object.keys(result)[0]
-  let hash = result[mainKey]
-  if(hash.details){
-    let start = <span className='Index'>  {result[mainKey].value}  </span>
 
+  // if(result.details){
     let next_content = []
-    resultToComponentAux(result[mainKey].details, next_content)
-    console.log('next_content', next_content)
+    resultToComponentAux(result, next_content)
     let next = <div>{next_content}</div>
     return (<span>
             {next}
          </span>)
-  }else{
-    console.log('resultToComponent: recursion: not impplemented, probably on demand too')
-    // return result[mainKey].map(elem => resultToComponent(elem))
-  }
+  // }else{
+  //   console.log('resultToComponent: recursion: not impplemented, probably on demand too')
+  //   // return result[mainKey].map(elem => resultToComponent(elem))
+  // }
 }
 
 let showDetail = (id_elem) => {
@@ -391,6 +396,8 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
+  if (operation=== 'sum_on')
+    operation = '+'
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     return addLine(mainElementArg, mainKey, [], lines)
   }
@@ -423,9 +430,7 @@ let processElement = (elements, mainKey, operation, lines, mainElementArg = null
   addLine(mainElement, mainKey, sub_elements, lines)
   elements.details.forEach(detail => resultToComponentAux(detail, lines))
 }
-// 1 = rien
 let resultToComponentAux = (elem, lines) => {
-  // console.log('current elem', elem)
   let elemContent = elem
   if('details' in elem) {
     elemContent = elemContent.details
@@ -441,7 +446,7 @@ let resultToComponentAux = (elem, lines) => {
   if(!resultDisplay[mainElement.uuid] && lines.length > 0){
     return
   }
-
+  // that one is not used anymore :/ apparently we go into processElement right away
   if(mainKey === 'sum_on'){
     // TODO: add an on click on the value
     processElement(mainElement, mainKey, '+', lines)
@@ -485,8 +490,8 @@ let resultToComponentAux = (elem, lines) => {
   let modalAddFile = React.useMemo(() => modalGeneric(addingFile, addFileContent(), triggerAddFileModal), [addingFile])
 
   let resultComponent = () =>   {
-    console.log("resultComponent execResult",execResult)
-    return resultToComponent(execResult)
+    let details =  resultToComponent(execResult)
+    return details
   }
 
 
@@ -501,7 +506,9 @@ let resultToComponentAux = (elem, lines) => {
               html={dataExampleHtml} />
               {/*<div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>*/}
               <h4>Script:</h4>
-              <div  spellCheck={false} id='script_box' contentEditable={!_.isNil(execResult)}></div>
+              <ContentEditable
+              onChange={scriptHandleChange}
+              html={scriptHtml} />
             </span>
             <h4>Result:</h4>
             <div >{resultComponent()}</div>
@@ -544,7 +551,7 @@ let resultToComponentAux = (elem, lines) => {
 
       <div className="App">
       {modalAddFile}
-      {console.log('rendu', dataExample)}
+      {console.log('rendu')}
         <div className="Sidebar">
           <div className="SidebarContent">
             <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
