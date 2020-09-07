@@ -45,6 +45,10 @@ function File(props) {
     const [casesHtml, setCasesHtml] = useState('');
     const [cases, setCases] = useState(null)
 
+    // state of data_example component
+    const [dataExampleHtml, setDataExampleHtml] = useState('');
+    const [dataExample, setDataExample] = useState(null);
+
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
       let range = sel.getRangeAt(0);
@@ -73,6 +77,19 @@ function File(props) {
     // console.log(htmlToTextNodes(codeBox))
     htmlToTextFor(span, htmlToTextNodes(codeBox));
     return span.textContent || span.innerText;
+  }
+
+  let onKeyDown= (evt) => {
+
+  }
+  // to factorise with below
+  let dataExampleHandleChange = (evt) => {
+    saveHandler(evt, saveDataExample)
+    let span = document.createElement('span');
+    span.innerHTML = evt.target.value
+    console.log('dataExampleHandleChange', span.innerText, dataExample, cases)
+    setDataExampleHtml(span.innerHTML)
+    setDataExample(span.innerText)
   }
 
   let casesHandleChange = (evt) => {
@@ -129,17 +146,25 @@ function File(props) {
       }
   }
 
+  const setDataExampleComplete = (value) => {
+    setDataExample(value)
+    if(Object.keys(value).length === 0)
+      setDataExampleHtml('{}')
+    else setDataExampleHtml(dataToText(value))
+  }
+
 
   const fetchExample = async (filename) => {
     try {
       const response = await axios.get(`files/${filename}/example`);
-      let data_context_box = document.getElementById('data_context_box')
+      // let data_context_box = document.getElementById('data_context_box')
       let script_box = document.getElementById('script_box')
 
       console.log("DEBUG fetchExample", response.data)
       if(Object.keys(response.data).length === 0){
         setExecResult(null)
-        data_context_box.innerHTML = ''
+        // data_context_box.innerHTML = ''
+        setDataExampleComplete({})
         script_box.innerHTML = ''
         return
       }
@@ -152,7 +177,8 @@ function File(props) {
       // }
 
 
-      data_context_box.innerHTML = dataToText(response.data.data_context)
+      // data_context_box.innerHTML = dataToText(response.data.data_context)
+      setDataExampleComplete(response.data.data_context)
       script_box.innerHTML = response.data.script
 
       let resultDetails = response.data.result
@@ -185,11 +211,17 @@ function File(props) {
       editing = false
     }
   }
-
-  const saveExample = async () => {
-    const dataContextBox = document.getElementById("data_context_box").innerText;
+  const saveDataExample = async () => {
+    console.log('saveDataExample', dataExample, dataExampleHtml)
+    let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
+    if(response.status === 200){
+      await fetchAllData(currentFile)
+      editing = false
+    }
+  }
+  const saveScriptExample = async () => {
     const scriptBox = document.getElementById("script_box").innerText;
-    let response = await axios.put(`files/${currentFile}/example`, {script: scriptBox, data_context: dataContextBox});
+    let response = await axios.put(`files/${currentFile}/example`, {script: scriptBox});
     if(response.status === 200){
       await fetchAllData(currentFile)
       editing = false
@@ -257,6 +289,15 @@ let fetchAllData = (file) => {
   fetchExample(file);
 }
 
+let saveHandler = (event, save) => {
+  console.log("saveHandler", dataExample, dataExampleHtml, casesHtml, cases, currentFile)
+  if(event.key === 's' && (event.metaKey || event.ctrlKey)){
+    save()
+    // must be because we dont give the functions, only the fields
+    // event.preventDefault()
+  }
+}
+
 let setKeyEventsHandler = () => {
   const codeBox = document.getElementById("code_box");
   // codeBox.removeEventListener("keydown")
@@ -278,7 +319,7 @@ let setKeyEventsHandler = () => {
   const exampleBox = document.getElementById("example_box");
   exampleBox.addEventListener("keydown", event => {
     if(event.key === 's' && (event.metaKey || event.ctrlKey)){
-      saveExample()
+      // saveScriptExample()
       event.preventDefault()
     }else if(event.key === "Tab"){
       event.preventDefault()
@@ -450,13 +491,15 @@ let resultToComponentAux = (elem, lines) => {
 
 
   let oneExample = () => {
-
     // we would have liked to not display it ... but
     return (<span>
             { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available. </span>)}
             <span id="example_box">
               <h4>Data context:</h4>
-              <div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>
+              <ContentEditable
+              onChange={dataExampleHandleChange}
+              html={dataExampleHtml} />
+              {/*<div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>*/}
               <h4>Script:</h4>
               <div  spellCheck={false} id='script_box' contentEditable={!_.isNil(execResult)}></div>
             </span>
@@ -475,8 +518,8 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let changeFileName = (filename) => {
-    // var element = document.getElementById("code_box");
-    // element.outerHTML = element.outerHTML;
+    var element = document.getElementById("code_box");
+    element.outerHTML = element.outerHTML;
 
     // element = document.getElementById("example_box");
     // element.outerHTML = element.outerHTML;
@@ -501,7 +544,7 @@ let resultToComponentAux = (elem, lines) => {
 
       <div className="App">
       {modalAddFile}
-      {console.log('rendu')}
+      {console.log('rendu', dataExample)}
         <div className="Sidebar">
           <div className="SidebarContent">
             <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
@@ -528,7 +571,7 @@ let resultToComponentAux = (elem, lines) => {
              <ContentEditable
              className="Json"
              onChange={casesHandleChange}
-              html={cases} />
+              html={casesHtml} />
               {/*<div id="cases_box" spellCheck={false} contentEditable className="Json"></div>*/}
               <div onClick={saveCases} className="Button"> Filter </div>
             </div>
