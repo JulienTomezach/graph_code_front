@@ -493,7 +493,7 @@ let resultToComponentAux = (elem, lines) => {
   let oneExample = () => {
     // we would have liked to not display it ... but
     return (<span>
-            { !_.isNil(execResult) ? null : (<span> No examples for this context, remove all filters to get all examples available. </span>)}
+            { (_.isNil(execResult) && Object.keys(JSON.parse(cases || '{}')).length > 0 ) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
             <span id="example_box">
               <h4>Data context:</h4>
               <ContentEditable
