@@ -17,7 +17,7 @@ import {
 
 import { withRouter } from "react-router";
 
-const axios_base = require('axios').default;
+import axios from './axios_utils'
 
 // How manage state between rendering is really bad.
 // basically, the html dom is my state : beeerk
@@ -25,9 +25,7 @@ const axios_base = require('axios').default;
 function File(props) {
     let editing = false
     const initialText = "The code is <br/> <span class='Function'>loading</span>...";
-    const axios = axios_base.create({
-                          baseURL: 'http://localhost:3000/',
-                        });
+
     // arbitraty choice, we use two tables for the details of the result
     // and if we have clicked for more detail or not.
     // joint key is uuid

@@ -1,9 +1,9 @@
-let nextTodoId = 0
+let nextErrorId = 0
 
-export const addTodo = content => ({
-  type: 'ADD_TODO',
+export const addError = content => ({
+  type: 'ADD_ERROR',
   payload: {
-    id: ++nextTodoId,
+    id: ++nextErrorId,
     content
   }
 })
