@@ -15,12 +15,23 @@
   opacity: 1;
 }
 
+.NotifType{
+  position: absolute;
+  z-index: 2;
+  left: 3px;
+  top: 3px;
+  /*border-bottom: 2px solid red;*/
+  /*padding: 1px;*/
+  cursor: pointer;
+}
+
+
 
 .Close{
   position: absolute;
   z-index: 2;
-  right: 10px;
-  top: 10px;
+  right: 5px;
+  top: 5px;
   border-bottom: 2px solid #0D47A1;
   padding: 2px;
   cursor: pointer;
@@ -30,6 +41,7 @@
 .ContentParent{
   position: relative;
   margin: 1em;
+  margin-top: 2em;
   width: 300px;
   height: 150px;
   overflow: scroll;
@@ -41,5 +53,7 @@
 }
 .Content{
   margin: auto;
+  text-align: justify;
+  font-weight: bold;
 }
 /*https://stackoverflow.com/questions/33454533/cant-scroll-to-top-of-flex-item-that-is-overflowing-container*/
