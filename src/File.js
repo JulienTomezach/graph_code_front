@@ -48,6 +48,7 @@ function File(props) {
     // state of data_example component
     const [dataExampleHtml, setDataExampleHtml] = useState('');
     const [dataExample, setDataExample] = useState(null);
+    const [dataUnsaved, setDataUnsaved] = useState(false)
 
     // state of script_example component
     const [scriptHtml, setScriptHtml] = useState('');
@@ -105,6 +106,7 @@ function File(props) {
     span.innerHTML = evt.target.value
     setDataExampleHtml(span.innerHTML)
     setDataExample(span.innerText)
+    setDataUnsaved(true)
   }
 
   let casesHandleChange = (evt) => {
@@ -174,6 +176,7 @@ function File(props) {
       let new_value = !opts.noPostProcess ? dataToText(value) : value
       setDataExampleHtml(new_value)
     }
+    setDataUnsaved(false)
   }
 
   const setScriptComplete = (value) => {
@@ -188,33 +191,38 @@ function File(props) {
   }
 
 
-  const fetchExample = async (filename) => {
+  const fetchExample = async (filename, opts = {}) => {
     try {
       const response = await axios.get(`files/${filename}/example`);
 
       // no example for this filter
       if(Object.keys(response.data).length === 1 && response.data.filter){
-        setDataExampleComplete(null)
-        setScriptComplete(null)
+        if(!opts.notData) setDataExampleComplete(null);
+        if(!opts.notScript) setScriptComplete(null)
         setExecResult(null)
         return
       }
 
-      if(_.isNil(response.data.data_context)){
-        setDataExampleComplete({})
-      }else{
-        if(response.data.data_context.error){
-          setDataExampleComplete(response.data.data_context.body, {noPostProcess: true})
-          axios.dispatch_error(response.data.data_context.error)
+      if(!opts.notData){
+        if(_.isNil(response.data.data_context)){
+          setDataExampleComplete({})
         }else{
-          setDataExampleComplete(response.data.data_context)
+          if(response.data.data_context.error){
+            setDataExampleComplete(response.data.data_context.body, {noPostProcess: true})
+            axios.dispatch_error(response.data.data_context.error)
+          }else{
+            setDataExampleComplete(response.data.data_context)
+          }
         }
       }
 
-      if(_.isNil(response.data.script)){
-        setScriptComplete('execute: 1+1')
-      }else{
-        setScriptComplete(response.data.script)
+      if(!opts.notScript) {
+
+        if(_.isNil(response.data.script)){
+          setScriptComplete('execute: 1+1')
+        }else{
+          setScriptComplete(response.data.script)
+        }
       }
 
       if(Object.keys(response.data).length === 0){
@@ -243,6 +251,7 @@ function File(props) {
     if(casesText === null) return
     let response = await axios.put(`files/${currentFile}/cases`, {cases: casesText});
     if(response.status === 200){
+      setDataUnsaved(false)
       // so we reload the filtered code and the filtered example
       await fetchAllData(currentFile)
       editing = false
@@ -526,13 +535,16 @@ let resultToComponentAux = (elem, lines) => {
     return details
   }
 
-
+  let reloadGeneric = (condition, onReload) => {
+      return condition ? <span> (<span onClick={onReload} className="Reload">reload</span> )</span>: null
+  }
   let oneExample = () => {
+    let reloadData = reloadGeneric(dataUnsaved, () => fetchExample(currentFile, {notScript: true}))
     // we would have liked to not display it ... but
     return (<span>
             { (_.isNil(dataExample)) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
             <span id="example_box">
-              <h4>Data context:</h4>
+              <h4>Data context {reloadData}:</h4>
               <ContentEditable
               onChange={dataExampleHandleChange}
               html={dataExampleHtml}
