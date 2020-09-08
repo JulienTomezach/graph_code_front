@@ -1,4 +1,4 @@
-import { ADD_ERROR } from "./actionTypes";
+import { ADD_ERROR, CLOSE_ERROR } from "./actionTypes";
 
 let nextErrorId = 0
 
@@ -10,3 +10,9 @@ export const addError = message => ({
   }
 })
 
+export const closeError = id => ({
+  type: CLOSE_ERROR,
+  payload: {
+    id
+  }
+})
