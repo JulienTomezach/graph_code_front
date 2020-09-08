@@ -19,6 +19,8 @@ import { withRouter } from "react-router";
 
 import axios from './axios_utils'
 
+import {is_json_string} from './utilities'
+
 // How manage state between rendering is really bad.
 // basically, the html dom is my state : beeerk
 
@@ -68,6 +70,10 @@ function File(props) {
   }
 
   let getTextCases = () => {
+    if(!is_json_string(cases)){
+      axios.dispatch_error({type: 'update_cases', message: 'The cases must be in format JSON'})
+      return null
+    }
     return cases;
   }
 
@@ -190,6 +196,7 @@ function File(props) {
       if(Object.keys(response.data).length === 1 && response.data.filter){
         setDataExampleComplete(null)
         setScriptComplete(null)
+        setExecResult(null)
         return
       }
 
@@ -228,7 +235,9 @@ function File(props) {
   }
 
   const saveCases = async () => {
-    let response = await axios.put(`files/${currentFile}/cases`, {cases: getTextCases()});
+    let casesText = getTextCases()
+    if(casesText === null) return
+    let response = await axios.put(`files/${currentFile}/cases`, {cases: casesText});
     if(response.status === 200){
       // so we reload the filtered code and the filtered example
       await fetchAllData(currentFile)
