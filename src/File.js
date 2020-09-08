@@ -155,7 +155,7 @@ function File(props) {
       }
   }
 
-  const setDataExampleComplete = (value) => {
+  const setDataExampleComplete = (value, opts = {}) => {
     setDataExample(value)
     if(_.isNil(value)){
       setDataExampleHtml('')
@@ -163,7 +163,10 @@ function File(props) {
     }
     if(Object.keys(value).length === 0)
       setDataExampleHtml('{}')
-    else setDataExampleHtml(dataToText(value))
+    else {
+      let new_value = !opts.noPostProcess ? dataToText(value) : value
+      setDataExampleHtml(new_value)
+    }
   }
 
   const setScriptComplete = (value) => {
@@ -181,8 +184,10 @@ function File(props) {
   const fetchExample = async (filename) => {
     try {
       const response = await axios.get(`files/${filename}/example`);
-      // let data_context_box = document.getElementById('data_context_box')
-      let script_box = document.getElementById('script_box')
+
+      if(response.data.error){
+        // already managed ?
+      }
 
       // no example for this filter
       if(Object.keys(response.data).length === 1 && response.data.filter){
@@ -194,7 +199,11 @@ function File(props) {
       if(_.isNil(response.data.data_context)){
         setDataExampleComplete({})
       }else{
-        setDataExampleComplete(response.data.data_context)
+        if(response.data.data_context.error){
+          setDataExampleComplete(response.data.data_context.body, {noPostProcess: true})
+        }else{
+          setDataExampleComplete(response.data.data_context)
+        }
       }
 
       if(_.isNil(response.data.script)){
