@@ -7,12 +7,16 @@ const axios = axios_base.create({
                           baseURL: 'http://localhost:3000/',
                         });
 
+
+let dispatch_error = (error) => {
+    store.dispatch(addError(`${error.type}: ${error.message}`))
+}
 const get = async (url) => {
   try{
   let response = await axios.get(url);
   return response
   }catch (error){
-    store.dispatch(addError(`${error.response.data.error.type}: ${error.response.data.error.message}`))
+    dispatch_error(error.response.data.error)
     return error.response
   }
 }
@@ -31,4 +35,4 @@ const post = async (url, body) => {
 
 
 
-export default {get, put, post};
+export default {get, put, post, dispatch_error};

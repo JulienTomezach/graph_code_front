@@ -4,7 +4,7 @@ import logo from './logo.svg';
 import './File.css';
 import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
-import ContentEditable from 'react-contenteditable'
+import ContentEditable from './ContentEditable'
 
 import {
   BrowserRouter as Router,
@@ -134,6 +134,7 @@ function File(props) {
     const response = await axios.get(`files/${filename}/code`);
     if(response.data.error){
       setCode(response.data.code)
+      axios.dispatch_error(response.data.error)
     }else{
         setCode(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
       }
@@ -185,10 +186,6 @@ function File(props) {
     try {
       const response = await axios.get(`files/${filename}/example`);
 
-      if(response.data.error){
-        // already managed ?
-      }
-
       // no example for this filter
       if(Object.keys(response.data).length === 1 && response.data.filter){
         setDataExampleComplete(null)
@@ -201,6 +198,7 @@ function File(props) {
       }else{
         if(response.data.data_context.error){
           setDataExampleComplete(response.data.data_context.body, {noPostProcess: true})
+          axios.dispatch_error(response.data.data_context.error)
         }else{
           setDataExampleComplete(response.data.data_context)
         }
