@@ -126,6 +126,7 @@ let htmlToTextNodesAux = (node, opts={}) => {
         return node
       }else{
         console.log("what is this node ?", node)
+        return [node]
       }
 }
 
