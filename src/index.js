@@ -8,7 +8,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 
-const store = createStore(rootReducer)
+import store from "./redux/store";
 
 const rootElement = document.getElementById('root')
 
