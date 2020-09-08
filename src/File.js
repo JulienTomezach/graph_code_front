@@ -131,12 +131,12 @@ function File(props) {
   }
 
    const fetchCode = async (filename) => {
-    try {
-      const response = await axios.get(`files/${filename}/code`);
-      setCode(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.get(`files/${filename}/code`);
+    if(response.data.error){
+      setCode(response.data.code)
+    }else{
+        setCode(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
+      }
   }
 
   let attachUUID = (hash) => {
@@ -342,7 +342,6 @@ let setKeyEventsHandler = () => {
   const exampleBox = document.getElementById("example_box");
   exampleBox.addEventListener("keydown", event => {
     if(event.key === 's' && (event.metaKey || event.ctrlKey)){
-      // saveScriptExample()
       event.preventDefault()
     }else if(event.key === "Tab"){
       event.preventDefault()
