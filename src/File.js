@@ -225,8 +225,12 @@ function File(props) {
       if(_.isNil(response.data.result)){
         setExecResult(null)
       }else{
-        attachUUID(response.data.result)
-        setExecResult(response.data.result)
+        if(response.data.result.error){
+          axios.dispatch_error(response.data.result.error)
+        }else {
+          attachUUID(response.data.result)
+          setExecResult(response.data.result)
+        }
       }
 
     } catch (error) {
