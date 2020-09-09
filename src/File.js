@@ -53,6 +53,7 @@ function File(props) {
     // state of script_example component
     const [scriptHtml, setScriptHtml] = useState('');
     const [script, setScript] = useState(null);
+    const [scriptUnsaved, setScriptUnsaved] = useState(false)
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -97,6 +98,7 @@ function File(props) {
     span.innerHTML = evt.target.value
     setScriptHtml(span.innerHTML)
     setScript(span.innerText)
+    setScriptUnsaved(true)
   }
 
   // to factorise with below
@@ -188,6 +190,7 @@ function File(props) {
     if(value.length === 0)
       setScriptHtml('')
     else setScriptHtml(value)
+    setScriptUnsaved(false)
   }
 
 
@@ -540,6 +543,9 @@ let resultToComponentAux = (elem, lines) => {
   }
   let oneExample = () => {
     let reloadData = reloadGeneric(dataUnsaved, () => fetchExample(currentFile, {notScript: true}))
+
+    let reloadScript = reloadGeneric(scriptUnsaved, () => fetchExample(currentFile, {notData: true}))
+
     // we would have liked to not display it ... but
     return (<span>
             { (_.isNil(dataExample)) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
@@ -551,7 +557,7 @@ let resultToComponentAux = (elem, lines) => {
               disabled={_.isNil(dataExample)}
               />
               {/*<div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>*/}
-              <h4>Script:</h4>
+              <h4>Script {reloadScript}:</h4>
               <ContentEditable
               onChange={scriptHandleChange}
               html={scriptHtml}
