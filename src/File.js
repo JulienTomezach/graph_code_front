@@ -21,11 +21,8 @@ import axios from './axios_utils'
 
 import {is_json_string} from './utilities'
 
-//
-
 function File(props) {
-    let editing = false
-    const initialText = "The code is <br/> <span class='Function'>loading</span>...";
+    const initialHtml = "The code is <br/> <span class='Function'>loading</span>...";
 
     // arbitraty choice, we use two tables for the details of the result
     // and if we have clicked for more detail or not.
@@ -53,9 +50,13 @@ function File(props) {
     const [dataUnsaved, setDataUnsaved] = useState(false)
 
     // state of script_example component
-    const [scriptHtml, setScriptHtml] = useState('');
+    const [scriptHtml, setScriptHtml] = useState(initialHtml);
     const [script, setScript] = useState(null);
     const [scriptUnsaved, setScriptUnsaved] = useState(false)
+
+    const [codeHtml, setCodeHtml] = useState('');
+    const [code, setCode] = useState(null);
+    const [codeEditing, setCodeEditing] = useState(false)
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -68,10 +69,6 @@ function File(props) {
       sel.removeAllRanges()
       sel.addRange(range)
    }
-  let setCode = (text) =>{
-    const el = document.getElementById("code_box");
-    el.innerHTML = text
-  }
 
   let getTextCases = () => {
     if(!is_json_string(cases)){
@@ -81,17 +78,19 @@ function File(props) {
     return cases;
   }
 
-  let getTextCode = () =>{
+  let getTextCode = () => {
     const codeBox = document.getElementById("code_box");
     let span = document.createElement('span');
     htmlToTextFor(span, htmlToTextNodes(codeBox));
     return span.textContent || span.innerText;
   }
 
-  let onKeyDown= (evt) => {
-
+  let codeHandleChange = () => {
+    // let span = document.createElement('span');
+    // span.innerHTML = evt.target.value
+    // setScriptHtml(span.innerHTML)
+    // setScript(span.innerText)
   }
-
 
   // scriptHandleChange
   let scriptHandleChange = (evt) => {
@@ -143,11 +142,12 @@ function File(props) {
    const fetchCode = async (filename) => {
     const response = await axios.get(`files/${filename}/code`);
     if(response.data.error){
-      setCode(response.data.code)
+      setCodeHtml(response.data.code)
       axios.dispatch_error(response.data.error)
     }else{
-        setCode(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
-      }
+        setCodeHtml(graph_to_text(response.data.length > 0 ? response.data : defaultCode()))
+    }
+    setCodeEditing(false)
   }
 
   let attachUUID = (hash) => {
@@ -249,6 +249,45 @@ function File(props) {
     }
   }
 
+  const saveDataAndCode = async () => {
+    // save what is unsaved
+    let dataSaved = {}
+
+    if(codeEditing){
+     dataSaved.code = await  saveCode()
+    }
+    console.log('DEBUG',dataUnsaved, scriptUnsaved)
+
+    if(dataUnsaved){
+      dataSaved.data = await saveDataExample()
+    }
+
+    if(scriptUnsaved){
+     dataSaved.script = await saveScript()
+    }
+
+    // fetch what have changed
+    let actions = {
+      data: () => fetchExample(currentFile, {notScript: true}),
+      script: () => fetchExample(currentFile, {notData: true}),
+      code: () => fetchCode(currentFile),
+    }
+
+    // dont need to wait execution
+    Object.entries(actions).forEach(([index, action]) => {
+      dataSaved[index] && action()
+    })
+
+  }
+
+  const saveErrorHandler = (response, what) => {
+    if(response.status !== 200){
+      axios.dispatch_error({error: `Failed to save the ${what}`, type: 'save'})
+      return false
+    }
+    return true
+  }
+
   const saveCases = async () => {
     let casesText = getTextCases()
     if(casesText === null) return
@@ -257,33 +296,22 @@ function File(props) {
       setDataUnsaved(false)
       // so we reload the filtered code and the filtered example
       await fetchAllData(currentFile)
-      editing = false
     }
   }
 
   const saveCode = async () => {
     let response = await axios.put(`files/${currentFile}/code`, {code: getTextCode()});
-    // thats inneficient, better to get graph from post response
-    if(response.status === 200){
-      await fetchAllData(currentFile)
-      editing = false
-    }
+    return saveErrorHandler(response, 'code')
   }
-  const saveDataExample = () => {
-    console.log('DEBUG',dataExampleHtml, script)
-    // let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
-    // if(response.status === 200){
-    //   await fetchAllData(currentFile)
-    //   editing = false
-    // }
+
+  const saveDataExample = async () => {
+    let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
+    return saveErrorHandler(response, 'data_context')
   }
 
   const saveScript = async () => {
-    let response = await axios.put(`files/${currentFile}/example`, {script: script});
-    if(response.status === 200){
-      await fetchAllData(currentFile)
-      editing = false
-    }
+  let response = await axios.put(`files/${currentFile}/example`, {script: script});
+   return saveErrorHandler(response, 'script')
   }
 
   const createFile =  async (filename) => {
@@ -296,8 +324,8 @@ function File(props) {
   }
 
   let toEditingMode = () => {
-    if(!editing){
-            editing = true
+    if(!codeEditing){
+            setCodeEditing(true)
             console.log('set editing at true')
             let cursor = document.createElement("span");
             cursor.id = "cursor"
@@ -347,22 +375,16 @@ let fetchAllData = (file) => {
   fetchExample(file);
 }
 
-let saveHandler = (event, save) => {
+let saveHandler = (event) => {
   if(event.key === 's' && (event.metaKey || event.ctrlKey)){
-    save()
-    // must be because we dont give the functions, only the fields
-    // event.preventDefault()
+    saveDataAndCode()
+    event.preventDefault()
   }
 }
 
-let setKeyEventsHandler = () => {
-  const codeBox = document.getElementById("code_box");
-  // codeBox.removeEventListener("keydown")
-  codeBox.addEventListener("keydown", event => {
-    if(event.key === 's' && (event.metaKey || event.ctrlKey)){
-      saveCode()
-      event.preventDefault()
-    }else if(event.key === "Tab"){
+let keyCodeHandler = (event) => {
+    saveHandler(event)
+    if(event.key === "Tab"){
       insertNodeAtCursor(document.createTextNode("\t"));
       toEditingMode()
       event.preventDefault()
@@ -371,13 +393,14 @@ let setKeyEventsHandler = () => {
       insertNodeAtCursor(document.createTextNode("\n"));
       event.preventDefault()
     }
-  });
+}
 
+
+let setKeyEventsHandler = () => {
+  // useless here
   const exampleBox = document.getElementById("example_box");
   exampleBox.addEventListener("keydown", event => {
-    if(event.key === 's' && (event.metaKey || event.ctrlKey)){
-      event.preventDefault()
-    }else if(event.key === "Tab"){
+    if(event.key === "Tab"){
       event.preventDefault()
       insertNodeAtCursor(document.createTextNode("\t"));
     }
@@ -390,9 +413,7 @@ let setKeyEventsHandler = () => {
 
    useEffect( () => {
     if(currentFile !== null){
-          setCode(initialText)
           fetchAllData(currentFile);
-          setKeyEventsHandler()
           setFocusEventsHandler()
         }
   }, [currentFile]);
@@ -544,7 +565,6 @@ let resultToComponentAux = (elem, lines) => {
       return condition ? <span> (<span onClick={onReload} className="Reload">reload</span> )</span>: null
   }
   let oneExample = () => {
-
     // we would have liked to not display it ... but
     return (<span>
             { (_.isNil(dataExample)) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
@@ -552,7 +572,7 @@ let resultToComponentAux = (elem, lines) => {
               <h4 >Data context :</h4>
               <ContentEditable
               onChange={dataExampleHandleChange}
-              onKeyDown={(evt) => saveHandler(evt, saveDataExample)}
+              onKeyDown={saveHandler}
               html={dataExampleHtml}
               disabled={_.isNil(dataExample)}
               />
@@ -560,7 +580,7 @@ let resultToComponentAux = (elem, lines) => {
               <h4>Script :</h4>
               <ContentEditable
               onChange={scriptHandleChange}
-              onKeyDown={(evt) => saveHandler(evt, saveScript)}
+              onKeyDown={saveHandler}
               html={scriptHtml}
               disabled={_.isNil(script)}
               />
@@ -602,6 +622,7 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let mainComponent = () => {
+    console.log('DEbug root', scriptUnsaved, dataUnsaved)
       return currentFile !== null ? (
 
       <div ref={fileRef} className="App">
@@ -639,8 +660,12 @@ let resultToComponentAux = (elem, lines) => {
             </div>
             </div>
             <hr className="Line"></hr>
-            <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox">
-            </div>
+            <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox"></div>
+            <ContentEditable
+              onChange={codeHandleChange}
+              onKeyDown={keyCodeHandler}
+              html={scriptHtml}
+              disabled={casesEmpty()}/>
             <div className="Examples">
               <h3>Examples:</h3>
               {oneExample()}
