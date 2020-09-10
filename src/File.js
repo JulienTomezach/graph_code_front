@@ -190,9 +190,10 @@ function File(props) {
   }
 
 
+  // opts: noData, noScript, noResult
   const fetchExample = async (filename, opts = {}) => {
     try {
-      const response = await axios.get(`files/${filename}/example`, {data: opts});
+      const response = await axios.get(`files/${filename}/example`, {params: opts});
 
       // no example for this filter
       if(Object.keys(response.data).length === 1 && response.data.filter){

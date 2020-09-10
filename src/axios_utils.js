@@ -11,9 +11,9 @@ const axios = axios_base.create({
 let dispatch_error = (error) => {
     store.dispatch(addError(`${error.type}: ${error.message}`))
 }
-const get = async (url) => {
+const get = async (url, config) => {
   try{
-  let response = await axios.get(url);
+  let response = await axios.get(url, config);
   return response
   }catch (error){
     dispatch_error(error.response.data.error)
