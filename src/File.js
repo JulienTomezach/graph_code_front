@@ -55,7 +55,7 @@ function File(props) {
     const [scriptUnsaved, setScriptUnsaved] = useState(false)
 
     const [codeHtml, setCodeHtml] = useState('');
-    const [code, setCode] = useState(null);
+    // const [code, setCode] = useState(null);
     const [codeEditing, setCodeEditing] = useState(false)
 
    let insertNodeAtCursor = (node) => {
@@ -555,9 +555,6 @@ let resultToComponentAux = (elem, lines) => {
     return details
   }
 
-  let reloadGeneric = (condition, onReload) => {
-      return condition ? <span> (<span onClick={onReload} className="Reload">reload</span> )</span>: null
-  }
   let oneExample = () => {
     // we would have liked to not display it ... but
     return (<span>
@@ -593,7 +590,11 @@ let resultToComponentAux = (elem, lines) => {
     return Object.keys(JSON.parse(el.innerText)).length === 0
   }
 
-  let changeSelectedFileName = (filename) => {
+  let switchSelectedFileName = (filename) => {
+    setExecResult(null)
+    setDataExampleHtml('')
+    setScriptHtml('')
+    setCodeHtml(initialHtml)
     history.push(`/${filename}`);
   }
 
@@ -602,7 +603,7 @@ let resultToComponentAux = (elem, lines) => {
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
-      return (<div href="#" onClick={() => changeSelectedFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
+      return (<div href="#" onClick={() => switchSelectedFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
               <span className="ItemText">{filename}</span>
             </div>)
     })
