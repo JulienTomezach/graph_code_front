@@ -17,7 +17,7 @@ let App = () => {
   return  (<Router>
     <ErrorUI></ErrorUI>
    <Switch>
-          {/*<Route path="/" children={<File/>} />*/}
+          <Route path="/" children={<File/>} />
           <Route path="/:filename" children={<File/>} />
   </Switch>
    </Router>

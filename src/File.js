@@ -38,8 +38,8 @@ function File(props) {
     const [addingFile, setAddingFile] = useState(false)
     const [updatingFile, setUpdatingFile] = useState(false)
 
-    const { filename } = useParams();
     const {history} = props;
+    const filename = _.last(history.location.pathname.split('/'))
 
     // for component editable
     const fileRef = React.createRef();
@@ -330,13 +330,36 @@ function File(props) {
       setAddingFile(v => !v)
     }
   }
-
+  let removeSelectedFile = async () => {
+    if(!selectedFile) return
+    let response = await axios.delete(`files/${selectedFile}`);
+    if(response.status === 200){
+      if(selectedFile === currentFile){
+        let newCurrentFile = files.filter(v => v !== selectedFile)[0]
+        if(newCurrentFile) setCurrentFile(newCurrentFile)
+        else{
+          setCurrentFile(null)
+          history.push('/')
+        }
+      }
+      setSelectedFile(null)
+      setUpdatingFile(false)
+    }
+  }
   let updateFile = async (filename) => {
     if(filename.length === 0 ) return
     let response = await axios.put(`files/${selectedFile}`, {name: filename});
     if(response.status === 200){
-      if(selectedFile === currentFile)
-        history.push(`/${filename}`);
+      if(selectedFile === currentFile){
+          setCurrentFile(filename)
+      }
+      let index = files.indexOf(selectedFile);
+      console.log('INdex', index)
+      if (index >= 0) {
+          setFiles(files => {
+             return files.map((item) => (item === selectedFile ? filename : item) );
+          })
+      }
       setSelectedFile(null)
       setUpdatingFile(false)
     }
@@ -370,12 +393,10 @@ function File(props) {
         }
   }
 
-let fetchFiles = async (filename) => {
+let fetchFiles = async () => {
   let response = await axios.get('files', {});
   let files = response.data.files
   setFiles(files)
-  if(files.includes(filename))
-    setCurrentFile(filename);
 };
 
 let fetchAllData = (file) => {
@@ -417,15 +438,26 @@ let setKeyEventsHandler = () => {
   });
 }
 
-   useEffect( () => {
-    fetchFiles(filename);
+  useEffect( () => {
+    fetchFiles();
+  }, []);
+
+  useEffect( () => {
+    if(filename.length > 0 && filename !== currentFile)
+      setCurrentFile(filename)
   }, [filename]);
 
-   useEffect( () => {
-    if(currentFile !== null){
-          fetchAllData(currentFile);
-        }
+useEffect( () => {
+  if(!_.isNil(currentFile) && filename !== currentFile)
+    history.push(`/${currentFile}`);
+}, [currentFile]);
+
+  useEffect( () => {
+    if(!_.isNil(currentFile))
+      fetchAllData(currentFile);
   }, [currentFile]);
+
+
 
 // approach:
 // all the element but some are displayed. only when other are click_ed on.
@@ -560,9 +592,12 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let updateFileContent = () => {
-    return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}}  className="AddFile">
-      <input defaultValue={selectedFile} id="filename_input2" type="text" className="Input" />
-      <div className="Button" onClick={() => {updateFile(document.getElementById("filename_input2").value)}} > Update </div>
+    return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}} className="FormModal">
+      <span className="Row">
+        <input className="Input" defaultValue={selectedFile} id="filename_input2" type="text"  />
+        <span className="Button" onClick={() => {updateFile(document.getElementById("filename_input2").value)}} > Update </span>
+      </span>
+      <span className="Button Red" onClick={removeSelectedFile} > Remove </span>
     </div>)
   }
 
@@ -610,12 +645,12 @@ let resultToComponentAux = (elem, lines) => {
     return Object.keys(JSON.parse(el.innerText)).length === 0
   }
 
-  let switchSelectedFileName = (filename) => {
+  let switchCurrentFileName = (filename) => {
     setExecResult(null)
     setDataExampleHtml('')
     setScriptHtml('')
     setCodeHtml(initialHtml)
-    history.push(`/${filename}`);
+    setCurrentFile(filename)
   }
 
   let clickUpdateFile= (filename) => {
@@ -629,7 +664,7 @@ let resultToComponentAux = (elem, lines) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
       return (<div className="ItemLine" href="#">
-              <span className={className} onClick={() => switchSelectedFileName(filename)} >
+              <span className={className} onClick={() => switchCurrentFileName(filename)} >
                 <span className="material-icons">text_snippet</span>
                 <span className="ItemText">{filename}</span>
               </span>
@@ -640,30 +675,12 @@ let resultToComponentAux = (elem, lines) => {
     })
   }
 
-  let mainComponent = () => {
-      return currentFile !== null ? (
+  //!_.isNil(currentFile) ?
 
-      <div ref={fileRef} className="App">
-      {modalAddFile}
-      {modalUpdateFile}
-      {console.log('rendu')}
-        <div className="Sidebar">
-          <div className="SidebarContent">
-            <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
-            {fileNames(files)}
-          <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
-        </div>
-        </div>
-
-        {/*<div className="RightScreen">*/}
-
-            {/*<div className="Header">
-
-            </div>*/}
-
-
-            <div className="Content">
-            <div  className="CasesBoxParent">
+  let contentPart = () => {
+    return !_.isNil(currentFile) ? (
+      <span>
+      <div  className="CasesBoxParent">
               <div>
               <h5>Business Cases (JSON) : </h5>
               {/*<span>Beta Feature: see doc</span>*/}
@@ -689,12 +706,40 @@ let resultToComponentAux = (elem, lines) => {
               <h3>Examples:</h3>
               {oneExample()}
             </div>
+            </span>
+      ) : null;
+  }
+
+  let mainComponent = () => {
+      return  (
+
+      <div ref={fileRef} className="App">
+      {modalAddFile}
+      {modalUpdateFile}
+      {console.log('rendu')}
+        <div className="Sidebar">
+          <div className="SidebarContent">
+            <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
+            {fileNames(files)}
+          <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
+        </div>
+        </div>
+
+        {/*<div className="RightScreen">*/}
+
+            {/*<div className="Header">
+
+            </div>*/}
+
+
+            <div className="Content">
+              {contentPart()}
             </div>
 
         {/*</div>*/}
 
       </div>
-    ): null;
+    );
   }
   return mainComponent()
 }

@@ -292,5 +292,40 @@ color: #ffaa00;
   /*height: 100px;*/
 }
 
+.FormModal{
+  width: 300px;
+  padding: 1em;
+  /*padding-top: 2em;
+  padding-bottom:  2em;*/
+  height: 100px;
+  background-color: white;
+  border-radius: 10px;
+  color: gray;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.Row {
+      width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.FormModal .Input{
+  width: 75px;
+}
+
+.FormModal .Button {
+  width: 50px;
+}
+
+.Red{
+  background-color: rgba(241,18,18, 0.8);
+}
+.Red:hover{
+  background-color: rgba(241,18,18);
+}
 

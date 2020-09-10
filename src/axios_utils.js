@@ -22,17 +22,33 @@ const get = async (url, config) => {
 }
 
 const put = async (url, body) => {
- let response = await axios.put(url, body);
- if(response.status === 200) return response;
- // store.dispatch(addError(response.data.error))
+  try{
+   let response = await axios.put(url, body);
+   return response
+  }catch (error){
+    dispatch_error(error.response.data.error)
+    return error.response
+  }
 }
 
 const post = async (url, body) => {
- let response = await axios.post(url, body);
- if(response.status === 200) return response;
- // store.dispatch(addError(response.data.error))
+  try{
+     let response = await axios.post(url, body);
+     return response
+ }catch (error){
+    dispatch_error(error.response.data.error)
+    return error.response
+  }
 }
 
+const del = async (url) => {
+try{
+   let response = await axios.delete(url);
+   return response
+ }catch (error){
+    dispatch_error(error.response.data.error)
+    return error.response
+  }
+}
 
-
-export default {get, put, post, dispatch_error};
+export default {get, put, post, dispatch_error, delete: del};
