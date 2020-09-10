@@ -79,17 +79,13 @@ function File(props) {
   }
 
   let getTextCode = () => {
-    const codeBox = document.getElementById("code_box");
     let span = document.createElement('span');
-    htmlToTextFor(span, htmlToTextNodes(codeBox));
+    htmlToTextFor(span, htmlToTextNodes(codeHtml));
     return span.textContent || span.innerText;
   }
 
-  let codeHandleChange = () => {
-    // let span = document.createElement('span');
-    // span.innerHTML = evt.target.value
-    // setScriptHtml(span.innerHTML)
-    // setScript(span.innerText)
+  let codeHandleChange = (evt) => {
+    setCodeHtml(evt.target.value)
   }
 
   // scriptHandleChange
@@ -337,8 +333,10 @@ function File(props) {
             let range = sel.getRangeAt(0);
             range.insertNode(cursor);
 
-            const codeBox = document.getElementById("code_box");
-            htmlToTextFor(codeBox, htmlToTextNodes(codeBox, {keepBRTag: true}));
+            let span = document.createElement('span');
+            htmlToTextFor(span, htmlToTextNodes(codeHtml, {keepBRTag: true}));
+
+            setCodeHtml(span.innerHTML)
 
             cursor = document.getElementById("cursor");
             range = document.createRange()
@@ -351,14 +349,6 @@ function File(props) {
             sel.addRange(range)
             // cursor.focus()
         }
-  }
-
-  let setFocusEventsHandler= () => {
-    const codeBox = document.getElementById("code_box");
-    codeBox.addEventListener('input', (event) => {
-      toEditingMode()
-    });
-
   }
 
 let fetchFiles = async (filename) => {
@@ -383,6 +373,7 @@ let saveHandler = (event) => {
 }
 
 let keyCodeHandler = (event) => {
+    toEditingMode()
     saveHandler(event)
     if(event.key === "Tab"){
       insertNodeAtCursor(document.createTextNode("\t"));
@@ -414,7 +405,6 @@ let setKeyEventsHandler = () => {
    useEffect( () => {
     if(currentFile !== null){
           fetchAllData(currentFile);
-          setFocusEventsHandler()
         }
   }, [currentFile]);
 
@@ -600,14 +590,7 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let changeSelectedFileName = (filename) => {
-    var element = document.getElementById("code_box");
-    element.outerHTML = element.outerHTML;
-
-    // element = document.getElementById("example_box");
-    // element.outerHTML = element.outerHTML;
-
     history.push(`/${filename}`);
-    // history.push(`/`);
   }
 
   let fileNames = (files) => {
@@ -660,11 +643,12 @@ let resultToComponentAux = (elem, lines) => {
             </div>
             </div>
             <hr className="Line"></hr>
-            <div id="code_box" spellCheck={false} contentEditable={casesEmpty()}  className="CodeBox"></div>
             <ContentEditable
+              id="code_box"
+              className="CodeBox"
               onChange={codeHandleChange}
               onKeyDown={keyCodeHandler}
-              html={scriptHtml}
+              html={codeHtml}
               disabled={casesEmpty()}/>
             <div className="Examples">
               <h3>Examples:</h3>

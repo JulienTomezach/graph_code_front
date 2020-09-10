@@ -108,7 +108,7 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
 
 let htmlToTextNodes = (htmlRoot, opts={}) => {
   let copy = document.createElement('div')
-  copy.innerHTML = htmlRoot.innerHTML
+  copy.innerHTML = htmlRoot
   return _.flattenDeep(htmlToTextNodesAux(copy, opts))
 }
 
