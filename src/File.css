@@ -13,19 +13,37 @@
   align-items: center;
 }
 
+.ItemLine{
+  display: flex;
+  flex-direction: row;
+  align-items:  center;
+  justify-content: space-between;
+}
+
 .SelectedItem{
   color: #F5F5F5;
   font-weight: bold;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   /*background-color: #9E9E9E;*/
+}
+
+.More{
+  margin-right: 1em;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.More:hover{
+  opacity: 1;
 }
 
 .Item{
   margin-bottom: 1em;
   margin-top: 1em;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  word-break: break-word;
 }
 
 .ItemText{
@@ -111,7 +129,9 @@
 .Button{
   font-weight: bold;
   background: rgba(77,208,225, 0.8);
-  width: 80%;
+  /*width: 80%;*/
+  padding-left: 1em;
+  padding-right: 1em;
   height: 40px;
   border-radius: 10px;
   font-size: 12;

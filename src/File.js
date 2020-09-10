@@ -30,9 +30,13 @@ function File(props) {
     const [execResult, setExecResult] = useState(null)
     const [resultDisplay, setResultDisplay] = useState({})
     const [files, setFiles] = useState([])
+    // file whose code is displayed
     const [currentFile, setCurrentFile] = useState(null)
+    // file whose we want to change metaData
+    const [selectedFile, setSelectedFile] = useState(null)
 
     const [addingFile, setAddingFile] = useState(false)
+    const [updatingFile, setUpdatingFile] = useState(false)
 
     const { filename } = useParams();
     const {history} = props;
@@ -323,7 +327,18 @@ function File(props) {
     let response = await axios.post(`files`, {name: filename});
     if(response.status === 200){
       await fetchFiles()
-      triggerAddFileModal()
+      setAddingFile(v => !v)
+    }
+  }
+
+  let updateFile = async (filename) => {
+    if(filename.length === 0 ) return
+    let response = await axios.put(`files/${selectedFile}`, {name: filename});
+    if(response.status === 200){
+      if(selectedFile === currentFile)
+        history.push(`/${filename}`);
+      setSelectedFile(null)
+      setUpdatingFile(false)
     }
   }
 
@@ -529,13 +544,9 @@ let resultToComponentAux = (elem, lines) => {
   return
 }
 
-  let triggerAddFileModal = () => {
-    setAddingFile(value => !value)
-  }
-
-  let modalGeneric = (triggered, content, trigger) =>  {
+  let modalGeneric = (triggered, content, turnOff) =>  {
   return triggered ? (
-    <div onClick = {() => trigger()} class="Modal">
+    <div onClick = {() => turnOff(false)} className="Modal">
       {content}
     </div>
     ) : null;
@@ -548,7 +559,16 @@ let resultToComponentAux = (elem, lines) => {
     </div>)
   }
 
-  let modalAddFile = React.useMemo(() => modalGeneric(addingFile, addFileContent(), triggerAddFileModal), [addingFile])
+  let updateFileContent = () => {
+    return (<div onClick = {(e) => {e.stopPropagation(); e.preventDefault();}}  className="AddFile">
+      <input defaultValue={selectedFile} id="filename_input2" type="text" className="Input" />
+      <div className="Button" onClick={() => {updateFile(document.getElementById("filename_input2").value)}} > Update </div>
+    </div>)
+  }
+
+  let modalAddFile = React.useMemo(() => modalGeneric(addingFile, addFileContent(), setAddingFile), [addingFile])
+
+  let modalUpdateFile = React.useMemo(() => modalGeneric(updatingFile, updateFileContent(), setUpdatingFile), [updatingFile])
 
   let resultComponent = () =>   {
     let details =  resultToComponent(execResult)
@@ -598,13 +618,24 @@ let resultToComponentAux = (elem, lines) => {
     history.push(`/${filename}`);
   }
 
+  let clickUpdateFile= (filename) => {
+    setSelectedFile(filename)
+    setUpdatingFile(true)
+  }
+
   let fileNames = (files) => {
 
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
-      return (<div href="#" onClick={() => switchSelectedFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
-              <span className="ItemText">{filename}</span>
+      return (<div className="ItemLine" href="#">
+              <span className={className} onClick={() => switchSelectedFileName(filename)} >
+                <span className="material-icons">text_snippet</span>
+                <span className="ItemText">{filename}</span>
+              </span>
+              <span className="More" onClick= {()=> clickUpdateFile(filename)}>
+                <span className="material-icons">more_vert</span>
+              </span>
             </div>)
     })
   }
@@ -614,12 +645,13 @@ let resultToComponentAux = (elem, lines) => {
 
       <div ref={fileRef} className="App">
       {modalAddFile}
+      {modalUpdateFile}
       {console.log('rendu')}
         <div className="Sidebar">
           <div className="SidebarContent">
             <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
             {fileNames(files)}
-          <div onClick={triggerAddFileModal} className="Button Item"> Add a File </div>
+          <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
         </div>
         </div>
 
