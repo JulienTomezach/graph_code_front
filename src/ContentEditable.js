@@ -6,23 +6,45 @@ function normalizeHtml(str) {
   return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ');
 }
 
+
+  let focusOnCursorElement = () =>  {
+      let cursor = document.getElementById("cursor");
+      if(!cursor) return
+      let range = document.createRange()
+      let sel = window.getSelection()
+
+      range.setStart(cursor, 0)
+      range.collapse(true)
+
+      sel.removeAllRanges()
+      sel.addRange(range)
+      cursor.focus()
+  }
+
 function replaceCaret(el) {
   // Place the caret at the end of the element
-  const target = document.createTextNode('');
-  el.appendChild(target);
-  // do not move caret if element was not focused
+  // const target = document.createTextNode('');
+  // el.appendChild(target);
+
+
   const isTargetFocused = document.activeElement === el;
-  if (target !== null && target.nodeValue !== null && isTargetFocused) {
-    var sel = window.getSelection();
-    if (sel !== null) {
-      var range = document.createRange();
-      range.setStart(target, target.nodeValue.length);
-      range.collapse(true);
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
-    if (el instanceof HTMLElement) el.focus();
+
+  if (isTargetFocused) {
+    focusOnCursorElement()
   }
+  // // do not move caret if element was not focused
+  // const isTargetFocused = document.activeElement === el;
+  // if (target !== null && target.nodeValue !== null && isTargetFocused) {
+  //   var sel = window.getSelection();
+  //   if (sel !== null) {
+  //     var range = document.createRange();
+  //     range.setStart(target, target.nodeValue.length);
+  //     range.collapse(true);
+  //     sel.removeAllRanges();
+  //     sel.addRange(range);
+  //   }
+  //   if (el instanceof HTMLElement) el.focus();
+  // }
 }
 
 /**

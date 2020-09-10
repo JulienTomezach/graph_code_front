@@ -342,20 +342,16 @@ function File(props) {
             range.insertNode(cursor);
 
             let span = document.createElement('span');
-            htmlToTextFor(span, htmlToTextNodes(codeHtml, {keepBRTag: true}));
+
+            //code_box
+            let codeHtmlWithCursor = document.getElementById("code_box").innerHTML
+            htmlToTextFor(span, htmlToTextNodes(codeHtmlWithCursor, {keepBRTag: true}));
+
 
             setCodeHtml(span.innerHTML)
 
-            cursor = document.getElementById("cursor");
-            range = document.createRange()
-            sel = window.getSelection()
+            // the component editable will focus on the cursor after updating ;)
 
-            range.setStart(cursor, 0)
-            range.collapse(true)
-
-            sel.removeAllRanges()
-            sel.addRange(range)
-            // cursor.focus()
         }
   }
 
