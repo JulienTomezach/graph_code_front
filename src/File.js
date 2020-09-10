@@ -342,6 +342,10 @@ function File(props) {
           history.push('/')
         }
       }
+
+      setFiles(files => {
+             return files.filter((item) => item !== selectedFile );
+          })
       setSelectedFile(null)
       setUpdatingFile(false)
     }
@@ -354,7 +358,6 @@ function File(props) {
           setCurrentFile(filename)
       }
       let index = files.indexOf(selectedFile);
-      console.log('INdex', index)
       if (index >= 0) {
           setFiles(files => {
              return files.map((item) => (item === selectedFile ? filename : item) );
@@ -442,6 +445,14 @@ let setKeyEventsHandler = () => {
     fetchFiles();
   }, []);
 
+  useEffect( () => {
+    if(filename.length === 0 && _.isNil(currentFile) && files.length > 0){
+      setCurrentFile(files[0])
+    }
+  }, [files]);
+
+
+// keep synchornisation between, a bit odd should be able to remove currentFile
   useEffect( () => {
     if(filename.length > 0 && filename !== currentFile)
       setCurrentFile(filename)
