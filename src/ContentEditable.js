@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+// https://github.com/lovasoa/react-contenteditable/issues/161
+
 function normalizeHtml(str) {
   return str && str.replace(/&nbsp;|\u202F|\u00A0/g, ' ');
 }
@@ -96,7 +98,6 @@ export default class ContentEditable extends React.Component<Props> {
     if (!el) return;
 
     const html = el.innerHTML;
-    if (this.props.onChange) {
       // Clone event with Object.assign to avoid
       // "Cannot assign to read only property 'target' of object"
       const evt = Object.assign({}, originalEvt, {
@@ -104,6 +105,11 @@ export default class ContentEditable extends React.Component<Props> {
           value: html
         }
       });
+
+    // if (this.props.onKeyDown) {
+    //   this.props.onKeyDown(evt)
+    // }
+    if (this.props.onChange && html !== this.lastHtml) {
       this.props.onChange(evt);
     }
     this.lastHtml = html;

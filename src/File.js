@@ -4,7 +4,7 @@ import logo from './logo.svg';
 import './File.css';
 import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
-import ContentEditable from './ContentEditable'
+import ContentEditable from './WrappedContentEditable'
 
 import {
   BrowserRouter as Router,
@@ -21,8 +21,7 @@ import axios from './axios_utils'
 
 import {is_json_string} from './utilities'
 
-// How manage state between rendering is really bad.
-// basically, the html dom is my state : beeerk
+//
 
 function File(props) {
     let editing = false
@@ -40,6 +39,9 @@ function File(props) {
 
     const { filename } = useParams();
     const {history} = props;
+
+    // for component editable
+    const fileRef = React.createRef();
 
     // state of cases component
     const [casesHtml, setCasesHtml] = useState('');
@@ -93,7 +95,6 @@ function File(props) {
 
   // scriptHandleChange
   let scriptHandleChange = (evt) => {
-    saveHandler(evt, saveScript)
     let span = document.createElement('span');
     span.innerHTML = evt.target.value
     setScriptHtml(span.innerHTML)
@@ -103,7 +104,6 @@ function File(props) {
 
   // to factorise with below
   let dataExampleHandleChange = (evt) => {
-    saveHandler(evt, saveDataExample)
     let span = document.createElement('span');
     span.innerHTML = evt.target.value
     setDataExampleHtml(span.innerHTML)
@@ -269,13 +269,15 @@ function File(props) {
       editing = false
     }
   }
-  const saveDataExample = async () => {
-    let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
-    if(response.status === 200){
-      await fetchAllData(currentFile)
-      editing = false
-    }
+  const saveDataExample = () => {
+    console.log('DEBUG',dataExampleHtml, script)
+    // let response = await axios.put(`files/${currentFile}/example`, {data_context: dataExample});
+    // if(response.status === 200){
+    //   await fetchAllData(currentFile)
+    //   editing = false
+    // }
   }
+
   const saveScript = async () => {
     let response = await axios.put(`files/${currentFile}/example`, {script: script});
     if(response.status === 200){
@@ -542,24 +544,23 @@ let resultToComponentAux = (elem, lines) => {
       return condition ? <span> (<span onClick={onReload} className="Reload">reload</span> )</span>: null
   }
   let oneExample = () => {
-    let reloadData = reloadGeneric(dataUnsaved, () => fetchExample(currentFile, {notScript: true}))
-
-    let reloadScript = reloadGeneric(scriptUnsaved, () => fetchExample(currentFile, {notData: true}))
 
     // we would have liked to not display it ... but
     return (<span>
             { (_.isNil(dataExample)) ? (<span> No examples for this context, remove all filters to get all examples available. </span>) :  null}
             <span id="example_box">
-              <h4>Data context {reloadData}:</h4>
+              <h4 >Data context :</h4>
               <ContentEditable
               onChange={dataExampleHandleChange}
+              onKeyDown={(evt) => saveHandler(evt, saveDataExample)}
               html={dataExampleHtml}
               disabled={_.isNil(dataExample)}
               />
               {/*<div spellCheck={false} id='data_context_box' contentEditable={!_.isNil(execResult)} ></div>*/}
-              <h4>Script {reloadScript}:</h4>
+              <h4>Script :</h4>
               <ContentEditable
               onChange={scriptHandleChange}
+              onKeyDown={(evt) => saveHandler(evt, saveScript)}
               html={scriptHtml}
               disabled={_.isNil(script)}
               />
@@ -578,7 +579,7 @@ let resultToComponentAux = (elem, lines) => {
     return Object.keys(JSON.parse(el.innerText)).length === 0
   }
 
-  let changeFileName = (filename) => {
+  let changeSelectedFileName = (filename) => {
     var element = document.getElementById("code_box");
     element.outerHTML = element.outerHTML;
 
@@ -594,7 +595,7 @@ let resultToComponentAux = (elem, lines) => {
     return files.map((filename) => {
       let className = (filename === currentFile) ? "SelectedItem" : ""
       className += " Item"
-      return (<div href="#" onClick={() => changeFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
+      return (<div href="#" onClick={() => changeSelectedFileName(filename)} className={className}><span className="material-icons">text_snippet</span>
               <span className="ItemText">{filename}</span>
             </div>)
     })
@@ -603,7 +604,7 @@ let resultToComponentAux = (elem, lines) => {
   let mainComponent = () => {
       return currentFile !== null ? (
 
-      <div className="App">
+      <div ref={fileRef} className="App">
       {modalAddFile}
       {console.log('rendu')}
         <div className="Sidebar">
