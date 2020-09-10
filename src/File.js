@@ -192,17 +192,17 @@ function File(props) {
 
   const fetchExample = async (filename, opts = {}) => {
     try {
-      const response = await axios.get(`files/${filename}/example`);
+      const response = await axios.get(`files/${filename}/example`, {data: opts});
 
       // no example for this filter
       if(Object.keys(response.data).length === 1 && response.data.filter){
-        if(!opts.notData) setDataExampleComplete(null);
-        if(!opts.notScript) setScriptComplete(null)
-        setExecResult(null)
+        if(!opts.noData) setDataExampleComplete(null);
+        if(!opts.noScript) setScriptComplete(null)
+        if(!opts.noResult) setExecResult(null)
         return
       }
 
-      if(!opts.notData){
+      if(!opts.noData){
         if(_.isNil(response.data.data_context)){
           setDataExampleComplete({})
         }else{
@@ -215,7 +215,7 @@ function File(props) {
         }
       }
 
-      if(!opts.notScript) {
+      if(!opts.noScript) {
 
         if(_.isNil(response.data.script)){
           setScriptComplete('execute: 1+1')
@@ -224,19 +224,22 @@ function File(props) {
         }
       }
 
-      if(Object.keys(response.data).length === 0){
-        setExecResult(null)
-        return
-      }
+      if(!opts.noResult){
 
-      if(_.isNil(response.data.result)){
-        setExecResult(null)
-      }else{
-        if(response.data.result.error){
-          axios.dispatch_error(response.data.result.error)
-        }else {
-          attachUUID(response.data.result)
-          setExecResult(response.data.result)
+        if(Object.keys(response.data).length === 0){
+          setExecResult(null)
+          return
+        }
+
+        if(_.isNil(response.data.result)){
+          setExecResult(null)
+        }else{
+          if(response.data.result.error){
+            axios.dispatch_error(response.data.result.error)
+          }else {
+            attachUUID(response.data.result)
+            setExecResult(response.data.result)
+          }
         }
       }
 
@@ -252,7 +255,6 @@ function File(props) {
     if(codeEditing){
      dataSaved.code = await  saveCode()
     }
-    console.log('DEBUG',dataUnsaved, scriptUnsaved)
 
     if(dataUnsaved){
       dataSaved.data = await saveDataExample()
@@ -264,8 +266,8 @@ function File(props) {
 
     // fetch what have changed
     let actions = {
-      data: () => fetchExample(currentFile, {notScript: true}),
-      script: () => fetchExample(currentFile, {notData: true}),
+      data: () => fetchExample(currentFile, {noScript: true, noResult: true}),
+      script: () => fetchExample(currentFile, {noData: true, noResult: true}),
       code: () => fetchCode(currentFile),
     }
 
@@ -273,6 +275,11 @@ function File(props) {
     Object.entries(actions).forEach(([index, action]) => {
       dataSaved[index] && action()
     })
+
+    // always fetch result details bc it necessarilly changed
+    if(_.some(Object.values(dataSaved))){
+      fetchExample(currentFile, {noData: true, noScript: true})
+    }
 
   }
 
@@ -605,7 +612,6 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let mainComponent = () => {
-    console.log('DEbug root', scriptUnsaved, dataUnsaved)
       return currentFile !== null ? (
 
       <div ref={fileRef} className="App">
@@ -638,7 +644,6 @@ let resultToComponentAux = (elem, lines) => {
              className="Json"
              onChange={casesHandleChange}
               html={casesHtml} />
-              {/*<div id="cases_box" spellCheck={false} contentEditable className="Json"></div>*/}
               <div onClick={saveCases} className="Button"> Filter </div>
             </div>
             </div>
@@ -649,7 +654,7 @@ let resultToComponentAux = (elem, lines) => {
               onChange={codeHandleChange}
               onKeyDown={keyCodeHandler}
               html={codeHtml}
-              disabled={casesEmpty()}/>
+              disabled={!casesEmpty()}/>
             <div className="Examples">
               <h3>Examples:</h3>
               {oneExample()}
