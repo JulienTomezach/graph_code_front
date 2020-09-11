@@ -82,14 +82,22 @@ function File(props) {
     return cases;
   }
 
-  let getTextCode = () => {
+  let htmlToText = (html) => {
     let span = document.createElement('span');
-    htmlToTextFor(span, htmlToTextNodes(codeHtml));
+    htmlToTextFor(span, htmlToTextNodes(html));
     return span.textContent || span.innerText;
   }
 
+  let getTextCode = () => {
+    htmlToText(codeHtml)
+  }
+
   let codeHandleChange = (evt) => {
-    setCodeHtml(evt.target.value)
+    let newHtml = toEditingMode(evt.target.value)
+    if(newHtml)
+      setCodeHtml(newHtml)
+    else
+      setCodeHtml(evt.target.value)
   }
 
   // scriptHandleChange
@@ -368,8 +376,16 @@ function File(props) {
     }
   }
 
-  let toEditingMode = () => {
-    if(!codeEditing){
+  let itReallyChanges = (actualCodeHtml) => {
+    const textActualCodeHtml =  htmlToText(actualCodeHtml) 
+    const textCodeBoxNow = htmlToText(codeHtml)
+    console.log('DEBUG',textCodeBoxNow.length, textActualCodeHtml.length)
+    return !(textCodeBoxNow.length === textActualCodeHtml.length && textCodeBoxNow === textActualCodeHtml); 
+  }
+
+  let toEditingMode = (actualCodeHtml) => {
+    // we use the sub-func bc there is a strange change at start <br/> -> <br>, space -> &nbsp;
+    if(!codeEditing && itReallyChanges(actualCodeHtml)){
             setCodeEditing(true)
             console.log('set editing at true')
             let cursor = document.createElement("span");
@@ -389,7 +405,7 @@ function File(props) {
             htmlToTextFor(span, htmlToTextNodes(codeHtmlWithCursor, {keepBRTag: true}));
 
 
-            setCodeHtml(span.innerHTML)
+            return span.innerHTML
 
             // the component editable will focus on the cursor after updating ;)
 
@@ -416,14 +432,11 @@ let saveHandler = (event) => {
 }
 
 let keyCodeHandler = (event) => {
-    toEditingMode()
     saveHandler(event)
     if(event.key === "Tab"){
       insertNodeAtCursor(document.createTextNode("\t"));
-      toEditingMode()
       event.preventDefault()
     }else if(event.key === "Enter"){
-      toEditingMode()
       insertNodeAtCursor(document.createTextNode("\n"));
       event.preventDefault()
     }
