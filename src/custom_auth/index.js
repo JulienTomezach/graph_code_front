@@ -15,13 +15,22 @@ let  jwt_dec =  require('express-jwt')
 
 const crypto = require('crypto');
 
+const signature = 'MySuP3R_z3kr3t';
+const expiration = '6h';
+// const salt = crypto.randomBytes(12).toString("hex")
+const salt= 'salt'
 
-let hash = (password) => {
-	return password.length
+let hash = async (password) => {
+	const key1 = crypto.scryptSync(password, salt, 64);
+	//  can store the salt
+	// https://security.stackexchange.com/questions/17421/how-to-store-salt/17435#17435
+	return salt+':'+key1.toString('hex');
 }
 
-let check_hash = (hashed_word, word) => {
-	return true
+let check_hash = (hashed_word, sent_word) => {
+	const [salt, key] = hashed_word.split(":")
+    const derived_key = crypto.scrypt(sent_word, salt, 64).toString('hex')
+
 }
 
 let generate_jwt = (user ) =>{
@@ -31,9 +40,7 @@ let generate_jwt = (user ) =>{
       name: user.name,
       email: user.email
     };
-    const signature = 'MySuP3R_z3kr3t';
-    const expiration = '6h';
-
+    
     return jwt_enc.sign({ data, }, signature, { expiresIn: expiration });
 }
 
@@ -72,7 +79,7 @@ let attach_current_user_middleware = (req, res, next) => {
 let check_auth_middleware = (req) => {
 	let token = getTokenFromHeader(req)
 	return jwt_dec({
-		  secret: 'MySuP3R_z3kr3t', 
+		  secret: signature, 
 		  userProperty: 'token', // token will in 'req.token'
 		  getToken: getTokenFromHeader, 
 		})
