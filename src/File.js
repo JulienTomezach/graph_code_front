@@ -89,7 +89,7 @@ function File(props) {
   }
 
   let getTextCode = () => {
-    htmlToText(codeHtml)
+    return htmlToText(codeHtml)
   }
 
   let codeHandleChange = (evt) => {
