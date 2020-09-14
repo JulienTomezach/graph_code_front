@@ -528,6 +528,7 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 }
 
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
+  console.log('Result display, processElement', operation)
   if (operation=== 'sum_on')
     operation = '+'
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
@@ -574,6 +575,8 @@ let resultToComponentAux = (elem, lines) => {
 
   let mainKey = Object.keys(elemContent)[0]
   let mainElement = elemContent[mainKey]
+
+  console.log('DEBUG, resultToComponentAux', mainKey, mainElement)
 
   if(!resultDisplay[mainElement.uuid] && lines.length > 0){
     return
