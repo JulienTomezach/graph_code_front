@@ -78,7 +78,7 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
     }else if('??' in graph_input){
         return graph_input['??'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' ?? ', OPERATION))
     }else if('[]' in graph_input){
-        return graph_to_text_aux(graph_input['[]'][0], line_break)+"["+SPAN(graph_input['[]'][1], INDEX)+"]"
+        return graph_to_text_aux(graph_input['[]'][0], line_break)+"["+SPAN(graph_input['[]'][1].name, INDEX)+"]"
     }else if('==' in graph_input){
         return graph_input['=='].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' == ', OPERATION))
     }else if('!=' in graph_input){
