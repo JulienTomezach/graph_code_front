@@ -525,6 +525,8 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 let processElement = (elements, mainKey, operation, lines, mainElementArg = null) => {
   if (operation=== 'sum_on')
     operation = '+'
+
+  console.log("mainKey, elements, operation", mainKey, elements, operation)
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     return addLine(mainElementArg, mainKey, [], lines)
   }
