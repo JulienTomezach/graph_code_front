@@ -96,7 +96,7 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
     }else if('where' in graph_input){
       // it is binary operator too like +, - ...
         let element = graph_input['where']
-        return "(" + graph_to_text_aux(element[0], line_break)+" where "+ graph_to_text_aux(element[1], line_break) + ")"
+        return "(" + graph_to_text_aux(element[0], line_break)+SPAN(" where ",FUNCTION_CALL)+ graph_to_text_aux(element[1], line_break) + ")"
     }else if('name' in graph_input && !('parameters' in graph_input)) {
 
       let is_number = !isNaN(graph_input.name)
