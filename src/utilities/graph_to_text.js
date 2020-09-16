@@ -65,6 +65,10 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
       let [iteree, formula] = graph_input.sum_on
       // sum_on(owner.lots) {
       return SPAN("sum_on",FUNCTION_CALL)+"("+ graph_to_text_aux(iteree, line_break)+")"+" { "+ graph_to_text_aux(formula, line_break) + " }"
+    }else if('iter_dec' in graph_input){
+        let iterName = graph_input['iter_dec'][0].name
+        let content = graph_input['iter_dec'][1]
+        return SPAN(' | ', OPERATION) + iterName + SPAN(' | ', OPERATION) + graph_to_text_aux(content, line_break);
     }else if('.' in graph_input){
         return graph_input['.'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN('.', OPERATION))
     }else if('*' in graph_input){
