@@ -722,6 +722,7 @@ let resultToComponentAux = (elem, lines) => {
             <ContentEditable
               id="code_box"
               className="CodeBox"
+              spellCheck={false}
               onChange={codeHandleChange}
               onKeyDown={keyCodeHandler}
               html={codeHtml}
