@@ -705,7 +705,7 @@ let resultToComponentAux = (elem, lines) => {
       <span>
       <div  className="CasesBoxParent">
               <div>
-              <h5>Business Cases (JSON) : </h5>
+              <h5>Filter Business Cases (JSON) : </h5>
               {/*<span>Beta Feature: see doc</span>*/}
               </div>
             <div  className="CasesBox">
