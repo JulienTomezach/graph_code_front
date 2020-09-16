@@ -713,6 +713,7 @@ let resultToComponentAux = (elem, lines) => {
              <ContentEditable
              className="Json"
              onChange={casesHandleChange}
+             spellCheck={false}
               html={casesHtml} />
               <div onClick={saveCases} className="Button"> Filter </div>
             </div>
