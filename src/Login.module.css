@@ -9,7 +9,7 @@
 	display: flex;
 	/*justify-content: center;*/
 	align-items: center;
-	width: 80%;
+	width: 1124px;
 	height: 100%;
 	flex-direction: column;
 	font-family: 'Inter', sans-serif;
@@ -27,7 +27,7 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	margin-top: 20px;
+	margin-top: 30px;
 }
 .Logo{
 width: 100px;
@@ -39,6 +39,8 @@ font-size: x-large;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
+	/*bad*/
+	margin-right: 50px;
 }
 
 
@@ -54,23 +56,18 @@ font-weight: bold;
 
 
 .LoginPart{
-	width: 60%;
 	margin-top: 40px;
 	margin-bottom: 40px;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
 
 }
 
 .Features {
 	display: flex;
 	flex-direction: row;
-	margin-top: 20px;
+	margin-top: 10px;
 	justify-content: space-between;
-	width: 95%;
+	width: 100%;
 	margin-bottom: 20px;
-	margin-left: 60px; 
 }
 
 .ParentCenter {
@@ -80,15 +77,14 @@ font-weight: bold;
 .Feature {
 	display: flex;
 	flex-direction: row;
+	justify-content: center;
+	align-items: center;
 	margin-top: 40px;
 }
 
 .Icon{
   font-size: 60px; 
-  margin-top: 10px;
-}
-
-.material-icons.md-48 {
+  /*margin-top: 10px;*/
 }
 
 .FeatureText{
