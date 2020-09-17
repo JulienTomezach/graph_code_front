@@ -1,19 +1,32 @@
 .Login {
 	display: flex;
-	justify-content: center;
+	/*justify-content: center;*/
 	align-items: center;
 	height: 100%;
 	flex-direction: column;
+	font-family: 'Inter', sans-serif;
 }
 
-.HeaderTitle{
-width: 25em;
-text-align: center;
-margin-bottom: 1em;
+.HeaderSpace{
+	height: 8em;
 }
-.HeaderSubTitle{
+
+.Header{
+	width: 100%;
+	top:0px;
+	left: 0px;
+}
+.HeaderTitle{
+width: 5em;
+margin-top: 0.2em;
+text-align: center;
+font-size: x-large;
+}
+
+.SubTitle{
 width: 25em;
 text-align: center;
+font-size: x-large;
 }
 .LoginPart{
 	margin-top: 2em;
@@ -26,16 +39,23 @@ text-align: center;
 	margin-top: 3em;
 	justify-content: space-around;
 	width: 100%;
+	margin-bottom: 1em;
 }
 
 .Feature {
 	/*margin-right: 1em;
 	margin-left: 1em;*/
 	width: 25em;	
+	text-align: justify;
 }
+.ActualFeatureTitle{
+	border-bottom: 2px solid blue;
 
+}
 .FeatureTitle{
+	font-size: large;
 	text-align: center;
+	margin-bottom: 1em;
 }
 
 
