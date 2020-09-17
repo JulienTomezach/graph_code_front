@@ -42,7 +42,7 @@ function Login(props) {
 				  		<span className={styles.ActualFeatureTitle}>Simple</span>
 				  </div>
 				  <div className={styles.FeatureContent}>
-				   	No Production Code constraints like performance, security or Front-Back communication. <br/>The business logic is as simple as it can be.
+				   	No production code constraints like performance, security or Front-Back communication. <br/>Only the business logic, as simple as it can be.
 				   </div>
 				</div>
 			</div>
@@ -69,7 +69,7 @@ function Login(props) {
 				  		<span className={styles.ActualFeatureTitle}>Flexible</span>
 				  </div>
 				  <div className={styles.FeatureContent}>
-	               	Go in as much or as little detail you want. <br/> The code always runs and gives you valuable feedbacks.
+	               	Write as much or as little details you want. <br/> The code always runs and gives you valuable feedbacks.
 				   </div>
 				</div>
 			</div>

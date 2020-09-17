@@ -16,7 +16,8 @@
 }
 
 .HeaderSpace{
-	height: 6em;
+	/*height: 6em;*/
+	height: 120px;
 }
 
 .Header{
