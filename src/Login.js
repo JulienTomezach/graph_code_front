@@ -8,21 +8,25 @@ function Login(props) {
 
 		<div className={styles.Header}>
 				<div className={styles.HeaderTitle}>
-					Explicit
+					&#931;xplicit
 				</div>
+				<div className={styles.Button} styles={{width: '80px', marginRight: '1.5em'}}>Try Demo</div>
 		</div>
 		<div className={styles.HeaderSpace}>
 		</div>
 		
 		<div className={styles.MainPart}>
+			<div className={styles.SubTitleParent}>
 				<div className={styles.SubTitle}>
-                    The place for your Business and Product Logic 
+                    The place for your Business
+                 </div>   
+                 <div className={styles.SubTitle}>
+                     and Product Logic 
+                 </div>   
                  </div>   
               
 		<div className={styles.LoginPart}>
-			<div className={styles.Username}>Username:</div>
-			<div className={styles.Password}>Password:</div>
-			<div className={styles.Button}>Login</div>
+			<div className={styles.Button}>Sign In</div>
 		</div>
 			
 		</div>
@@ -34,7 +38,7 @@ function Login(props) {
 			  		<span className={styles.ActualFeatureTitle}>Simple</span>
 			  </div>
 			  <div className={styles.FeatureContent}>
-			   	No Production Code constraints like performance, security or Front-Back communication. The business logic is as simple as it can be.
+			   	No Production Code constraints like performance, security or Front-Back communication. <br/>The business logic is as simple as it can be.
 			   </div>
 			</div>
 			<div className={styles.Feature}>
@@ -54,7 +58,7 @@ function Login(props) {
 			  		<span className={styles.ActualFeatureTitle}>Flexible</span>
 			  </div>
 			  <div className={styles.FeatureContent}>
-               	Go in as much or as little detail you want. The code always runs and gives you valuable feedbacks.
+               	Go in as much or as little detail you want. <br/> The code always runs and gives you valuable feedbacks.
 			   </div>
 			</div>
 		</div>

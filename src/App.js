@@ -18,7 +18,7 @@ let App = () => {
   return  (<Router>
     <ErrorUI></ErrorUI>
    <Switch>
-          <Route path="/login" children={<Login/>} />
+          <Route path="/home" children={<Login/>} />
   </Switch>
    </Router>
    );

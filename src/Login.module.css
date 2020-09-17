@@ -8,29 +8,51 @@
 }
 
 .HeaderSpace{
-	height: 8em;
+	height: 6em;
 }
 
 .Header{
 	width: 100%;
 	top:0px;
 	left: 0px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 0.4em;
 }
 .HeaderTitle{
 width: 5em;
-margin-top: 0.2em;
+margin-left: 1.5em;
 text-align: center;
 font-size: x-large;
+}
+
+.MainPart{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
 }
 
 .SubTitle{
 width: 25em;
 text-align: center;
-font-size: x-large;
+font-size: xx-large;
+font-weight: bold;
 }
+.SubTitleParent{
+
+}
+
+
 .LoginPart{
+	width: 60%;
 	margin-top: 2em;
 	margin-bottom: 2em;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+
 }
 
 .Features {
@@ -46,7 +68,7 @@ font-size: x-large;
 	/*margin-right: 1em;
 	margin-left: 1em;*/
 	width: 25em;	
-	text-align: justify;
+	text-align: center;
 }
 .ActualFeatureTitle{
 	border-bottom: 2px solid blue;
@@ -58,5 +80,18 @@ font-size: x-large;
 	margin-bottom: 1em;
 }
 
+
+.Button{
+  /*font-weight: bold;*/
+  color: white;
+  background: rgba(55,85,190, 0.9);
+  height: 20px;
+  padding: 1em;
+  border-radius: 10px;
+}
+
+.Button:hover {
+  background: rgba(55,85,190, 1);
+}
 
 
