@@ -4,13 +4,15 @@ import  styles from './Login.module.css';
 
 function Login(props) {
 
-	return <div className={styles.Login}>
+	return (
+	<div className={styles.LoginParent}>
+	<div className={styles.Login}>
 
 		<div className={styles.Header}>
-				<div className={styles.HeaderTitle}>
+				<div className={styles.Logo}>
 					&#931;xplicit
 				</div>
-				<div className={styles.Button} styles={{width: '80px', marginRight: '1.5em'}}>Try Demo</div>
+				<div className={styles.UpperButton}>Try Demo</div>
 		</div>
 		<div className={styles.HeaderSpace}>
 		</div>
@@ -34,6 +36,7 @@ function Login(props) {
 
 		<div className={styles.Features}>
 			<div className={styles.Feature}>
+			<span className="material-icons">beach_access</span>
 			  <div className={styles.FeatureTitle}>
 			  		<span className={styles.ActualFeatureTitle}>Simple</span>
 			  </div>
@@ -42,11 +45,12 @@ function Login(props) {
 			   </div>
 			</div>
 			<div className={styles.Feature}>
+			<span className="material-icons">code</span>
 			  <div className={styles.FeatureTitle}>
 			  		<span className={styles.ActualFeatureTitle}>Still Code</span>
 			  </div>
 			  <div className={styles.FeatureContent}>
-               So computer can run it, check consistency, properties of the system and more.
+               So computers can run it, check consistency, properties of the system and more.
 			   </div>
 			</div>
 			
@@ -54,6 +58,7 @@ function Login(props) {
 		</div>
 		<div className={styles.Features}>
 		<div className={styles.Feature}>
+		<span className="material-icons">polymer</span>
 			  <div className={styles.FeatureTitle}>
 			  		<span className={styles.ActualFeatureTitle}>Flexible</span>
 			  </div>
@@ -63,6 +68,7 @@ function Login(props) {
 			</div>
 		</div>
 	</div>
+	</div>)
 }
 
 
