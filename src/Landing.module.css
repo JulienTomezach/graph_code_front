@@ -1,0 +1,157 @@
+.LandingParent {
+	display: flex;
+	justify-content: center;
+	/*align-items: center;*/
+	width: 100%;
+	height: 100%;
+}
+.Landing {
+	display: flex;
+	/*justify-content: center;*/
+	align-items: center;
+	width: 1124px;
+	height: 100%;
+	flex-direction: column;
+	font-family: 'Inter', sans-serif;
+}
+
+.HeaderSpace{
+	height: 110px;
+}
+
+.Header{
+	width: 100%;
+	top:0px;
+	left: 0px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 30px;
+}
+.Logo{
+width: 100px;
+text-align: center;
+font-size: x-large;
+}
+
+.MainPart{
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	/*bad*/
+	margin-right: 50px;
+}
+
+
+.SubTitle{
+width: 500px;
+text-align: center;
+font-size: xx-large;
+font-weight: bold;
+}
+.SubTitleParent{
+
+}
+
+
+.LandingPart{
+	margin-top: 40px;
+	margin-bottom: 40px;
+
+}
+
+.Features {
+	display: flex;
+	flex-direction: row;
+	margin-top: 10px;
+	justify-content: space-between;
+	width: 100%;
+	margin-bottom: 20px;
+}
+
+.ParentCenter {
+	justify-content: center;
+}
+
+.Feature {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-top: 40px;
+}
+
+
+.Icon{
+  font-size: 60px; 
+  /*margin-top: 10px;*/
+}
+
+.FeatureText{
+	display: flex;
+	flex-direction: column;	
+	margin-left: 30px;
+}
+.ActualFeatureTitle{
+	border-bottom: 2px solid blue;
+
+}
+.FeatureTitle{
+	font-size: large;
+	margin-bottom: 20px;
+}
+
+.FeatureContent{
+color: #495057;
+width: 400px;
+}
+
+.Button{
+  /*font-weight: bold;*/
+  color: white;
+  background: rgba(55,85,190, 0.9);
+  height: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.Button:hover {
+  background: rgba(55,85,190, 1);
+}
+.Connections{
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+width: 275px;
+}
+
+.LandingButton{
+	color: rgba(55,85,190);;
+	cursor: pointer;
+	font-size: large;
+	font-weight: bold; 
+	padding-bottom: 2px; 
+}
+
+
+.LandingButton:hover{
+	border-bottom: 2px solid blue;
+}
+
+.UpperButton{
+	background: white;
+	color: black;
+	font-size: large;
+	padding: 6px;
+	border: 3px dotted rgba(55,85,190);
+	cursor: pointer;
+}
+
+.UpperButton:hover{
+	background-color: #c5cdffcc;
+}
+
+
