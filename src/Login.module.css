@@ -16,8 +16,7 @@
 }
 
 .HeaderSpace{
-	/*height: 6em;*/
-	height: 120px;
+	height: 110px;
 }
 
 .Header{
@@ -28,10 +27,10 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	margin-top: 1em;
+	margin-top: 20px;
 }
 .Logo{
-width: 5em;
+width: 100px;
 text-align: center;
 font-size: x-large;
 }
@@ -44,7 +43,7 @@ font-size: x-large;
 
 
 .SubTitle{
-width: 25em;
+width: 500px;
 text-align: center;
 font-size: xx-large;
 font-weight: bold;
@@ -56,8 +55,8 @@ font-weight: bold;
 
 .LoginPart{
 	width: 60%;
-	margin-top: 2em;
-	margin-bottom: 2em;
+	margin-top: 40px;
+	margin-bottom: 40px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -67,11 +66,11 @@ font-weight: bold;
 .Features {
 	display: flex;
 	flex-direction: row;
-	margin-top: 1em;
+	margin-top: 20px;
 	justify-content: space-between;
 	width: 95%;
-	margin-bottom: 1em;
-	margin-left: 3em; 
+	margin-bottom: 20px;
+	margin-left: 60px; 
 }
 
 .ParentCenter {
@@ -79,13 +78,9 @@ font-weight: bold;
 }
 
 .Feature {
-	/*margin-right: 1em;
-	margin-left: 1em;*/
-	/*width: 25em;	
-	text-align: center;*/
 	display: flex;
 	flex-direction: row;
-	margin-top: 2em;
+	margin-top: 40px;
 }
 
 .Icon{
@@ -99,7 +94,7 @@ font-weight: bold;
 .FeatureText{
 	display: flex;
 	flex-direction: column;	
-	margin-left: 1.5em;
+	margin-left: 30px;
 }
 .ActualFeatureTitle{
 	border-bottom: 2px solid blue;
@@ -107,7 +102,7 @@ font-weight: bold;
 }
 .FeatureTitle{
 	font-size: large;
-	margin-bottom: 1em;
+	margin-bottom: 20px;
 }
 
 .FeatureContent{
@@ -120,8 +115,9 @@ width: 400px;
   color: white;
   background: rgba(55,85,190, 0.9);
   height: 20px;
-  padding: 1em;
+  padding: 20px;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .Button:hover {
@@ -132,6 +128,13 @@ width: 400px;
 	background: white;
 	color: black;
 	font-size: large;
+	padding: 6px;
+	border: 3px dotted rgba(55,85,190);
+	cursor: pointer;
+}
+
+.UpperButton:hover{
+	background-color: #c5cdffcc;
 }
 
 

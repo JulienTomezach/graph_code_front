@@ -12,7 +12,7 @@ function Login(props) {
 				<div className={styles.Logo}>
 					&#931;xplicit
 				</div>
-				<div className={styles.UpperButton}>Try Demo</div>
+				<div className={styles.UpperButton}>Sign in the Alpha !</div>
 		</div>
 		<div className={styles.HeaderSpace}>
 		</div>
@@ -28,7 +28,7 @@ function Login(props) {
                  </div>   
               
 		<div className={styles.LoginPart}>
-			<div className={styles.Button}>Sign In</div>
+			<div className={styles.Button}>Try Demo</div>
 		</div>
 			
 		</div>
