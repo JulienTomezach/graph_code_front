@@ -82,6 +82,7 @@ font-weight: bold;
 	margin-top: 40px;
 }
 
+
 .Icon{
   font-size: 60px; 
   /*margin-top: 10px;*/
@@ -118,6 +119,26 @@ width: 400px;
 
 .Button:hover {
   background: rgba(55,85,190, 1);
+}
+.Connections{
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+width: 275px;
+}
+
+.LoginButton{
+	color: rgba(55,85,190);;
+	cursor: pointer;
+	font-size: large;
+	font-weight: bold; 
+	padding-bottom: 2px; 
+}
+
+
+.LoginButton:hover{
+	border-bottom: 2px solid blue;
 }
 
 .UpperButton{

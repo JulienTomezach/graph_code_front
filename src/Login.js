@@ -12,7 +12,11 @@ function Login(props) {
 				<div className={styles.Logo}>
 					&#931;xplicit
 				</div>
+				<div className={styles.Connections}>
 				<div className={styles.UpperButton}>Sign in the Alpha !</div>
+				<span>or </span>
+				<div className={styles.LoginButton}>Log in</div>
+				</div>
 		</div>
 		<div className={styles.HeaderSpace}>
 		</div>
