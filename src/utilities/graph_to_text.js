@@ -82,7 +82,8 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
     }else if('??' in graph_input){
         return graph_input['??'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' ?? ', OPERATION))
     }else if('[]' in graph_input){
-        return graph_to_text_aux(graph_input['[]'][0], line_break)+"["+SPAN(graph_input['[]'][1].name, INDEX)+"]"
+        let indexRep = ('name' in graph_input['[]'][1]) ? SPAN(graph_input['[]'][1].name, INDEX) : graph_to_text_aux(graph_input['[]'][1])
+        return graph_to_text_aux(graph_input['[]'][0], line_break)+"["+ indexRep +"]"
     }else if('==' in graph_input){
         return graph_input['=='].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' == ', OPERATION))
     }else if('!=' in graph_input){
@@ -151,7 +152,7 @@ let isSimpleHash = (hash) => {
 let dataToText = (hash, offset='') => {
     if((typeof hash === 'string') ){
       return '"' + hash + '"'
-    }else if(Number.isInteger(hash) || (typeof hash === "boolean")){
+    }else if(!isNaN(hash) || (typeof hash === "boolean")){
       return hash
     }
     let text = ''

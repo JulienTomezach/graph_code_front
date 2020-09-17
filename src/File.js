@@ -463,12 +463,17 @@ let setKeyEventsHandler = () => {
     }
   }, [files]);
 
+const filenameToApply= () => (filename.length > 0 && filename !== currentFile)
 
 // keep synchornisation between, a bit odd should be able to remove currentFile
   useEffect( () => {
-    if(filename.length > 0 && filename !== currentFile)
-      setCurrentFile(filename)
-  }, [filename]);
+    if(filenameToApply() && files.includes(filename)){
+          setCurrentFile(filename)
+    }else if(filenameToApply() && !files.includes(filename) && files.length> 0){
+          setCurrentFile(files[0])
+    }
+  }, [filename, files]);
+
 
 useEffect( () => {
   if(!_.isNil(currentFile) && filename !== currentFile)
