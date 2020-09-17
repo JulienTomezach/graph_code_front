@@ -13,6 +13,12 @@ function Login(props) {
                     The place for your Business and Product Logic 
                  </div>   
               
+		<div className={styles.LoginPart}>
+			<div className={styles.Username}>Username:</div>
+			<div className={styles.Password}>Password:</div>
+			<div className={styles.Button}>Login</div>
+		</div>
+			
 		</div>
 		<div className={styles.Features}>
 			<div className={styles.Feature}>

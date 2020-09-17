@@ -1,3 +1,42 @@
 .Login {
-	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	flex-direction: column;
 }
+
+.HeaderTitle{
+width: 25em;
+text-align: center;
+margin-bottom: 1em;
+}
+.HeaderSubTitle{
+width: 25em;
+text-align: center;
+}
+.LoginPart{
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+.Features {
+	display: flex;
+	flex-direction: row;
+	margin-top: 3em;
+	justify-content: space-around;
+	width: 100%;
+}
+
+.Feature {
+	/*margin-right: 1em;
+	margin-left: 1em;*/
+	width: 25em;	
+}
+
+.FeatureTitle{
+	text-align: center;
+}
+
+
+
