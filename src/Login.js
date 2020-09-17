@@ -36,35 +36,42 @@ function Login(props) {
 
 		<div className={styles.Features}>
 			<div className={styles.Feature}>
-			<span className="material-icons">beach_access</span>
-			  <div className={styles.FeatureTitle}>
-			  		<span className={styles.ActualFeatureTitle}>Simple</span>
-			  </div>
-			  <div className={styles.FeatureContent}>
-			   	No Production Code constraints like performance, security or Front-Back communication. <br/>The business logic is as simple as it can be.
-			   </div>
+			<span className={`material-icons ${styles.Icon}`}>beach_access</span>
+			<div className={styles.FeatureText}>
+				  <div className={styles.FeatureTitle}>
+				  		<span className={styles.ActualFeatureTitle}>Simple</span>
+				  </div>
+				  <div className={styles.FeatureContent}>
+				   	No Production Code constraints like performance, security or Front-Back communication. <br/>The business logic is as simple as it can be.
+				   </div>
+				</div>
 			</div>
+
 			<div className={styles.Feature}>
-			<span className="material-icons">code</span>
-			  <div className={styles.FeatureTitle}>
-			  		<span className={styles.ActualFeatureTitle}>Still Code</span>
-			  </div>
-			  <div className={styles.FeatureContent}>
-               So computers can run it, check consistency, properties of the system and more.
-			   </div>
+			<span className={`material-icons ${styles.Icon}`}>code</span>
+			<div className={styles.FeatureText}>
+				  <div className={styles.FeatureTitle}>
+				  		<span className={styles.ActualFeatureTitle}>Still Code</span>
+				  </div>
+				  <div className={styles.FeatureContent}>
+	               So computers can run it, check consistency, properties of the system and more.
+				   </div>
+				</div>
 			</div>
 			
               
 		</div>
-		<div className={styles.Features}>
+		<div className={`${styles.Features} ${styles.ParentCenter}`}>
 		<div className={styles.Feature}>
-		<span className="material-icons">polymer</span>
-			  <div className={styles.FeatureTitle}>
-			  		<span className={styles.ActualFeatureTitle}>Flexible</span>
-			  </div>
-			  <div className={styles.FeatureContent}>
-               	Go in as much or as little detail you want. <br/> The code always runs and gives you valuable feedbacks.
-			   </div>
+		<span className={`material-icons ${styles.Icon}`}>polymer</span>
+			<div className={styles.FeatureText}>
+				  <div className={styles.FeatureTitle}>
+				  		<span className={styles.ActualFeatureTitle}>Flexible</span>
+				  </div>
+				  <div className={styles.FeatureContent}>
+	               	Go in as much or as little detail you want. <br/> The code always runs and gives you valuable feedbacks.
+				   </div>
+				</div>
 			</div>
 		</div>
 	</div>
