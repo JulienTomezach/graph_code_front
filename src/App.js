@@ -23,12 +23,12 @@ let App = () => {
     <Route path="/sign_in" children={<SignIn/>} />
     <Route path="/log_in" children={<Login/>} />
     <Route path="/landing" children={<Landing/>} />
+    <Route path="/:filename" children={<File/>} />
+    <Route path="/" children={<File/>} />
   </Switch>
    </Router>
    );
 }
-          //<Route path="/" children={<File/>} />
-          // <Route path="/:filename" children={<File/>} />
 
 export default App;
 

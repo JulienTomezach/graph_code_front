@@ -10,7 +10,7 @@ function Login(props) {
 		let username = document.getElementById("username_input").innerText
 		let password = document.getElementById("password_input").innerText
 		if(username.length > 0 && password.length > 0){
-			    let response = await axios.post(`login`, {username, password});
+			    let response = await axios.post(`log_in`, {username, password});
 			    if(response.status === 200){
 			    	// push history to /
 			    }else{
