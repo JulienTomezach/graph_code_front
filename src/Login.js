@@ -1,28 +1,22 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import  styles from './Login.module.css';
 import  stylesLanding from './Landing.module.css';
-
+import axios from './axios_utils'
 
 function Login(props) {
 
-	const sendLogin = () => {
+	const sendLogin = async () => {
 		let username = document.getElementById("username_input").innerText
 		let password = document.getElementById("password_input").innerText
-		password
-	    let response = await axios.post(`files`, {name: filename});
-	    if(response.status === 200){
-	      await fetchFiles()
-	      setAddingFile(v => !v)
-	    }
-	}
-
-	const errorMessageComponent =  () => {
-		// put that in back
-		let badPassword = password.length < 8 || password.match(/[0-9]+/) === null || password.match(/[^A-Za-z0-9]/) === null
-		let msg = ''
-		if(badPassword) msg += 'The password must be at least 8 characters, with one or more numbers and special characters'
-			// check no space in username
-		return (<div className={styles.ErrorMessage}>{errorMessage}</div>)
+		if(username.length > 0 && password.length > 0){
+			    let response = await axios.post(`login`, {username, password});
+			    if(response.status === 200){
+			    	// push history to /
+			    }else{
+			    	let {message} = response.data
+			    	// do something
+			    }
+		}
 	}
 
 	return (

@@ -12,18 +12,19 @@ import {
 import File from './File'
 import ErrorUI from './ErrorUI'
 import Landing from './Landing'
-import Login from './Login'
+import SignIn from './SignIn'
 
 let App = () => {
 
   return  (<Router>
     <ErrorUI></ErrorUI>
    <Switch>
-    <Route path="/login" children={<Login/>} />
+    <Route path="/sign_in" children={<SignIn/>} />
   </Switch>
    </Router>
    );
 }
+    // <Route path="/login" children={<Login/>} />
           // <Route path="/landing" children={<Landing/>} />
           //<Route path="/" children={<File/>} />
           // <Route path="/:filename" children={<File/>} />
