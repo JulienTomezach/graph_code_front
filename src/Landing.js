@@ -46,7 +46,7 @@ function Landing(props) {
 				  		<span className={styles.ActualFeatureTitle}>Simple</span>
 				  </div>
 				  <div className={styles.FeatureContent}>
-				   	No production code complexities like performance, security or Front-Back communication. <br/>Only the business logic, as simple as it can be.
+				   	No production complexities like performance, security or Front-Back communication. <br/>Only the business logic, as simple as it can be.
 				   </div>
 				</div>
 			</div>
