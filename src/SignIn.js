@@ -30,31 +30,35 @@ function SignIn(props) {
 		// 	    }
 		// }
 	}
-	let matter = "Alpha Subscription"
-	let question0 = "Some optional questions:"
+	let matter = " subscription"
+	let question0 = "Some (optional) questions :"
 	let question1 = "For what kind of business logic you would like to use Explicit ? (roughly)"
 	let question2 = "What is the size of your company/ dev team ?"
 	let question3 = "Did you ever find hard to get/modify the business logic of a feature, from the code or elsewhere ?"
 
 					// <input placeholder="Password" id="password_input" type="password" className={`Input`} />
+					// <div className={`${styles.TextParent}`}>
 	return (
 		<div className={stylesLanding.LandingParent}>
 			<div className={stylesLanding.Landing }>
 				<div className={styles.Card}>
 					<div className={`${stylesLogin.Logo}`}>&#931;xplicit</div>
-					<div className={styles.Matter}>{matter}</div>
+					<div className={styles.Matter}><span style={{fontSize: '25px'}}>&#127881;</span><span style={{marginLeft: '10px',marginRight: '10px'}}>
+					<span style={{color: 'purple'}}>Alpha</span>{matter}</span><span style={{fontSize: '25px'}}>&#127881;</span></div>
 					<input className={`Input`} style={{width: '250px'}} placeholder="Professional email (ideally)" id="email_input" type="text"  />
-					<div className={`${styles.TextParent}`}>
-						<div className={styles.Question}> </div>
-						<textarea id="text_beta_user" rows="20" cols="60"></textarea>
-					</div>
-					<div> Thank you ! </div>
-					<div onClick={sendSignIn} className={`${stylesLogin.GoButton}`}>Sign in</div>
+						<div > <span style={{fontSize: '25px', marginLeft: '3px',marginRight: '3px'}}>&#129488;</span> {question0}</div>
+						<div className={styles.Question} >{question1}</div>
+						<div className={styles.Question} >{question2}</div>
+						<div className={styles.Question} >{question3}</div>
+						<textarea style={{marginTop: '10px' }} id="text_beta_user" rows="20" cols="60"></textarea>
+					<div style={{marginTop: '10px' }}> Thank you ! </div>
+					<div onClick={sendSignIn} className={`${stylesLogin.GoButton}`} style={{marginTop: '10px' }}>Sign in</div>
 				</div>
 			</div>
 		</div>
 		)
 }
+					// </div>
 
 
 
