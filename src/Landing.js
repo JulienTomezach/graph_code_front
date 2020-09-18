@@ -2,13 +2,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import  styles from './Landing.module.css';
 import  './App.css';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link,
   useParams
 } from "react-router-dom";
-
+import Logo from "./components/Logo"
 
 function Landing(props) {
 
@@ -17,13 +14,11 @@ function Landing(props) {
 	<div className={styles.Landing}>
 
 		<div className={styles.Header}>
-				<div className={styles.Logo}>
-					&#931;xplicit
-				</div>
+				<Logo/>
 				<div className={styles.Connections}>
 				<Link className="Link" to="/sign_in"><div className={styles.UpperButton}>Sign in the Alpha !</div></Link>
 				<span>or </span>
-				<div className={styles.LandingButton}>Log in</div>
+				<Link className="Link" to="/log_in"><div className={styles.LandingButton}>Log in</div></Link>
 				</div>
 		</div>
 		<div className={styles.HeaderSpace}>

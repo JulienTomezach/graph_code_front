@@ -21,7 +21,7 @@ let App = () => {
     <ErrorUI></ErrorUI>
    <Switch>
     <Route path="/sign_in" children={<SignIn/>} />
-    <Route path="/login" children={<Login/>} />
+    <Route path="/log_in" children={<Login/>} />
     <Route path="/landing" children={<Landing/>} />
   </Switch>
    </Router>

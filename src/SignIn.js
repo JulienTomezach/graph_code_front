@@ -2,7 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import  stylesLogin from './Login.module.css';
 import  styles from './SignIn.module.css';
 import  stylesLanding from './Landing.module.css';
-import axios from './axios_utils'
+import './App.css';
+import axios from './axios_utils';
+  import {
+  Link,
+  useParams
+} from "react-router-dom";
+import Logo from "./components/Logo"
 
 function SignIn(props) {
 
@@ -43,7 +49,7 @@ function SignIn(props) {
 		<div className={stylesLanding.LandingParent}>
 			<div className={stylesLanding.Landing }>
 		<div className={stylesLanding.Header} style={{marginTop: '5px'}}>
-			<div className={`${stylesLogin.Logo}`}>&#931;xplicit</div>
+					<Logo/>
 					<div className={styles.Matter}><span style={{fontSize: '25px'}}>&#127881;</span><span style={{marginLeft: '10px',marginRight: '10px'}}>
 					<span style={{color: 'purple'}}>Alpha</span>{matter}</span><span style={{fontSize: '25px'}}>&#127881;</span></div>
 			<div className={styles.Demo}>Try Demo</div>
