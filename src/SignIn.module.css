@@ -20,3 +20,35 @@
 	margin-bottom: 6px;
 	color: #495057;
 }
+
+.Demo{
+	position: absolute;
+	z-index: 1;
+	top: 40px;
+	right: 80px;
+
+	color: white;
+  background: rgba(55,85,190, 0.9);
+  height: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.Demo:hover {
+  background: rgba(55,85,190, 1);
+}
+
+
+.TextArea{
+	margin-top: 10px;
+	font-family: 'Inter', sans-serif;
+	padding: 20px;
+	padding-left: 25px;
+	padding-right:  25px;
+	resize: none; 
+	border: none;
+	 outline: none;
+	border-left: 2px solid rgba(200,200,200, 0.7);
+	border-right: 2px solid rgba(200,200,200, 0.7);
+}

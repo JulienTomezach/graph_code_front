@@ -18,7 +18,7 @@ function SignIn(props) {
 	}
 
 	const sendSignIn = async () => {
-		let username = document.getElementById("email_input").innerText
+		let email = document.getElementById("email_input").innerText
 		// let password = document.getElementById("password_input").innerText
 		// if(username.length > 0 && password.length > 0){
 		// 	    let response = await axios.post(`sign_in`, {username, password});
@@ -40,6 +40,7 @@ function SignIn(props) {
 					// <div className={`${styles.TextParent}`}>
 	return (
 		<div className={stylesLanding.LandingParent}>
+		<div className={styles.Demo}>Try Demo</div>
 			<div className={stylesLanding.Landing }>
 				<div className={styles.Card}>
 					<div className={`${stylesLogin.Logo}`}>&#931;xplicit</div>
@@ -50,7 +51,7 @@ function SignIn(props) {
 						<div className={styles.Question} >{question1}</div>
 						<div className={styles.Question} >{question2}</div>
 						<div className={styles.Question} >{question3}</div>
-						<textarea style={{marginTop: '10px' }} id="text_beta_user" rows="20" cols="60"></textarea>
+						<textarea placeholder="Type here" className={styles.TextArea} id="text_beta_user" rows="20" cols="60"></textarea>
 					<div style={{marginTop: '10px' }}> Thank you ! </div>
 					<div onClick={sendSignIn} className={`${stylesLogin.GoButton}`} style={{marginTop: '10px' }}>Sign in</div>
 				</div>
