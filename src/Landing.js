@@ -1,5 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import  styles from './Landing.module.css';
+import  './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
 
 
 function Landing(props) {
@@ -13,7 +21,7 @@ function Landing(props) {
 					&#931;xplicit
 				</div>
 				<div className={styles.Connections}>
-				<div className={styles.UpperButton}>Sign in the Alpha !</div>
+				<Link className="Link" to="/sign_in"><div className={styles.UpperButton}>Sign in the Alpha !</div></Link>
 				<span>or </span>
 				<div className={styles.LandingButton}>Log in</div>
 				</div>
