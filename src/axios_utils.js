@@ -12,11 +12,21 @@ let dispatch_error = (error) => {
     store.dispatch(addError(`${error.type}: ${error.message}`))
 }
 
+let redirection_auth = (response) => {
+  console.log('response.status',response.status)
+  // add a condition on path later
+  if(response.status === 401){
+    window.location.href = '/landing'
+  } 
+
+}
+
 const get = async (url, config) => {
   try{
   let response = await axios.get(url, {...config,  withCredentials: true });
   return response
   }catch (error){
+    redirection_auth(error.response)
     dispatch_error(error.response.data.error)
     return error.response
   }
