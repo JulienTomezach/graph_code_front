@@ -9,7 +9,7 @@ const axios = axios_base.create({
 
 
 let dispatch_error = (error) => {
-    store.dispatch(addError(`${error.type}: ${error.message}`))
+    store.dispatch(addError(error.message, error.type))
 }
 
 let redirection_auth = (response) => {

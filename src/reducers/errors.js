@@ -7,11 +7,12 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_ERROR: {
-      const { id, message } = action.payload;
+      const { id, message, type } = action.payload;
       return {
           ...state,
           [id]: {
-            message
+            message,
+            type
           }
       };
     }
