@@ -428,6 +428,7 @@ let fetchAllData = (file) => {
   fetchExample(file);
 }
 
+
 let saveHandler = (event) => {
   if(event.key === 's' && (event.metaKey || event.ctrlKey)){
     saveDataAndCode()
@@ -663,7 +664,7 @@ let resultToComponentAux = (elem, lines) => {
               <h4 >Data context :</h4>
               <ContentEditable
               onChange={dataExampleHandleChange}
-              onKeyDown={saveHandler}
+              onKeyDown={keyCodeHandler}
               html={dataExampleHtml}
               disabled={_.isNil(dataExample)}
               />
@@ -671,7 +672,7 @@ let resultToComponentAux = (elem, lines) => {
               <h4>Script :</h4>
               <ContentEditable
               onChange={scriptHandleChange}
-              onKeyDown={saveHandler}
+              onKeyDown={keyCodeHandler}
               html={scriptHtml}
               disabled={_.isNil(script)}
               />
@@ -720,9 +721,12 @@ let resultToComponentAux = (elem, lines) => {
     })
   }
 
-  
+  let shortCutSave = () => {
+     return navigator.platform === 'MacIntel' ? "⌘ + s": "Ctrl + s"
+  }
+
   let saveButton = () => {
-  return (dataUnsaved || scriptUnsaved || codeEditing) ? (<div onClick={saveDataAndCode} className="Button SaveButton">Save</div>) : null
+  return (dataUnsaved || scriptUnsaved || codeEditing) ? (<div onClick={saveDataAndCode} title={shortCutSave()} className="Button SaveButton">Save</div>) : null
 }
 
   let contentPart = () => {
