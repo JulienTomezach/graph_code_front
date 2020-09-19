@@ -1,0 +1,55 @@
+.Main{
+	background-color: #212121;
+	height: 100%;
+	width: 100%;
+	color: white;
+	display: flex;
+	/*justify-content: center;*/
+	align-items: center;
+	flex-direction: column;
+
+}
+
+.Card div {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.Header{
+	width: 100%;
+}
+
+.Home{
+	color: white;
+	margin-left: 30px;
+	margin-top: 20px;
+	font-size: 24px;
+	text-decoration: none;
+}
+
+.Card{
+	height: 200px;
+	width: 500px;
+	margin-top: 100px;
+	flex-direction: column;
+	display: flex;
+	justify-content: space-between; 
+	align-items: center;
+}
+
+.User{
+	flex-direction: column;
+	display: flex;
+	align-items: center;
+}
+
+.Button{
+	font-size: x-large;
+	padding-bottom: 2px; 
+	border-bottom: 2px solid blue;
+	cursor: pointer;
+}
+
+.Button:hover{
+		border-bottom: 2px dashed blue;
+}

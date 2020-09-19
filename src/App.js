@@ -14,6 +14,7 @@ import ErrorUI from './ErrorUI'
 import Landing from './Landing'
 import Login from './Login'
 import SignIn from './SignIn'
+import ProfilePage from './components/ProfilePage'
 
 let App = () => {
 
@@ -23,6 +24,7 @@ let App = () => {
     <Route path="/sign_in" children={<SignIn/>} />
     <Route path="/log_in" children={<Login/>} />
     <Route path="/landing" children={<Landing/>} />
+    <Route path="/profile" children={<ProfilePage/>} />
     <Route path="/:filename" children={<File/>} />
     <Route path="/" children={<File/>} />
   </Switch>

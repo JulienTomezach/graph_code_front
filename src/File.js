@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import logo from './logo.svg';
 import './File.css';
+import './App.css';
 import {dataToText, graph_to_text, htmlToTextNodes, htmlToTextFor} from './utilities/graph_to_text'
 import { v4 as uuidv4 } from 'uuid';
 import ContentEditable from './WrappedContentEditable'
@@ -61,6 +62,10 @@ function File(props) {
     const [codeHtml, setCodeHtml] = useState('');
     // const [code, setCode] = useState(null);
     const [codeEditing, setCodeEditing] = useState(false)
+
+
+    // 
+    const [username, setUsername] = useState('...')
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -453,6 +458,17 @@ let setKeyEventsHandler = () => {
   });
 }
 
+let fetchProfile = async () => {
+  let response = await axios.get('user')
+  if(response.status === 200)
+    setUsername(response.data.name)
+}
+// all the useEffects
+
+  useEffect( ()=> {
+    fetchProfile()
+  }, []);
+
   useEffect( () => {
     fetchFiles();
   }, []);
@@ -485,6 +501,7 @@ useEffect( () => {
       fetchAllData(currentFile);
   }, [currentFile]);
 
+//
 
 
 // approach:
@@ -708,35 +725,36 @@ let resultToComponentAux = (elem, lines) => {
   let contentPart = () => {
     return !_.isNil(currentFile) ? (
       <span>
-      <div  className="CasesBoxParent">
-              <div>
-              <h5>Filter Business Cases (JSON) : </h5>
-              {/*<span>Beta Feature: see doc</span>*/}
-              </div>
-            <div  className="CasesBox">
+        <div  className="CasesBoxParent">
+        <div className="Button SaveButton">Save</div>
+                <div>
+                <h5>Filter Business Cases (JSON) : </h5>
+                {/*<span>Beta Feature: see doc</span>*/}
+                </div>
+              <div  className="CasesBox">
 
-             <ContentEditable
-             className="Json"
-             onChange={casesHandleChange}
-             spellCheck={false}
-              html={casesHtml} />
-              <div onClick={saveCases} className="Button"> Filter </div>
-            </div>
-            </div>
-            <hr className="Line"></hr>
-            <ContentEditable
-              id="code_box"
-              className="CodeBox"
-              spellCheck={false}
-              onChange={codeHandleChange}
-              onKeyDown={keyCodeHandler}
-              html={codeHtml}
-              disabled={!casesEmpty()}/>
-            <div className="Examples">
-              <h3>Examples:</h3>
-              {oneExample()}
-            </div>
-            </span>
+               <ContentEditable
+               className="Json"
+               onChange={casesHandleChange}
+               spellCheck={false}
+                html={casesHtml} />
+                <div onClick={saveCases} className="Button"> Filter </div>
+              </div>
+              </div>
+              <hr className="Line"></hr>
+              <ContentEditable
+                id="code_box"
+                className="CodeBox"
+                spellCheck={false}
+                onChange={codeHandleChange}
+                onKeyDown={keyCodeHandler}
+                html={codeHtml}
+                disabled={!casesEmpty()}/>
+              <div className="Examples">
+                <h3>Examples:</h3>
+                {oneExample()}
+          </div>
+        </span>
       ) : null;
   }
 
@@ -749,7 +767,9 @@ let resultToComponentAux = (elem, lines) => {
       {console.log('rendu')}
         <div className="Sidebar">
           <div className="SidebarContent">
-            <h5 className="UserName"><span className="material-icons">person</span><span className="ItemText">Julien</span></h5>
+            <Link to="/profile" className="Link" ><h5 className="UserName">
+              <span className="material-icons">person</span><span className="ItemText">{username}</span></h5>
+            </Link>
             {fileNames(files)}
           <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
         </div>

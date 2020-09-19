@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import  styles from './Login.module.css';
 import  stylesLanding from './Landing.module.css';
-import axios from './axios_utils'
-import Logo from './components/Logo'
+import axios from './axios_utils';
+import Logo from './components/Logo';
+import { withRouter } from "react-router";
 
 function Login(props) {
-
+	const {history} = props;
+	
 	const sendLogin = async () => {
 		let username = document.getElementById("username_input").value
 		let password = document.getElementById("password_input").value
 		if(username.length > 0 && password.length > 0){
 			    let response = await axios.put(`log_in`, {username, password});
 			    if(response.status === 200){
-			    	// push history to /
+			    	history.push('/')
 			    }else{
-			    	let {message} = response.data
-			    	// do something
+			    	// the message already displays
+			    	// let {message} = response.data
 			    }
 		}
 	}
@@ -38,4 +40,4 @@ function Login(props) {
 
 
 
-export default Login;
+export default withRouter(Login);
