@@ -391,7 +391,6 @@ function File(props) {
     // we use the sub-func bc there is a strange change at start <br/> -> <br>, space -> &nbsp;
     if(!codeEditing && itReallyChanges(actualCodeHtml)){
             setCodeEditing(true)
-            console.log('set editing at true')
             let cursor = document.createElement("span");
             cursor.id = "cursor"
             // cursor.setAttribute("tabindex", 0);

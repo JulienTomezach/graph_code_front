@@ -4,7 +4,7 @@ import store from './redux/store'
 const axios_base = require('axios').default;
 
 const axios = axios_base.create({
-                          baseURL: 'http://localhost:3000/',
+                          baseURL: 'https://localhost:3000/',
                         });
 
 
@@ -13,7 +13,6 @@ let dispatch_error = (error) => {
 }
 
 let redirection_auth = (response) => {
-  console.log('response.status',response.status)
   // add a condition on path later
   if(response.status === 401){
     window.location.href = '/landing'
