@@ -720,13 +720,16 @@ let resultToComponentAux = (elem, lines) => {
     })
   }
 
-  //!_.isNil(currentFile) ?
+  
+  let saveButton = () => {
+  return (dataUnsaved || scriptUnsaved || codeEditing) ? (<div onClick={saveDataAndCode} className="Button SaveButton">Save</div>) : null
+}
 
   let contentPart = () => {
     return !_.isNil(currentFile) ? (
       <span>
         <div  className="CasesBoxParent">
-        <div className="Button SaveButton">Save</div>
+                {saveButton()}
                 <div>
                 <h5>Filter Business Cases (JSON) : </h5>
                 {/*<span>Beta Feature: see doc</span>*/}
