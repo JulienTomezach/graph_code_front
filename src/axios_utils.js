@@ -11,9 +11,10 @@ const axios = axios_base.create({
 let dispatch_error = (error) => {
     store.dispatch(addError(`${error.type}: ${error.message}`))
 }
+
 const get = async (url, config) => {
   try{
-  let response = await axios.get(url, config);
+  let response = await axios.get(url, {...config,  withCredentials: true });
   return response
   }catch (error){
     dispatch_error(error.response.data.error)
@@ -23,9 +24,10 @@ const get = async (url, config) => {
 
 const put = async (url, body) => {
   try{
-   let response = await axios.put(url, body);
+   let response = await axios.put(url, body, { withCredentials: true });
    return response
   }catch (error){
+    if(!error.response) return console.log('request error',error)
     dispatch_error(error.response.data.error)
     return error.response
   }
@@ -33,7 +35,7 @@ const put = async (url, body) => {
 
 const post = async (url, body) => {
   try{
-     let response = await axios.post(url, body);
+     let response = await axios.post(url, body, { withCredentials: true });
      return response
  }catch (error){
     dispatch_error(error.response.data.error)
@@ -43,7 +45,7 @@ const post = async (url, body) => {
 
 const del = async (url) => {
 try{
-   let response = await axios.delete(url);
+   let response = await axios.delete(url, { withCredentials: true });
    return response
  }catch (error){
     dispatch_error(error.response.data.error)

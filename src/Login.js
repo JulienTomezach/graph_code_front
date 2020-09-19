@@ -7,10 +7,10 @@ import Logo from './components/Logo'
 function Login(props) {
 
 	const sendLogin = async () => {
-		let username = document.getElementById("username_input").innerText
-		let password = document.getElementById("password_input").innerText
+		let username = document.getElementById("username_input").value
+		let password = document.getElementById("password_input").value
 		if(username.length > 0 && password.length > 0){
-			    let response = await axios.post(`log_in`, {username, password});
+			    let response = await axios.put(`log_in`, {username, password});
 			    if(response.status === 200){
 			    	// push history to /
 			    }else{
