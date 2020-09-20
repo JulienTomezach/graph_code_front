@@ -1,4 +1,4 @@
-const _ = require('lodash')
+import _ from 'lodash';
 
 const PARAM = 'Parameter'
 const FUNCTION = 'Function'
@@ -174,4 +174,4 @@ let dataToText = (hash, offset='') => {
 
 
 
-module.exports = {graph_to_text, dataToText, htmlToTextNodes, htmlToTextFor};
+export {graph_to_text, dataToText, htmlToTextNodes, htmlToTextFor};

@@ -45,4 +45,4 @@ let invert = (obj) => {
     return Object.fromEntries(Object.entries(obj).map(([key, value]) => [value, key]))
 }
 
-module.exports = {set_to_h, dict_array_to_h, get_first_key, array_to_h, is_json_string, invert};
+export {set_to_h, dict_array_to_h, get_first_key, array_to_h, is_json_string, invert};
