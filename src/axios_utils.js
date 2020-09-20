@@ -3,9 +3,22 @@ import store from './redux/store'
 
 const axios_base = require('axios').default;
 
-const axios = axios_base.create({
-                          baseURL: 'https://localhost:3000/',
-                        });
+
+const development_config = {
+                          baseURL: 'http://localhost:3000/',
+                          // baseURL: 'https://localhost:3000/',
+                        };
+
+
+// do I need to set up explicit.rocks for back end ? 
+// already sure of the target with https
+const production_config = {
+                          baseURL: 'https://explicit.oa.r.appspot.com',
+                          }
+
+const config = window.location.href.includes('localhost') ? development_config : production_config                          
+
+const axios = axios_base.create(config);
 
 
 let dispatch_error = (error) => {
