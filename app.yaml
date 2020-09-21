@@ -1,5 +1,6 @@
 runtime: nodejs12
 env: standard
+# it is quite useles, because it works only for browser and the standard environement
 handlers:
 - url: /.*
   script: auto
