@@ -76,7 +76,8 @@ function SignIn(props) {
 			<div className={styles.Demo}>Try Demo</div>
 		</div>
 				<div className={styles.Card}>
-					<input className={`Input`} style={{width: '250px'}} placeholder="Professional email (ideally)" id="email_input" type="text"  />
+						<input className={`Input`} style={{width: '250px'}} placeholder="Professional email (ideally)" id="email_input" type="text"  />
+						<div> <span style={{fontSize: '15px', marginLeft: '3px',marginRight: '3px'}}>&#128584;</span> We won t send you emails except for app operations like checking identity etc.. </div>
 						<div > <span style={{fontSize: '25px', marginLeft: '3px',marginRight: '3px'}}>&#129488;</span> {question0}</div>
 						<div className={styles.Question} >{question1}</div>
 						<div className={styles.Question} >{question2}</div>
