@@ -52,8 +52,8 @@ function SignIn(props) {
 	}
 
 	let erroDescComp = () => {
-		return displayErrorDesc ? (<div style={{color: 'red'}}>
-			But do tell us a bit about yourself ;)
+		return displayErrorDesc ? (<div style={{color: 'red', marginTop: '3px'}}>
+			But do answer something <span style={{fontSize: '15px', marginLeft: '3px',marginRight: '3px'}}>&#128591;</span>
 		</div>) : null
 	}
 
@@ -87,8 +87,8 @@ function SignIn(props) {
 					<div style={{marginTop: '10px' }}> Thank you ! </div>
 					<div onClick={sendSignIn} className={`${stylesLogin.GoButton}`} style={{marginTop: '10px' }}>Sign in</div>
 					{subscribedComp()}
-					{erroDescComp()}
 				</div>
+					{erroDescComp()}
 			</div>
 		</div>
 		)

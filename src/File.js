@@ -691,11 +691,13 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let switchCurrentFileName = (filename) => {
-    setExecResult(null)
-    setDataExampleHtml('')
-    setScriptHtml('')
-    setCodeHtml(initialHtml)
-    setCurrentFile(filename)
+    if(currentFile !== filename){
+      setExecResult(null)
+      setDataExampleHtml('')
+      setScriptHtml('')
+      setCodeHtml(initialHtml)
+      setCurrentFile(filename)
+    }
   }
 
   let clickUpdateFile= (filename) => {
