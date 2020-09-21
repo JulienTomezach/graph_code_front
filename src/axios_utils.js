@@ -13,7 +13,7 @@ const development_config = {
 // do I need to set up explicit.rocks for back end ? 
 // already sure of the target with https
 const production_config = {
-                          baseURL: 'https://explicit.oa.r.appspot.com',
+                          baseURL: 'https://api.explicit.rocks',
                           }
 
 const config = window.location.href.includes('localhost') ? development_config : production_config                          
