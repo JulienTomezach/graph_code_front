@@ -12,6 +12,9 @@ import Logo from "./components/Logo"
 
 function SignIn(props) {
 
+	 let [subscribed, setSubscribed] = useState(false)
+	 let [displayErrorDesc, setDisplayErrorDesc] = useState(false)
+
 			// put that in back
 	const errorMessageComponent =  (password, username) => {
 		let badPassword = password.length < 8 || password.match(/[0-9]+/) === null || password.match(/[^A-Za-z0-9]/) === null
@@ -24,24 +27,42 @@ function SignIn(props) {
 	}
 
 	const sendSignIn = async () => {
-		let email = document.getElementById("email_input").innerText
-		// let password = document.getElementById("password_input").innerText
-		// if(username.length > 0 && password.length > 0){
-		// 	    let response = await axios.post(`sign_in`, {username, password});
-		// 	    if(response.status === 200){
-		// 	    	// push history to /
-		// 	    }else{
-		// 	    	let {message} = response.data
-		// 	    	// do something
-		// 	    }
-		// }
+		// email, description
+		let email = document.getElementById("email_input").value
+		let description = document.getElementById("text_beta_user").value
+		if(description.length === 0){
+			setDisplayErrorDesc(true)
+		}else{
+			setDisplayErrorDesc(false)
+		}
+		if(email.length > 0 && description.length > 0){
+			    let response = await axios.put(`sign_in`, {email, description});
+			    if(response.status === 200){
+			    		setSubscribed(true)
+			    }else{
+			    	// let {message} = response.data
+			    	// do something
+			    }
+		}
 	}
+	let subscribedComp = () => {
+		return subscribed ? (<div>
+			You are all set. We sent you an email.
+		</div>) : null
+	}
+
+	let erroDescComp = () => {
+		return displayErrorDesc ? (<div style={{color: 'red'}}>
+			But do tell us a bit about yourself ;)
+		</div>) : null
+	}
+
 	let matter = " subscription"
-	let question0 = "Some (optional) questions :"
+	let question0 = "Some (optional) questions:"
 	let question1 = "For what kind of business logic you would like to use Explicit ? (roughly)"
 	let question2 = "What is the size of your company/ dev team ?"
 	let question3 = "Did you ever find hard to get/modify the business logic of a feature, on your own or as a team ?"
-	let question4 = "Did you try the demo ?"
+	let question4 = "Did you try the live demo ?"
 
 					// <input placeholder="Password" id="password_input" type="password" className={`Input`} />
 					// <div className={`${styles.TextParent}`}>
@@ -64,13 +85,13 @@ function SignIn(props) {
 						<textarea placeholder="Type here" className={styles.TextArea} id="text_beta_user" rows="20" cols="60"></textarea>
 					<div style={{marginTop: '10px' }}> Thank you ! </div>
 					<div onClick={sendSignIn} className={`${stylesLogin.GoButton}`} style={{marginTop: '10px' }}>Sign in</div>
+					{subscribedComp()}
+					{erroDescComp()}
 				</div>
 			</div>
 		</div>
 		)
 }
-					// </div>
-
 
 
 
