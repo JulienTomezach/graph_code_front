@@ -8,9 +8,12 @@ const OPERATION = 'Operation'
 const INDEX = 'Index'
 
 
+const TAB_DEF = '    '
+
 let get_tabs = (n) => {
     return _.sumBy(Array(n), o => "\t") || ""
 }
+
 // special case of the root elements
 let graph_to_text = (graph_input) => {
 
@@ -38,7 +41,7 @@ let graph_to_text = (graph_input) => {
     // do something with the name of formula, the parameters
     let parameters = () => value.parameters.map(param =>  graph_to_text_aux(param, line_break, PARAM)).join(", ")
     let params_repr = value.parameters ? "("+ parameters()+ ")" : ""
-    let line_break_or_not = (formula.definitions ? line_break + '    ' : "")
+    let line_break_or_not = (formula.definitions ? line_break + TAB_DEF : "")
     textCode += offset + SPAN(element.function.name, FUNCTION) + params_repr + " = " + line_break_or_not + graph_to_text_aux(formula, line_break) + '<br/>' + '<br/>'
 
 
@@ -59,7 +62,7 @@ const SPAN = (content, className) => {
 let graph_to_text_aux = (graph_input, line_break, type=null) => {
   if('definitions' in graph_input){
     let definitions = graph_input.definitions
-    return definitions.map(([condition, formula]) => graph_to_text_aux(condition, line_break)+" | "+graph_to_text_aux(formula, line_break)).join(line_break)
+    return definitions.map(([condition, formula]) => graph_to_text_aux(condition, line_break)+" | "+graph_to_text_aux(formula, line_break)).join(line_break + TAB_DEF)
   }else {
     if('sum_on' in graph_input){
       let [iteree, formula] = graph_input.sum_on
@@ -69,6 +72,8 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
         let iterName = graph_input['iter_dec'][0].name
         let content = graph_input['iter_dec'][1]
         return SPAN(' | ', OPERATION) + iterName + SPAN(' | ', OPERATION) + graph_to_text_aux(content, line_break);
+    }else if('!' in graph_input){
+        return SPAN('!', OPERATION) + graph_to_text_aux(graph_input['!'][0], line_break)
     }else if('.' in graph_input){
         return graph_input['.'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN('.', OPERATION))
     }else if('*' in graph_input){
@@ -90,6 +95,12 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
         return graph_input['!='].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' != ', OPERATION))
     }else if('>' in graph_input){
         return graph_input['>'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' > ', OPERATION))
+    }else if('<' in graph_input){
+        return graph_input['<'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' < ', OPERATION))
+    }else if('<=' in graph_input){
+        return graph_input['<='].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' <= ', OPERATION))
+    }else if('>=' in graph_input){
+        return graph_input['>='].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' >= ', OPERATION))
     }else if('()' in graph_input){
         return SPAN(' ( ', OPERATION) + graph_to_text_aux(graph_input['()'], line_break) + SPAN(' ) ', OPERATION)
     }else if('||' in graph_input){
