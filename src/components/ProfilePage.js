@@ -8,12 +8,12 @@ import { withRouter } from "react-router";
 function ProfilePage(props){
 	// we could use redux here, but lets just fetch all the data		
 	const {history} = props;
-	const [username, setUsername] = useState('...')
+	const [user, setUser] = useState({})
 
 	let fetchProfile = async () => {
 	  let response = await axios.get('user')
 	  if(response.status === 200)
-	    setUsername(response.data.name)
+	    setUser(response.data)
 	}	
 
 	let logOut = async () => {
@@ -35,7 +35,8 @@ function ProfilePage(props){
 			<div className={styles.Card}>
 			<div className={styles.User}>
 				<div className="material-icons" style={{fontSize: '48px'}}>person</div>
-				<div>User name: {username}</div>
+				<div>User name: {user.name}</div>
+				<div>Id: {user.id}</div>
 			</div>	
 				<span onClick={logOut} className={styles.Button}>Log out</span>
 			</div>
