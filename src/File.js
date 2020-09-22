@@ -541,8 +541,9 @@ let details = (displayTriggered, mainKey, mainElement) => {
 let addLine = (mainElement, mainKey, sub_elements, lines) => {
   let condition = lines.length === 0 ? true : resultDisplay[mainElement.uuid]
   let subElementsDiv =  sub_elements.length > 0 ? <span> = {sub_elements.slice(0, sub_elements.length - 1)} </span> : null
+  let val_or_bool = (v) => [true, false].includes(v) ? `${v}` : v
   let newLine= () => {
-    return condition ? (<div> {details(true, mainKey, mainElement)} {mainElement.value} {subElementsDiv} </div>) : null
+    return condition ? (<div> {details(true, mainKey, mainElement)} {val_or_bool(mainElement.value)} {subElementsDiv} </div>) : null
   }
   lines.push(newLine())
 }
