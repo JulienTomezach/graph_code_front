@@ -551,6 +551,9 @@ let addLine = (mainElement, mainKey, sub_elements, lines) => {
 
 let processElement = (elements, mainKey, operation_arg, lines, mainElementArg = null) => {
   let operation = (operation_arg=== 'sum_on') ? '+': operation_arg
+  console.log(elements.details, mainKey)
+
+  if(typeof elements.details === 'object') return lines.push(<span className="Result" > {elements.value || elements.details.value} </span>)
 
   if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     let keyDisplayed = (operation_arg=== 'sum_on') ? operation_arg : mainKey

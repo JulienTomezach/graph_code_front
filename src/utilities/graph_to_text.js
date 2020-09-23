@@ -84,7 +84,8 @@ let graph_to_text_aux = (graph_input, line_break, type=null) => {
     }else if('/' in graph_input){
         return graph_input['/'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' / ', OPERATION))
     }else if('-' in graph_input){
-        return graph_input['-'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' - ', OPERATION))
+      if(graph_input['-'][0].name === "0") return SPAN(' - ', OPERATION) + graph_to_text_aux(graph_input['-'][1], line_break)
+      return graph_input['-'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' - ', OPERATION))
     }else if('+' in graph_input){
         return graph_input['+'].map(sub_element => graph_to_text_aux(sub_element, line_break)).join(SPAN(' + ', OPERATION))
     }else if('??' in graph_input){
