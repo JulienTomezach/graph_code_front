@@ -148,8 +148,9 @@ function File(props) {
   }
 
   const defaultCode = () => {
-    return [{function: {name: "foo", formulas: {'+': [{name: '1'}, {name: '1'}]}, level: 0, parameters: [],
-    comments:["put your code here"]}}]
+    // return [{function: {name: "foo", formulas: {'+': [{name: '1'}, {name: '1'}]}, level: 0, parameters: [],
+    // comments:["put your code here"]}}]
+    return []
   }
 
    const fetchCode = async (filename) => {
@@ -236,7 +237,7 @@ function File(props) {
       if(!opts.noScript) {
 
         if(_.isNil(response.data.script)){
-          setScriptComplete('execute: 1+1')
+          setScriptComplete('')
         }else{
           setScriptComplete(response.data.script)
         }
