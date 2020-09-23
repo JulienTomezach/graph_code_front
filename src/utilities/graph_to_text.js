@@ -26,7 +26,7 @@ let graph_to_text = (graph_input) => {
 
     let value = element[main_key]
     // set the offset
-    let offset =  get_tabs(value.level)
+    let offset =  !_.isNil(value.level) ? get_tabs(value.level) : ''
     // let offset =  get_tabs(0)
     let line_break = '</br>' + offset
     // then add the comments
@@ -35,8 +35,11 @@ let graph_to_text = (graph_input) => {
           textCode += offset + SPAN("# "+comment, COMMENT) + '<br/>'
       })
     }
+    if(main_key === 'last_comment'){
+      return textCode += "</br>"
+    }
 
-    if(!('formulas' in value)) throw Error('graph_to_text: "formulas" not in element')
+    if(!('formulas' in value)) return 
     let formula = value.formulas
     // do something with the name of formula, the parameters
     let parameters = () => value.parameters.map(param =>  graph_to_text_aux(param, line_break, PARAM)).join(", ")
