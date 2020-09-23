@@ -542,20 +542,20 @@ let details = (displayTriggered, mainKey, mainElement) => {
 let addLine = (mainElement, mainKey, sub_elements, lines) => {
   let condition = lines.length === 0 ? true : resultDisplay[mainElement.uuid]
   let subElementsDiv =  sub_elements.length > 0 ? <span> = {sub_elements.slice(0, sub_elements.length - 1)} </span> : null
-  let val_or_bool = (v) => [true, false].includes(v) ? `${v}` : v
+  let val_or_bool_or_string = (v) => {
+    if(typeof v === 'string' ) return `"${v}"`
+    return [true, false].includes(v) ? `${v}` : v
+  }
   let newLine= () => {
-    return condition ? (<div> {details(true, mainKey, mainElement)} {val_or_bool(mainElement.value)} {subElementsDiv} </div>) : null
+    return condition ? (<div> {details(true, mainKey, mainElement)} <span className="Result">{val_or_bool_or_string(mainElement.value)}</span> {subElementsDiv} </div>) : null
   }
   lines.push(newLine())
 }
 
 let processElement = (elements, mainKey, operation_arg, lines, mainElementArg = null) => {
   let operation = (operation_arg=== 'sum_on') ? '+': operation_arg
-  console.log(elements.details, mainKey)
 
-  if(typeof elements.details === 'object') return lines.push(<span className="Result" > {elements.value || elements.details.value} </span>)
-
-  if( _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
+  if( (typeof elements.details === 'object') || _.isNil(elements.details) || elements.details.filter(detail => Object.keys(detail).length === 0).length > 0){
     let keyDisplayed = (operation_arg=== 'sum_on') ? operation_arg : mainKey
     return addLine(mainElementArg, keyDisplayed, [], lines)
   }
