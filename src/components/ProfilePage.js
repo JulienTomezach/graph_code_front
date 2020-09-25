@@ -27,6 +27,10 @@ function ProfilePage(props){
 		fetchProfile()
 	}, [])
 
+	let demoLine = () => {
+		return user.demo ? (<div style={{color: "#c74b42"}}>You are connected to a demo account. All changes will be reset after a day. </div>) : null
+	}
+
 	return (
 		<div className={styles.Main}>
 			<div className={styles.Header}>
@@ -37,6 +41,7 @@ function ProfilePage(props){
 				<div className="material-icons" style={{fontSize: '48px'}}>person</div>
 				<div>User name: {user.name}</div>
 				<div>Id: {user.id}</div>
+				{demoLine()}
 			</div>	
 				<span onClick={logOut} className={styles.Button}>Log out</span>
 			</div>
