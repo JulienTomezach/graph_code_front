@@ -779,11 +779,18 @@ let resultToComponentAux = (elem, lines) => {
       {console.log('rendu')}
         <div className="Sidebar">
           <div className="SidebarContent">
+          <div className="MainPartContainer">
             <Link to="/profile" className="Link" ><h5 className="UserName">
               <span className="material-icons">person</span><span className="ItemText">{username}</span></h5>
             </Link>
             {fileNames(files)}
           <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
+          </div>
+          <div className="DocLinkContainer">
+            <a className="DocLink" href="https://www.notion.so/Roadmap-Explicit-2dbac8ce41754e899208a78ea5d320ad" target="_blank" rel="noopener"> Roadmap</a>
+            <a className="DocLink" href="https://www.notion.so/Changelogs-27a0ac1b45cd451b917c29cb4e8b064f" target="_blank" rel="noopener"> Changelogs</a>
+            <a className="DocLink" href="https://www.notion.so/For-Alpha-Users-4c2e087e8aba4e5eae87ba2628813f0b" target="_blank" rel="noopener"> For Alpha Users <span>&#128153;</span></a>
+          </div>
         </div>
         </div>
 

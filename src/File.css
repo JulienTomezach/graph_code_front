@@ -13,6 +13,28 @@
   align-items: center;
 }
 
+.MainPartContainer{
+}
+
+.DocLinkContainer{
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  margin-bottom: 60px;
+}
+
+
+.DocLink{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.DocLink:hover{
+  color: #F5F5F5;
+  font-weight: 600;
+}
 .ItemLine{
   display: flex;
   flex-direction: row;
@@ -64,9 +86,11 @@
 }
 
 .SidebarContent{
-  flex:1;
+  display: flex;
   margin-left: 1em;
-
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 .Header {
