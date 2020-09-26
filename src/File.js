@@ -461,8 +461,15 @@ let setKeyEventsHandler = () => {
 
 let fetchProfile = async () => {
   let response = await axios.get('user')
-  if(response.status === 200)
-    setUsername(response.data.name)
+  if(response.status === 200){
+      setUsername(response.data.name)
+      if(window.drift){
+              window.drift.identify(response.data.id, {
+                // can use that in the drift app
+                name: response.data.name,
+              });
+          }
+    }
 }
 // all the useEffects
 

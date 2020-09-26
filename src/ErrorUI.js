@@ -9,7 +9,6 @@ function ErrorUI({ errors, closeError }) {
 
   let errorsA = Object.entries(errors)
   errorsA = _.uniqBy(errorsA, e => e.message )
-  console.log("errorsA", errorsA)
   let nbErrors = errorsA.length
   if(nbErrors === 0)
     return null

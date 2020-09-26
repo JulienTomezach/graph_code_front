@@ -6,8 +6,20 @@ import {
   useParams
 } from "react-router-dom";
 import Logo from "./components/Logo"
+import { withRouter } from "react-router";
+import axios from './axios_utils';
 
 function Landing(props) {
+	const {history} = props;
+
+	let clickDemo = async () => {
+		// try_demo
+		let res = await axios.put("/try_demo")
+		// if the response is 200, we got our token.
+		if(res.status === 200){
+			history.push('/')
+		}
+	}
 
 	return (
 	<div className={styles.LandingParent}>
@@ -35,7 +47,7 @@ function Landing(props) {
                  </div>   
               
 		<div className={styles.LandingPart}>
-			<div className={styles.Button}>Try Demo</div>
+			<div className={styles.Button} onClick={clickDemo} >Try Demo</div>
 		</div>
 			
 		</div>
@@ -86,7 +98,6 @@ function Landing(props) {
 }
 
 
-export default Landing;
-
+export default withRouter(Landing);
 
 
