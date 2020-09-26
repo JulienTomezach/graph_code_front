@@ -28,7 +28,7 @@ function ProfilePage(props){
 	}, [])
 
 	let demoLine = () => {
-		return user.demo ? (<div style={{color: "#c74b42"}}>You are connected to a demo account. All changes will be reset after a day. </div>) : null
+		return user.demo ? (<div style={{color: "#c74b42", textAlign: "center"}}>You are connected to a demo account. All changes will be reset after a day. </div>) : null
 	}
 
 	return (
