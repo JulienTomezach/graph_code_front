@@ -359,7 +359,13 @@ color: #ffaa00;
 
 
 
-
+.LeaveDemo{
+  cursor: pointer;
+  padding: 3px;
+  width: 120px;
+  text-align: center;
+  border: dashed red 1px;
+}
 
 
 

@@ -65,7 +65,7 @@ function File(props) {
 
 
     // 
-    const [username, setUsername] = useState('...')
+    const [user, setUser] = useState('...')
 
    let insertNodeAtCursor = (node) => {
       let sel = window.getSelection();
@@ -462,7 +462,7 @@ let setKeyEventsHandler = () => {
 let fetchProfile = async () => {
   let response = await axios.get('user')
   if(response.status === 200){
-      setUsername(response.data.name)
+      setUser(response.data)
       if(window.drift){
               window.drift.identify(response.data.id, {
                 // can use that in the drift app
@@ -777,6 +777,10 @@ let resultToComponentAux = (elem, lines) => {
       ) : null;
   }
 
+  let log_out = () => {
+    return user.demo ? (<div className="LeaveDemo" onClick={() => {window.location.href = '/landing'}}> Leave Demo </div>):null
+  }
+
   let mainComponent = () => {
       return  (
 
@@ -788,11 +792,12 @@ let resultToComponentAux = (elem, lines) => {
           <div className="SidebarContent">
           <div className="MainPartContainer">
             <Link to="/profile" className="Link" ><h5 className="UserName">
-              <span className="material-icons">person</span><span className="ItemText">{username}</span></h5>
+              <span className="material-icons">person</span><span className="ItemText">{user.name}</span></h5>
             </Link>
             {fileNames(files)}
           <div onClick={() => setAddingFile(v => !v)} className="Button Item"> Add a File </div>
           </div>
+          {log_out()}
           <div className="DocLinkContainer">
             <a className="DocLink" href="https://www.notion.so/Roadmap-Explicit-2dbac8ce41754e899208a78ea5d320ad" target="_blank" rel="noopener"> Roadmap</a>
             <a className="DocLink" href="https://www.notion.so/Changelogs-27a0ac1b45cd451b917c29cb4e8b064f" target="_blank" rel="noopener"> Changelogs</a>

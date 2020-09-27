@@ -9,6 +9,7 @@ import axios from './axios_utils';
   useParams
 } from "react-router-dom";
 import Logo from "./components/Logo"
+import TryDemo from "./components/TryDemo";
 
 function SignIn(props) {
 
@@ -96,7 +97,7 @@ function SignIn(props) {
 					<Logo/>
 					<div className={styles.Matter}><span style={{fontSize: '25px'}}>&#127881;</span><span style={{marginLeft: '10px',marginRight: '10px'}}>
 					<span style={{color: 'purple'}}>Alpha</span>{matter}</span><span style={{fontSize: '25px'}}>&#127881;</span></div>
-			<div className={styles.Demo}>Try Demo</div>
+					<TryDemo newTab={true}/>
 		</div>
 				<div className={styles.Card}>
 						<input className={`Input`} style={{width: '250px'}} placeholder="Professional email (ideally)" id="email_input" type="text"  />

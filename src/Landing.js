@@ -9,6 +9,8 @@ import Logo from "./components/Logo"
 import { withRouter } from "react-router";
 import axios from './axios_utils';
 
+import TryDemo from "./components/TryDemo";
+
 function Landing(props) {
 	const {history} = props;
 
@@ -47,7 +49,7 @@ function Landing(props) {
                  </div>   
               
 		<div className={styles.LandingPart}>
-			<div className={styles.Button} onClick={clickDemo} >Try Demo</div>
+			<TryDemo/>
 		</div>
 			
 		</div>
