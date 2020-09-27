@@ -778,7 +778,12 @@ let resultToComponentAux = (elem, lines) => {
   }
 
   let log_out = () => {
-    return user.demo ? (<div className="LeaveDemo" onClick={() => {window.location.href = '/landing'}}> Leave Demo </div>):null
+    return user.demo ? (<div className="LeaveDemo" onClick={async () => {
+      let response = await axios.put('log_out')
+     if(response.status === 200){
+        window.location.href = '/landing'
+      }
+    }}> Leave Demo </div>):null
   }
 
   let mainComponent = () => {
