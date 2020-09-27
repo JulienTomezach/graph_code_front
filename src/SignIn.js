@@ -46,7 +46,7 @@ function SignIn(props) {
 		}
 	}
 	let subscribedComp = () => {
-		return subscribed ? (<div>
+		return subscribed ? (<div style={{marginTop: '10px' }}>
 			You are all set. We sent you an email.
 		</div>) : null
 	}
@@ -61,7 +61,7 @@ function SignIn(props) {
 	let question0 = "Some (optional) questions:"
 	let question1 = "For what kind of business logic you would like to use Explicit ? (roughly)"
 	let question2 = "What is the size of your company/ dev team ?"
-	let question3 = "Did you ever find hard to get/modify the business logic of a feature, on your own or as a team ?"
+	let question3 = "Did you ever feel that your business logic could be simplified but it was hard to do so ?"
 	let question4 = "Did you try the live demo ?"
 
 					// <input placeholder="Password" id="password_input" type="password" className={`Input`} />
