@@ -22,6 +22,12 @@ yarn
 
 PORT=3001 HTTPS=true yarn start_react
 
+## Implementation
+
+For the language I used the libreary _nearley_, which gives you a parser for free if you give it a grammar.
+
+For the editor, it is a mix of html contenteditable and of custom event handlers. The idea was progressively to get rid of contenteditable. 
+
 ## --
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
