@@ -5,7 +5,9 @@ This is the front end of the Explicit project.
 Explicit is a language and an online editor that helps you turn your most complicated business logic into a version that is 10x simpler than production code.
 
 Features:
+
 _ details/debug of the result.
+
 _ filtering of the code based on the use case.
 
 the back end is here:
@@ -17,7 +19,8 @@ To use it just click on "try demo" on the landing page.
 ## Install & launch
 
 yarn
-HTTPS=true yarn start_react
+
+PORT=3001 HTTPS=true yarn start_react
 
 ## --
 
