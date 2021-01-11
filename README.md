@@ -15,7 +15,7 @@ https://github.com/JulienTomezach/graph_software
 
 To use it just click on "try demo" on the landing page.
 
-In /ui_pictures: pictures of the landing page, demo page, the code filtering and the computational details features.
+In */ui_pictures*: pictures of the landing page, demo page, the code filtering and the computational details features.
 
 ## Install & launch
 
