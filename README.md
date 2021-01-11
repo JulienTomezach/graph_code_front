@@ -28,6 +28,7 @@ PORT=3001 HTTPS=true yarn start_react
 For the language I used the libreary _nearley_, which gives you a parser for free if you give it a grammar.
 
 For the editor, it is a mix of html contenteditable and of custom event handlers. The idea was progressively to get rid of contenteditable. 
+
 We also format and color the text with html, using the syntax tree returned by the back-end.
 
 
