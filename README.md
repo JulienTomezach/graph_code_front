@@ -15,6 +15,7 @@ https://github.com/JulienTomezach/graph_software
 
 To use it just click on "try demo" on the landing page.
 
+In /ui_pictures: pictures of the landing page, demo page, the code filtering and the computational details features.
 
 ## Install & launch
 
@@ -27,6 +28,8 @@ PORT=3001 HTTPS=true yarn start_react
 For the language I used the libreary _nearley_, which gives you a parser for free if you give it a grammar.
 
 For the editor, it is a mix of html contenteditable and of custom event handlers. The idea was progressively to get rid of contenteditable. 
+We also format and color the text with html, using the syntax tree returned by the back-end.
+
 
 ## --
 
